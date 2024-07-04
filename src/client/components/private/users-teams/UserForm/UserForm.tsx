@@ -78,25 +78,25 @@ export const UserForm = ({
     }
     console.log(employeeData);
     console.log(userData);
-    //await createEmployee({
-    //  variables: {
-    //    userData: {
-    //      email: user.userId.email,
-    //      name: user.userId.name,
-    //      roles: user.roles,
-    //    },
-    //    employeeData: {
-    //      position: user.position,
-    //      skills: user.skills,
-    //      teams: user.teams,
-    //      contactInfo: {
-    //        phone: user.contactInfo.phone,
-    //        emergencyContact: user.contactInfo.emergencyContact,
-    //      },
-    //    },
-    //  },
-    //});
-    //handleSave();
+    await createEmployee({
+      variables: {
+        userData: {
+          email: userData.email,
+          name: userData.name,
+          roles: userData.rolesAdded,
+        },
+        employeeData: {
+          position: employeeData.position,
+          skills: employeeData.skillsAdded,
+          teams: employeeData.teamsAdded,
+          contactInfo: {
+            phone: employeeData.contactInfo.phone,
+            emergencyContact: employeeData.contactInfo.emergencyContact,
+          },
+        },
+      },
+    });
+    handleSave();
   };
 
   //Effects
@@ -136,7 +136,7 @@ export const UserForm = ({
         <FormSection>
           <p className="w-[100px]">Roles asignados</p>
           <div className="flex gap-4">
-            <select
+            {mode !== 'view' && <select
               className="border border-neutral-3 rounded-[6px] py-1 px-4"
               name="roles"
               id="roles"
@@ -146,21 +146,21 @@ export const UserForm = ({
                   ...userData,
                   rolesAdded: [...userData.rolesAdded, selectedRole],
                   roles: [...userData.roles, selectedRole],
-                })
+                });
               }}
             >
               <option value="">Seleccione un rol</option>
               <option value="ADMIN">Administrador</option>
               <option value="TEAMLEADER">Lider de equipo</option>
               <option value="EMPLOYEE">Empleado</option>
-            </select>
+            </select>}
 
             {userData.roles.map((role) => (
               <div
                 key={role}
-                className="border border-neutral-3 rounded-[6px] py-1 px-4 relative"
+                className={`${mode === 'view' ? 'cursor-not-allowed' : ''} border border-neutral-3 rounded-[6px] py-1 px-4 relative`}
               >
-                <CloseIcon
+                {mode !== 'view' && <CloseIcon
                   width={5}
                   height={5}
                   className="p-1 absolute -top-2 -right-1 flex items-center justify-center cursor-pointer rounded-full border border-neutral-3 bg-neutral-4 w-[20px] h-[20px] text-center"
@@ -171,7 +171,7 @@ export const UserForm = ({
                       roles: userData.roles.filter((r) => r !== role),
                     })
                   }
-                />
+                />}
                 {role}
               </div>
             ))}
@@ -195,112 +195,64 @@ export const UserForm = ({
             disabled={mode === "view" ? true : false}
           />
         </FormSection>
-        <FormSection>
+        {mode !== 'create' && <FormSection>
           <p className="min-w-[100px]">Equipos</p>
           <div className="flex gap-4">
-            <select
-              name="teams"
-              id="teams"
-              className="caret-neutral-3 placeholder-neutral-3 border text-neutral-3 text-[12px] outline-neutral-3 dark:outline-neutral-2 border-neutral-3 dark:border-neutral-2 rounded-[6px] py-1 px-4 flex-1"
-              disabled={mode === "view" ? true : false}
-              onChange={(e) => {
-                const selectedId = e.target.value;
-                console.log('selectedId',selectedId)
-                if (!selectedId) return;
-
-                // Busca el team completo usando el id
-                const selectedTeam = teamsState.find(
-                  (team) => team.id === selectedId
-                );
-                console.log('selectedTeam',selectedTeam)
-                if (!selectedTeam) return;
-
-                // Verifica si ya fue agregado
-                const alreadyExists = employeeData.teams.some(
-                  (team) => team.id === selectedId
-                );
-                console.log('alreadyExists',alreadyExists)
-                if (alreadyExists) return;
-
-                // Agrega el nuevo team y su id sin duplicados
-                setEmployeeData({
-                  ...employeeData,
-                  teams: [
-                    ...employeeData.teams,
-                    { id: selectedTeam.id, name: selectedTeam.name },
-                  ],
-                  teamsAdded: [...employeeData.teamsAdded, selectedTeam.id],
-                });
-              }}
-            >
-              <option value="">Seleccione un equipo</option>
-              {teamsState.map((team) => (
-                <option key={team.id} value={team.id}>
-                  {team.name}
-                </option>
-              ))}
-            </select>
             {employeeData.teams.map((team) => (
               <div
                 key={team?.id}
-                className="border border-neutral-3 rounded-[6px] py-1 px-4 relative"
+                className={`cursor-not-allowed border border-neutral-3 rounded-[6px] py-1 px-4 relative`}
               >
-                <CloseIcon 
-                  width={5} 
-                  height={5}
-                  className="p-1 absolute -top-2 -right-1 flex items-center justify-center cursor-pointer rounded-full border border-neutral-3 bg-neutral-4 w-[20px] h-[20px] text-center"
-                  onClick={() =>
-                    setEmployeeData({
-                      ...employeeData,
-                      teams: employeeData.teams.filter((t) => t.id !== team.id),
-                      teamsAdded: employeeData.teamsAdded.filter((t) => t !== team.id),
-                    })
-                  }
-                />
                 {team?.name}
               </div>
             ))}
+              <p className="text-neutral-3">
+                La gestión de equipos se realiza en la sección del mismo.
+              </p>
           </div>
-        </FormSection>
+        </FormSection>}
         <FormSection>
           <p className="min-w-[100px]">Habilidades</p>
           <div className="flex gap-4">
-            <select
-            name="skills"
-            id="skills"
-            className="caret-neutral-3 placeholder-neutral-3 border text-neutral-3 text-[12px] outline-neutral-3 dark:outline-neutral-2 border-neutral-3 dark:border-neutral-2 rounded-[6px] py-1 px-4 flex-1"
-            disabled={mode === "view" ? true : false}
-            onChange={(e) => {
-              const selectSkill = e.target.value;
-              setEmployeeData({
-                ...employeeData,
-                skillsAdded: [...employeeData.skillsAdded, selectSkill],
-                skills: [...employeeData.skills, selectSkill],
-              });
-            }}
-          >
-            <option value="">Seleccione las habilidades</option>
-            <option value="JavaScript">JavaScript</option>
-            <option value="Java">Java</option>
-            <option value="Spring">Spring</option>
-          </select>
-          {employeeData.skills.map((skill) => (
+            {mode !== "view" && (
+              <select
+                name="skills"
+                id="skills"
+                className=" caret-neutral-3 placeholder-neutral-3 border text-neutral-3 text-[12px] outline-neutral-3 dark:outline-neutral-2 border-neutral-3 dark:border-neutral-2 rounded-[6px] py-1 px-4 flex-1"
+                onChange={(e) => {
+                  const selectSkill = e.target.value;
+                  setEmployeeData({
+                    ...employeeData,
+                    skillsAdded: [...employeeData.skillsAdded, selectSkill],
+                    skills: [...employeeData.skills, selectSkill],
+                  });
+                }}
+              >
+                <option value="">Seleccione las habilidades</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Java">Java</option>
+                <option value="Spring">Spring</option>
+              </select>
+            )}
+            {employeeData.skills.map((skill) => (
               <div
                 key={skill}
-                className="border border-neutral-3 rounded-[6px] py-1 px-4 relative"
+                className={`${mode === "view" ? "cursor-not-allowed" : ""} border border-neutral-3 rounded-[6px] py-1 px-4 relative`}
               >
-                <CloseIcon 
-                  width={5} 
+                {mode !== 'view' && <CloseIcon
+                  width={5}
                   height={5}
                   className="p-1 absolute -top-2 -right-1 flex items-center justify-center cursor-pointer rounded-full border border-neutral-3 bg-neutral-4 w-[20px] h-[20px] text-center"
                   onClick={() =>
                     setEmployeeData({
                       ...employeeData,
                       skills: employeeData.skills.filter((s) => s !== skill),
-                      skillsAdded: employeeData.skillsAdded.filter((s) => s !== skill),
+                      skillsAdded: employeeData.skillsAdded.filter(
+                        (s) => s !== skill
+                      ),
                     })
                   }
-                />
+                />}
                 {skill}
               </div>
             ))}
@@ -327,30 +279,16 @@ export const UserForm = ({
             onChange={(value) =>
               setEmployeeData({
                 ...employeeData,
-                contactInfo: { ...employeeData.contactInfo, emergencyContact: value },
+                contactInfo: {
+                  ...employeeData.contactInfo,
+                  emergencyContact: value,
+                },
               })
             }
             placeholder="Area"
             disabled={mode === "view" ? true : false}
           />
         </FormSection>
-
-        {mode !== "create" && (
-          <div className="flex gap-8">
-            <p className="min-w-[100px]">Telefono</p>
-            <div className="flex gap-4">
-              <div className="py-2 px-4 border border-neutral-3 rounded-[12px]">
-                DevOps
-              </div>
-              <div className="py-2 px-4 border border-neutral-3 rounded-[12px]">
-                DevOps
-              </div>
-              <div className="py-2 px-4 border border-neutral-3 rounded-[12px]">
-                DevOps
-              </div>
-            </div>
-          </div>
-        )}
       </FormLayout>
 
       {mode !== "view" && (
