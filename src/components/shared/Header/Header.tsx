@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FaCircleUser } from "react-icons/fa6";
+import { IoMenu } from "react-icons/io5";
 import { ModuleLink } from "./ModuleLink";
 import { moduleLinks } from "app/constants/ModuleLinks";
 
@@ -22,7 +23,7 @@ export const Header = () => {
           <Image src="/images/logo.png" fill alt="logo" />
         </div>
 
-        <div className="flex gap-12">
+        <div className="hidden lg:flex gap-12">
           {moduleLinks.map((moduleLink, index) => (
               <ModuleLink
                 key={index}
@@ -34,7 +35,8 @@ export const Header = () => {
       </div>
 
       <div>
-        <FaCircleUser className="w-[34px] h-[34px]" />
+        <FaCircleUser className="hidden md:block w-[34px] h-[34px]" />
+        <IoMenu className="block md:hidden w-[34px] h-[34px]" />
       </div>
     </header>
   );

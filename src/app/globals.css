@@ -15,7 +15,6 @@
 }
 
 @theme inline {
-  --font-beVietnam: "Be Vietnam Pro", sans-serif;
   --font-playfair: "Playfair Display", serif;
 
   --color-background: var(--background);
