@@ -34,5 +34,8 @@
   --color-neutral-2:#3a3a3a;
   --color-neutral-3:#efefef;
   --color-neutral-4:#f6f6f6;
-  --color-neutral-5:#ffffff;  
+  --color-neutral-5:#ffffff;
+  
+  
+  --shadow-header: 0px 1px 1px 0px #00000040;
 }
