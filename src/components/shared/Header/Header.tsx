@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 import { ModuleLink } from "./ModuleLink";
@@ -20,10 +21,12 @@ export const Header = () => {
             w-27 h-8
           "
         >
-          <Image src="/images/logo.png" fill alt="logo" />
+          <Link className="cursor-pointer" href='/' >
+            <Image src="/images/logo.png" fill alt="logo" />
+          </Link>
         </div>
 
-        <div className="hidden lg:flex gap-12">
+        <div className="hidden md:flex gap-12">
           {moduleLinks.map((moduleLink, index) => (
               <ModuleLink
                 key={index}

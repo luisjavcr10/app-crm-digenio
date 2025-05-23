@@ -4,7 +4,7 @@ export const ModuleLink= ({href, moduleTitle}:Readonly<{href:string, moduleTitle
   return (
     <Link 
         href={href}
-        className="text-[12px]"
+        className="text-[12px] cursor-pointer"
     >
         {moduleTitle}
     </Link>
