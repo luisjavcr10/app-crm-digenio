@@ -1,6 +1,6 @@
 export const moduleLinks =[
     {
-      href:"/module1",
+      href:"/okrs",
       moduleTitle:"Módulo 1"
     },
     {

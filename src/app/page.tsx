@@ -43,21 +43,21 @@ export default function Home() {
         className="
             mt-10
             md:hidden 
-            text-center text-[40px] font-playfair font-[700] text-neutral-1"
+            text-center text-[40px] font-playfair font-[700]"
       >
         <p>
-          Estrateg<span className="text-alert-red">ias</span>{" "}
+          Estrateg<span className="text-primary-1">ias</span>{" "}
         </p>
         <p>diseño y</p>
-        <p className="text-alert-red">
-          produ<span className="text-neutral-1">cción</span>{" "}
+        <p className="text-primary-1">
+          produ<span className="">cción</span>{" "}
         </p>
-        <p className="mt-5 text-[16px] font-[500] text-neutral-1">
-          Con ideas de negocio únicas <span className="text-alert-red">y</span>
+        <p className="mt-5 text-[16px] font-[500]">
+          Con ideas de negocio únicas <span className="text-primary-1">y</span>
         </p>
-        <p className="text-[16px] font-[500] text-neutral-1">
+        <p className="text-[16px] font-[500]">
           personas apasionadas por su{" "}
-          <span className="text-alert-red">trabajo</span>
+          <span className="text-primary-1">trabajo</span>
         </p>
       </div>
 
