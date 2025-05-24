@@ -1,3 +1,5 @@
+import { DataServer } from "app/components/shared/icons/DataServer";
+
 export default function OkrsPage() {
   return (
     <div className="min-h-screen my-6 mx-8 flex flex-col gap-8">
@@ -17,8 +19,9 @@ export default function OkrsPage() {
         
       </div>
 
-      <div className="min-h-[550px] flex justify-center items-center border border-neutral-3 rounded-[24px]">
-            No data to show
+      <div className="min-h-[550px] gap-4 flex flex-col justify-center items-center border border-neutral-3 rounded-[24px]">
+            <DataServer />
+            <p>No data to show</p>
       </div>
     </div>
   );
