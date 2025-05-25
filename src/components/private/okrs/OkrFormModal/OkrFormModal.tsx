@@ -1,10 +1,30 @@
-import { MainButton } from "app/components/shared/buttons/MainButton/MainButton"
+import { useState } from "react";
+import { MainButton } from "app/components/shared/buttons/MainButton"
+
+interface okrProps {
+  nombresResponsable: string;
+  nombreEquipo: string;
+  descripcion: string;
+  fechaInicio: string;
+  fechaFin: string;
+}
+
 
 export const OkrFormModal = ({
     handleClose,
+    handleSubmit,
 }:Readonly<{
     handleClose:()=>void,
+    handleSubmit:(okr:okrProps)=>void,
 }>) => {
+  const [okr, setOkr] = useState<okrProps>({
+    nombresResponsable: "",
+    nombreEquipo: "",
+    descripcion: "",
+    fechaInicio: "",
+    fechaFin: "",
+  });
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       {/* Fondo oscuro */}
@@ -21,25 +41,47 @@ export const OkrFormModal = ({
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3">
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
                 <p className="min-w-[100px]">Responsable</p>
-                <input placeholder="Nombres y apellidos del colaborador" type="text" className="placeholder-neutral-3 border placeholder:text-[12px] outline-neutral-3 border-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
-                <input placeholder="Nombre del equipo de trabajo" type="text" className="placeholder-neutral-3 placeholder:text-[12px] border border-neutral-3 outline-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
+                <input 
+                  value={okr.nombresResponsable} 
+                  onChange={(e) => setOkr({ ...okr, nombresResponsable: e.target.value })}
+                  placeholder="Nombres y apellidos del colaborador" 
+                  type="text" 
+                  className="placeholder-neutral-3 border placeholder:text-[12px] outline-neutral-3 border-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
+                <input 
+                  value={okr.nombreEquipo} 
+                  onChange={(e) => setOkr({...okr, nombreEquipo: e.target.value })}
+                  placeholder="Nombre del equipo de trabajo" 
+                  type="text" 
+                  className="placeholder-neutral-3 placeholder:text-[12px] border border-neutral-3 outline-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
             </div>
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
                 <p className="min-w-[100px]">Descripción</p>
-                <textarea placeholder="Descripción detallada del objetivo" className="placeholder-neutral-3 placeholder:text-[12px] outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
+                <textarea 
+                  onChange={(e) => setOkr({...okr, descripcion: e.target.value })}
+                  value={okr.descripcion} 
+                  placeholder="Descripción detallada del objetivo" 
+                  className="placeholder-neutral-3 placeholder:text-[12px] outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
             </div>
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
                 <p className="min-w-[100px]">Fecha inicio</p>
-                <input type="date" className="outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 " />
+                <input 
+                  onChange={(e) => setOkr({...okr, fechaInicio: e.target.value })}
+                  value={okr.fechaInicio} 
+                  type="date" 
+                  className="outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 " />
             </div>
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
                 <p className="min-w-[100px]">Fecha fin</p>
-                <input type="date" className="outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 " />
+                <input 
+                  onChange={(e) => setOkr({...okr, fechaFin: e.target.value })}
+                  value={okr.fechaFin} 
+                  type="date" 
+                  className="outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 " />
             </div>
         </div>
 
         <div className="w-full py-4 px-6 flex justify-center items-center">
-            <MainButton text="Agregar nuevo OKR" handleClick={()=>{}} />
+            <MainButton text="Agregar nuevo OKR" handleClick={()=>{handleSubmit(okr); handleClose()}} />
         </div>
        
       </div>

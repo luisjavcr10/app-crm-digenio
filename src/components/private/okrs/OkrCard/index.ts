@@ -1,0 +1,1 @@
+export { OkrCard } from './OkrCard';
