@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { MainButton } from "app/components/shared/buttons/MainButton"
+import { MainButton } from "app/components/shared/buttons/MainButton";
+import { OkrTextInput } from "../OkrTextInput";
+import { OkrTextareaInput } from "../OkrTextareaInput";
+import { OkrDateInput } from "../OkrDateInput";
 
 interface okrProps {
   nombresResponsable: string;
@@ -34,50 +37,42 @@ export const OkrFormModal = ({
       />
       
       {/* Contenedor del modal */}
-      <div className="w-9/12 max-h-11/12 lg:max-h-9/12 overflow-y-auto bg-neutral-5 border border-neutral-3 rounded-[12px] relative z-10">
-        <h2 className="w-full py-4 px-6 border-b border-neutral-3 text-[24px] lg:text-[32px] font-[600]">Agregar nuevo OKR</h2>
+      <div className="w-9/12 max-h-11/12 lg:max-h-9/12 overflow-y-auto bg-neutral-5 dark:bg-neutral-1 border border-neutral-3 dark:border-neutral-2 rounded-[12px] relative z-10">
+        <h2 className="w-full py-4 px-6 border-b border-neutral-3 dark:border-neutral-2  text-[24px] lg:text-[32px] font-[600]">Agregar nuevo OKR</h2>
         
         {/* Contenido del modal irá aquí */}
-        <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3">
-            <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-                <p className="min-w-[100px]">Responsable</p>
-                <input 
-                  value={okr.nombresResponsable} 
-                  onChange={(e) => setOkr({ ...okr, nombresResponsable: e.target.value })}
-                  placeholder="Nombres y apellidos del colaborador" 
-                  type="text" 
-                  className="placeholder-neutral-3 border placeholder:text-[12px] outline-neutral-3 border-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
-                <input 
-                  value={okr.nombreEquipo} 
-                  onChange={(e) => setOkr({...okr, nombreEquipo: e.target.value })}
-                  placeholder="Nombre del equipo de trabajo" 
-                  type="text" 
-                  className="placeholder-neutral-3 placeholder:text-[12px] border border-neutral-3 outline-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
-            </div>
-            <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-                <p className="min-w-[100px]">Descripción</p>
-                <textarea 
-                  onChange={(e) => setOkr({...okr, descripcion: e.target.value })}
-                  value={okr.descripcion} 
-                  placeholder="Descripción detallada del objetivo" 
-                  className="placeholder-neutral-3 placeholder:text-[12px] outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 flex-1" />
-            </div>
-            <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-                <p className="min-w-[100px]">Fecha inicio</p>
-                <input 
-                  onChange={(e) => setOkr({...okr, fechaInicio: e.target.value })}
-                  value={okr.fechaInicio} 
-                  type="date" 
-                  className="outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 " />
-            </div>
-            <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-                <p className="min-w-[100px]">Fecha fin</p>
-                <input 
-                  onChange={(e) => setOkr({...okr, fechaFin: e.target.value })}
-                  value={okr.fechaFin} 
-                  type="date" 
-                  className="outline-neutral-3 border border-neutral-3 rounded-[12px] py-2 px-4 " />
-            </div>
+        <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2 ">
+          <div className={`flex flex-col lg:flex-row gap-4 lg:gap-8 `}>
+            <p className="min-w-[100px]">Responsable</p>
+              <OkrTextInput
+                label="Responsable"
+                value={okr.nombresResponsable}
+                onChange={value => setOkr({ ...okr, nombresResponsable: value })}
+                placeholder="Nombres y apellidos del colaborador"
+              />
+              <OkrTextInput
+                label="Equipo"
+                value={okr.nombreEquipo}
+                onChange={value => setOkr({ ...okr, nombreEquipo: value })}
+                placeholder="Nombre del equipo de trabajo"
+              />
+           </div>
+            <OkrTextareaInput
+              label="Descripción"
+              value={okr.descripcion}
+              onChange={value => setOkr({ ...okr, descripcion: value })}
+              placeholder="Descripción detallada del objetivo"
+            />
+            <OkrDateInput
+              label="Fecha inicio"
+              value={okr.fechaInicio}
+              onChange={value => setOkr({ ...okr, fechaInicio: value })}
+            />
+            <OkrDateInput
+              label="Fecha fin"
+              value={okr.fechaFin}
+              onChange={value => setOkr({ ...okr, fechaFin: value })}
+            />
         </div>
 
         <div className="w-full py-4 px-6 flex justify-center items-center">

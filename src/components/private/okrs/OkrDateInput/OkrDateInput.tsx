@@ -1,0 +1,27 @@
+import React from "react";
+
+interface OkrDateInputProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
+}
+
+export const OkrDateInput = ({
+  label,
+  value,
+  onChange,
+  className = "",
+}: OkrDateInputProps) => {
+  return (
+    <div className={`flex flex-col lg:flex-row gap-4 lg:gap-8 ${className}`}>
+      <p className="min-w-[100px]">{label}</p>
+      <input
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        type="date"
+        className="outline-neutral-3 dark:outline-neutral-2 border border-neutral-3 dark:border-neutral-2 rounded-[12px] py-2 px-4"
+      />
+    </div>
+  );
+};
