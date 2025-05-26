@@ -36,6 +36,50 @@ const okrsList = [
     fechaInicio: "2023-01-01",
     fechaFin: "2023-06-01",
   },
+  {
+    nombresResponsable: "Luis Castillo",
+    nombreEquipo: "Equipo de desarrollo",
+    descripcion: "Elevar la calidad del software entregado, reduciendo defectos críticos en producción y fortaleciendo los procesos de validación.",
+    fechaInicio: "2023-01-01",
+    fechaFin: "2023-06-01",
+  },
+  {
+    nombresResponsable: "Luis Castillo",
+    nombreEquipo: "Equipo de desarrollo",
+    descripcion:
+      "Optimizar de manera significativa el flujo de trabajo del equipo de desarrollo backend mediante la implementación de metodologías ágiles combinadas con herramientas de integración continua y entrega continua (CI/CD), permitiendo la automatización de pruebas y facilitando la integración rápida y fiable de nuevos cambios de código. Este enfoque tiene como objetivo mejorar la productividad global del equipo, reducir considerablemente los tiempos de entrega, y asegurar que cada sprint proporcione valor de manera consistente y con un nivel de calidad alto en cada iteración.",
+    fechaInicio: "2023-01-01",
+    fechaFin: "2023-06-01",
+  },
+  {
+    nombresResponsable: "Luis Castillo",
+    nombreEquipo: "Equipo de desarrollo",
+    descripcion: "Crear una infraestructura de ciberseguridad robusta que se integre completamente en el proceso de desarrollo y despliegue del software, asegurando que todos los productos y sistemas cuenten con políticas de seguridad desde la fase de diseño hasta la de mantenimiento. Esto incluye la implementación de controles de acceso basados en roles, encriptación de datos en tránsito y reposo, auditorías de seguridad regulares, formación continua en mejores práct",
+    fechaInicio: "2023-01-01",
+    fechaFin: "2023-06-01",
+  },
+  {
+    nombresResponsable: "Luis Castillo",
+    nombreEquipo: "Equipo de desarrollo",
+    descripcion: "Elevar la calidad del software entregado, reduciendo defectos críticos en producción y fortaleciendo los procesos de validación.",
+    fechaInicio: "2023-01-01",
+    fechaFin: "2023-06-01",
+  },
+  {
+    nombresResponsable: "Luis Castillo",
+    nombreEquipo: "Equipo de desarrollo",
+    descripcion:
+      "Optimizar de manera significativa el flujo de trabajo del equipo de desarrollo backend mediante la implementación de metodologías ágiles combinadas con herramientas de integración continua y entrega continua (CI/CD), permitiendo la automatización de pruebas y facilitando la integración rápida y fiable de nuevos cambios de código. Este enfoque tiene como objetivo mejorar la productividad global del equipo, reducir considerablemente los tiempos de entrega, y asegurar que cada sprint proporcione valor de manera consistente y con un nivel de calidad alto en cada iteración.",
+    fechaInicio: "2023-01-01",
+    fechaFin: "2023-06-01",
+  },
+  {
+    nombresResponsable: "Luis Castillo",
+    nombreEquipo: "Equipo de desarrollo",
+    descripcion: "Crear una infraestructura de ciberseguridad robusta que se integre completamente en el proceso de desarrollo y despliegue del software, asegurando que todos los productos y sistemas cuenten con políticas de seguridad desde la fase de diseño hasta la de mantenimiento. Esto incluye la implementación de controles de acceso basados en roles, encriptación de datos en tránsito y reposo, auditorías de seguridad regulares, formación continua en mejores práct",
+    fechaInicio: "2023-01-01",
+    fechaFin: "2023-06-01",
+  },
 ];
 
 export default function OkrsPage() {
@@ -47,7 +91,7 @@ export default function OkrsPage() {
   }
 
   return (
-    <div className="min-h-screen my-6 mx-8 flex flex-col gap-8">
+    <div className=" my-6 mx-8 flex flex-col gap-8">
       <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
         {/** Seccion del titulo */}
         <div className="w-full">
@@ -74,7 +118,7 @@ export default function OkrsPage() {
       {/** Contenedor para los okrs */}
 
       {okrs.length === 0 ? (
-        <div className="min-h-screen flex flex-col justify-center items-center gap-4  border border-neutral-3 rounded-[24px]">
+        <div className="min-h-[550px] flex flex-col justify-center items-center gap-4  border border-neutral-3 rounded-[24px]">
           <DataServer />
           <p>No data to show</p>
         </div>
