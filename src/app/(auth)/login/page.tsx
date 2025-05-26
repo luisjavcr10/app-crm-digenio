@@ -7,11 +7,11 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen w-full flex">
       <div className="m-4 flex-1 lg:flex-0 flex flex-col gap-10">
-        <div className="flex justify-center lg:justify-start">
+        <div className="my-4 lg:my-0 flex justify-center lg:justify-start">
           <div
             className="
             relative
-            w-27 h-8
+            w-54 lg:w-27 h-16 lg:h-8
           "
           >
             <Link className="cursor-pointer" href="/">
