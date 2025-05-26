@@ -1,3 +1,5 @@
+"use client";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { FaCircleUser } from "react-icons/fa6";
@@ -6,6 +8,10 @@ import { ModuleLink } from "./ModuleLink";
 import { moduleLinks } from "app/constants/ModuleLinks";
 
 export const Header = () => {
+  const pathname = usePathname();
+
+
+  if(pathname === '/login') return null;
   return (
     <header
       className="
