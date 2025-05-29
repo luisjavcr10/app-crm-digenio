@@ -7,9 +7,6 @@ export class AuthService{
     static async login(email:string, password:string){
         await dbConnect();
         const user = await User.findOne({email}).select("+password");
-        console.log(user);
-        //solucionar problema con || !(await user.comparePassword(password)) 
-        //parece ser que no valida conrrectamente el password
         if(!user || !(await user.comparePassword(password)) ){
             throw new Error('Credenciales inválidas');
         }

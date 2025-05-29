@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, models, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
 export interface IUser extends Document {
@@ -40,18 +40,19 @@ const userSchema = new Schema<IUser>({
   },
 });
 
-//Modificamos la contraseña antes de guardar (HASH)
+// Middleware para hash de contraseña
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
-//Metodo para comparar la contraseña con la que viene en el request
+// Método para comparar contraseñas
 userSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-export const User = model<IUser>("User", userSchema);
+// Solución clave: Verifica si el modelo ya existe antes de crearlo
+export const User = models.User || model<IUser>("User", userSchema);

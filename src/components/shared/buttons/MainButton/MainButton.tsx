@@ -1,20 +1,24 @@
 export const MainButton = ({
     handleClick,
-    text
+    text,
+    disabled = false
 }:Readonly<{
     handleClick:()=>void,
-    text:string
+    text:string,
+    disabled?: boolean
 }>) =>{
     return(
         <button 
             onClick={handleClick}
-            className="
+            disabled={disabled}
+            className={`
                 py-2 px-10 
-                bg-primary-1 hover:bg-alert-red 
+                ${disabled ? 'bg-gray-400' : 'bg-primary-1 hover:bg-alert-red'} 
                 text-neutral-5 
                 rounded-[12px] 
-                cursor-pointer
-                "
+                ${disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}
+                transition-all duration-200
+                `}
         >
           {text}
         </button>
