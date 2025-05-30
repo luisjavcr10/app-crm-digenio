@@ -7,7 +7,7 @@ if (!MONGODB_URI) {
 }
 
 // Objeto de caché local al módulo
-let cached = {
+const cached = {
   conn: null as typeof mongoose | null,
   promise: null as Promise<typeof mongoose> | null
 };

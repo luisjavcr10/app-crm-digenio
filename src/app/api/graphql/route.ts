@@ -3,34 +3,43 @@ import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { typeDefs, resolvers } from 'app/lib/graphql';
 
+// Tipos para TypeScript
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  // Considera añadir:
+  introspection: process.env.NODE_ENV !== 'production',
 });
 
 const handler = startServerAndCreateNextHandler(server, {
-  context: async () => ({}), // tu contexto si lo necesitas
+  context: async (req) => {
+    // Aquí puedes añadir autenticación, headers, etc.
+    return { req };
+  },
 });
 
-function withCORS(request: Request, response: Response) {
-  response.headers.set('Access-Control-Allow-Origin', 'https://studio.apollographql.com');
-  response.headers.set('Access-Control-Allow-Credentials', 'true');
-  response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+function setCORSHeaders(res: NextApiResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // O tu dominio específico
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  return res;
+}
+
+export async function OPTIONS(req: NextApiRequest, res: NextApiResponse) {
+  const response = setCORSHeaders(res);
+  response.status(204).end();
   return response;
 }
 
-export async function OPTIONS() {
-  const response = new Response(null, { status: 204 });
-  return withCORS(null as any, response);
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
+  const response = setCORSHeaders(res);
+  return handler(req, response);
 }
 
-export async function POST(request: Request) {
-  const response = await handler(request);
-  return withCORS(request, response);
-}
-
-export async function GET(request: Request) {
-  const response = await handler(request);
-  return withCORS(request, response);
+export async function GET(req: NextApiRequest, res: NextApiResponse) {
+  const response = setCORSHeaders(res);
+  return handler(req, response);
 }
