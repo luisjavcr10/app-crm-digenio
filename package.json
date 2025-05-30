@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "NEXT_DISABLE_TURBOPACK=1 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
+    "@apollo/experimental-nextjs-app-support": "^0.12.2",
     "@apollo/server": "^4.12.1",
     "@as-integrations/next": "^3.2.0",
     "bcrypt": "^6.0.0",
