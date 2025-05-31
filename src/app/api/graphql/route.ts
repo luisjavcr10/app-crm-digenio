@@ -26,7 +26,7 @@ function setCORSHeaders(response: Response): Response {
   return newResponse;
 }
 
-export async function OPTIONS(request: NextRequest): Promise<Response> {
+export async function OPTIONS(): Promise<Response> {
   const response = new Response(null, { status: 204 });
   return setCORSHeaders(response);
 }

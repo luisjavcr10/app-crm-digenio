@@ -38,9 +38,9 @@ export const LoginForm = () => {
       } else {
         setError("Credenciales inválidas.");
       }
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || "Error al iniciar sesión.");
+    } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Error desconocido';
+        setError(message);
     }
   };
 
