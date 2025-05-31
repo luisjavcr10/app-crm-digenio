@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../../models/User";
-import { JWT_SECRET } from "app/config";
-import dbConnect from "app/lib/db/dbConnect";
+import { JWT_SECRET } from "@/lib/config";
+import dbConnect from "@/server/db/dbConnect";
 
 export class AuthService{
     static async login(email:string, password:string){

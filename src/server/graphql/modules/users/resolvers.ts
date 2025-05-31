@@ -1,5 +1,5 @@
 import { User } from "../../models/User";
-import dbConnect from "app/lib/db/dbConnect";
+import dbConnect from "@/server/db/dbConnect";
 
 export const userResolvers = {
   Query: {
