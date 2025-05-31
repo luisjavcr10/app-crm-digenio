@@ -1,6 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Be_Vietnam_Pro} from "next/font/google";
-import "./globals.css";
 import { Header } from "@/client/components/shared/Header";
 import { Footer } from "@/client/components/shared/Footer";
 
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   description: "Digenio's CRM",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +26,8 @@ export default function RootLayout({
       <body 
         className={`
           bg-background text-foreground 
-          ${beVietmanPro.className} `}>
+          ${beVietmanPro.className} `}
+      >
         <Header />
         {children}
         <Footer />
