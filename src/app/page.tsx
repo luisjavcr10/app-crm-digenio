@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Card } from "app/components/private/home/Card";
-import { cardsInHome } from "app/constants/CardsInHome";
+import { Card } from "@/client/components/private/home/Card";
+import { cardsInHome } from "@/client/constants/CardsInHome";
 
 export default function Home() {
   return (

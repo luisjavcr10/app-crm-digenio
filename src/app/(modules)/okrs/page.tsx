@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import { DataServer } from "app/components/shared/icons/DataServer";
-import { MainButton } from "app/components/shared/buttons/MainButton";
-import { OkrFormModal } from "app/components/private/okrs/OkrFormModal";
-import { OkrCard } from "app/components/private/okrs/OkrCard";
+import { DataServer } from "@/client/components/shared/icons/DataServer";
+import { MainButton } from "@/client/components/shared/buttons/MainButton";
+import { OkrFormModal } from "@/client/components/private/okrs/OkrFormModal";
+import { OkrCard } from "@/client/components/private/okrs/OkrCard";
 
 interface okrProps {
   nombresResponsable: string;

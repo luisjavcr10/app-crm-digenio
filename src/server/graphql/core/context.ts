@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
-import { JWT_SECRET } from '../../../config';
+import { JWT_SECRET } from '@/lib/config';
 
 export async function createContext({ req }: { req: NextRequest }) {
   const token = req.headers.get('authorization')?.replace('Bearer ', '');

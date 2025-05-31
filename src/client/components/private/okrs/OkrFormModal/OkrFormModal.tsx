@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MainButton } from "app/components/shared/buttons/MainButton";
+import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { OkrTextInput } from "../OkrTextInput";
 import { OkrTextareaInput } from "../OkrTextareaInput";
 import { OkrDateInput } from "../OkrDateInput";

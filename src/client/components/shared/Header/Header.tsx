@@ -5,7 +5,7 @@ import Link from "next/link";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 import { ModuleLink } from "./ModuleLink";
-import { moduleLinks } from "app/constants/ModuleLinks";
+import { moduleLinks } from "@/client/constants/ModuleLinks";
 
 export const Header = () => {
   const pathname = usePathname();

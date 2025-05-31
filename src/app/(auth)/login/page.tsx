@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { MainButton } from 'app/components/shared/buttons/MainButton';
+import { MainButton } from '@/client/components/shared/buttons/MainButton';
 import { useState } from 'react';
 
 const mutation = `
@@ -66,7 +66,7 @@ export default function LoginPage() {
       // Verificar si la respuesta contiene los datos esperados
       if (responseData.data?.login) {
         const { token, user } = responseData.data.login;
-        
+        document.cookie = `auth_token=${token}; path=/; max-age=86400`;
         // Guardar token en localStorage
         localStorage.setItem('auth_token', token);
         

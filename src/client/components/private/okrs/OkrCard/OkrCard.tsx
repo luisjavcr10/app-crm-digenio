@@ -1,4 +1,4 @@
-import { ProfileIcon } from "app/components/shared/icons/ProfileIcon";
+import { ProfileIcon } from "@/client/components/shared/icons/ProfileIcon";
 
 interface okrProps {
   nombresResponsable: string;
