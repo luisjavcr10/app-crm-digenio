@@ -1,6 +1,6 @@
 "use client";
 import { ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
-import { BACK_URI } from "@/lib/config";
+import { BACK_URI } from '../lib/config';
 
 const client = new ApolloClient({
     uri: `${BACK_URI}/graphql`,
