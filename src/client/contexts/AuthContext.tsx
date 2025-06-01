@@ -37,6 +37,7 @@ type AuthContextType = {
   loading: boolean;
   error: string | null;
   handleLogin: (user: LoginPaylaod) => Promise<boolean>;
+  handleLogout: () => void;
   initialized: boolean;
 };
 
@@ -95,6 +96,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return false;
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user");
+    setIsAuthenticated(false);
+    setToken(null);
+  };
+
   const value: AuthContextType = {
     user:user,
     isAuthenticated: isAuthenticated,
@@ -102,6 +110,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     loading: loading,
     error: error?.message || null,
     handleLogin,
+    handleLogout,
     initialized:initialized
   };
 
