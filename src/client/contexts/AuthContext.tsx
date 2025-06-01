@@ -8,20 +8,6 @@ interface LoginPaylaod {
   password: string;
 }
 
-interface LoginResponse {
-  data: {
-    login: {
-      token: string;
-      user: {
-        id: string;
-        username: string;
-        email: string;
-        role: string;
-      };
-    };
-  };
-}
-
 interface User {
   email: string;
   id: string;
