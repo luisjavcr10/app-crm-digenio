@@ -91,7 +91,7 @@ export default function OkrsPage() {
   }
 
   return (
-    <div className=" my-6 mx-8 flex flex-col gap-8">
+    <div className="pt-[60px] my-6 mx-8 flex flex-col gap-8">
       <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
         {/** Seccion del titulo */}
         <div className="w-full">

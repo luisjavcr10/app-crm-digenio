@@ -4,7 +4,7 @@ import { cardsInHome } from "@/client/constants/CardsInHome";
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pt-[60px]">
       <div className="h-96 md:h-[500px] xl:min-h-screen relative">
         {/* Background image */}
         <Image
@@ -12,6 +12,7 @@ export default function Home() {
           src="/images/main-image.png"
           fill
           alt="background"
+          priority
         />
 
         {/* Main text */}
