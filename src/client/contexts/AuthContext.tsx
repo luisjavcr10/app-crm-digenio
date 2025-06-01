@@ -68,6 +68,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const { token, user } = data.login;
   
         localStorage.setItem("auth_token", token);
+        document.cookie = `auth-token=${token}; path=/; max-age=${60 * 60 * 24 * 7}`;
         localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
         setIsAuthenticated(true);
@@ -84,6 +85,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
+    document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     localStorage.removeItem("user");
     setIsAuthenticated(false);
     setToken(null);

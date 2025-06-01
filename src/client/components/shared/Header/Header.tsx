@@ -23,11 +23,11 @@ export const Header = () => {
     };
 
     // Agregar el event listener
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     // Limpiar el event listener al desmontar
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -39,7 +39,7 @@ export const Header = () => {
 
   return (
     <header
-      className={` py-1  ${scrolled ? 'px-10' : 'px-3 shadow-header'}
+      className={` py-1  ${scrolled ? "px-10" : "px-3 shadow-header"}
         transition-all duration-300 
         w-full
         min-h-[60px]
@@ -47,16 +47,19 @@ export const Header = () => {
         top-0
         z-50`}
     >
-      <nav className={`
+      <nav
+        className={`
           py-2 px-5 
           relative 
           flex justify-between items-center 
           transition-all duration-300 
           rounded-[16px]
-          ${scrolled ? 
-          'bg-neutral-2 text-neutral-4 dark:bg-neutral-4 dark:text-neutral-2' 
-          : 'bg-neutral-5 dark:bg-neutral-1'
-          }`}>
+          ${
+            scrolled
+              ? "bg-neutral-2 text-neutral-4 dark:bg-neutral-4 dark:text-neutral-2"
+              : "bg-neutral-5 dark:bg-neutral-1"
+          }`}
+      >
         <div className="flex justify-center items-center gap-16">
           <div className="relative w-27 h-8">
             <Link className="cursor-pointer" href="/">
@@ -86,20 +89,27 @@ export const Header = () => {
                 <IoMenu className="block md:hidden w-[34px] h-[34px]" />
               </button>
               {isOpen && (
-                <MenuToggle isOpen={isOpen} handleOpen={handleMenuToggle} />
+                <MenuToggle
+                  isScrolled={scrolled}
+                  isOpen={isOpen}
+                  handleOpen={handleMenuToggle}
+                />
               )}
             </>
           ) : (
             <Link
               href="/login"
-              className="
-              hidden md:block 
-              bg-neutral-2 dark:bg-neutral-4 
-              hover:bg-neutral-1 dark:hover:bg-neutral-3
-              text-neutral-4 dark:text-neutral-2  text-[12px] 
+              className={`
+              transition-all duration-300
+        ${
+          scrolled
+            ? "bg-neutral-4 dark:bg-neutral-2 text-neutral-1 dark:text-neutral-5 hover:bg-neutral-3 dark:hover:bg-neutral-1"
+            : "bg-neutral-2 dark:bg-neutral-4 text-neutral-5 dark:text-neutral-1 hover:bg-neutral-1 dark:hover:bg-neutral-3"
+        }
+              text-[12px] 
               py-2 px-6 
               rounded-[12px]
-            "
+            `}
             >
               Inicia sesión
             </Link>
