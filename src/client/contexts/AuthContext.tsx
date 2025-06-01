@@ -28,7 +28,7 @@ type AuthContextType = {
   loading: boolean;
   error: string | null;
   handleLogin: (user: LoginPaylaod) => Promise<boolean>;
-  //handleLogout: () => void;
+  initialized: boolean;
 };
 
 type AuthProviderProps = {
@@ -41,13 +41,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("auth_token");
     if (storedToken) {
       setIsAuthenticated(true);
       setToken(storedToken);
-    }
+    };
+    setInitialized(true);
   }, []);
 
   const handleLogin = async (user: LoginPaylaod): Promise<boolean> => {
@@ -78,6 +80,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     loading: loading,
     error: error?.message || null,
     handleLogin,
+    initialized:initialized
   };
 
   return (
