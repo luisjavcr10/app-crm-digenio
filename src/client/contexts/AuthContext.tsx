@@ -22,7 +22,16 @@ interface LoginResponse {
   };
 }
 
+interface User {
+  email: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+}
+
 type AuthContextType = {
+  user:User,
   isAuthenticated: boolean;
   token: string | null;
   loading: boolean;
@@ -42,9 +51,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
+  const [user, setUser] = useState<User>({
+    email: "",
+    id: "",
+    firstName: "",
+    lastName: "",
+    role: ""
+  });
 
   useEffect(() => {
     const storedToken = localStorage.getItem("auth_token");
+    const user = localStorage.getItem("user");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      setUser(parsedUser);
+    };
     if (storedToken) {
       setIsAuthenticated(true);
       setToken(storedToken);
@@ -61,7 +82,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   
         localStorage.setItem("auth_token", token);
         localStorage.setItem("user", JSON.stringify(user));
-  
+        setUser(user);
         setIsAuthenticated(true);
         setToken(token);
         return true;
@@ -75,6 +96,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const value: AuthContextType = {
+    user:user,
     isAuthenticated: isAuthenticated,
     token: token,
     loading: loading,
