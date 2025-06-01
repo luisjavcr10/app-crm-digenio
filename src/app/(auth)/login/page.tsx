@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { LoginForm } from "@/client/components/private/login/LoginForm/LoginForm";
-import ApolloWrapper from "@/client/provider/ApolloWrapper";
+import { LoginForm } from "@/client/components/private/login/LoginForm";
 
 export default function LoginPage() {
   return (
@@ -21,9 +20,8 @@ export default function LoginPage() {
               Por favor, ingresa tus credenciales.
             </p>
           </div>
-          <ApolloWrapper>
             <LoginForm />
-          </ApolloWrapper>
+            
         </div>
       </div>
       <div className="hidden md:block relative flex-1">
@@ -32,6 +30,7 @@ export default function LoginPage() {
           src="/images/login-image.png"
           alt="image-login"
           fill
+          priority
         />
       </div>
     </div>

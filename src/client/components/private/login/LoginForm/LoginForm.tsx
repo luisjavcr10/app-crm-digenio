@@ -1,48 +1,36 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@apollo/client";
 import Link from "next/link";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import { LOGIN_MUTATION } from "@/client/services/auth";
+import { useAuth } from "@/client/hooks/useAuth";
 
 export const LoginForm = () => {
+  const { handleLogin, loading} = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-  const [login, { loading }] = useMutation(LOGIN_MUTATION);
 
-  const handleLogin = async () => {
+  const handleLogin1 = async () => {
     if (!email || !password) {
       setError("Todos los campos son obligatorios.");
       return;
     }
-
+  
     setError("");
-
-    try {
-      const { data } = await login({
-        variables: { email, password },
-      });
-
-      if (data?.login) {
-        const { token, user } = data.login;
-
-        // Guardar token y datos del usuario
-        document.cookie = `auth_token=${token}; path=/; max-age=86400`;
-        localStorage.setItem("auth_token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-
-        router.push("/");
-      } else {
-        setError("Credenciales inválidas.");
-      }
-    } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        setError(message);
+  
+    const success = await handleLogin({ email, password });
+  
+    if (!success) {
+      setError("Credenciales inválidas.");
+      return;
     }
+  
+    router.push("/");
   };
+  
 
   return (
       
@@ -74,7 +62,7 @@ export const LoginForm = () => {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <MainButton
             text={loading ? "Iniciando sesión..." : "Iniciar sesión"}
-            handleClick={handleLogin}
+            handleClick={handleLogin1}
             disabled={loading}
           />
         </form>

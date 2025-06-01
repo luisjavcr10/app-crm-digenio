@@ -1,5 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { AuthProvider } from "@/client/contexts/AuthContext";
+import ApolloWrapper from "@/client/contexts/ApolloWrapper";
 import { Be_Vietnam_Pro} from "next/font/google";
 import { Header } from "@/client/components/shared/Header";
 import { Footer } from "@/client/components/shared/Footer";
@@ -28,9 +30,13 @@ export default function RootLayout({
           bg-background text-foreground 
           ${beVietmanPro.className} `}
       >
-        <Header />
-        {children}
-        <Footer />
+        <ApolloWrapper>
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );

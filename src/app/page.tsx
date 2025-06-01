@@ -12,6 +12,7 @@ export default function Home() {
           src="/images/main-image.png"
           fill
           alt="background"
+          priority
         />
 
         {/* Main text */}
