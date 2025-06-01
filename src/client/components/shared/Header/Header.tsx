@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,22 @@ export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { isAuthenticated, initialized } = useAuth();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Cambia el estado cuando el scroll sea mayor a 0
+      setScrolled(window.scrollY > 0);
+    };
+
+    // Agregar el event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Limpiar el event listener al desmontar
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleMenuToggle = () => {
     setIsOpen(!isOpen);
@@ -23,18 +39,24 @@ export const Header = () => {
 
   return (
     <header
-      className="
-        py-1 px-3
-        shadow-header
+      className={` py-1  ${scrolled ? 'px-10' : 'px-3 shadow-header'}
+        transition-all duration-300 
         w-full
         min-h-[60px]
         fixed
         top-0
-        z-50
-        bg-neutral-5 dark:bg-neutral-1
-      "
+        z-50`}
     >
-      <nav className="py-2 px-5 relavite flex justify-between items-center">
+      <nav className={`
+          py-2 px-5 
+          relative 
+          flex justify-between items-center 
+          transition-all duration-300 
+          rounded-[16px]
+          ${scrolled ? 
+          'bg-neutral-2 text-neutral-4 dark:bg-neutral-4 dark:text-neutral-2' 
+          : 'bg-neutral-5 dark:bg-neutral-1'
+          }`}>
         <div className="flex justify-center items-center gap-16">
           <div className="relative w-27 h-8">
             <Link className="cursor-pointer" href="/">
