@@ -2,6 +2,7 @@ import { AuthService } from "./service";
 import { cookies } from "next/headers";
 import { COOKIE_NAME } from "@/server/utils/session";
 import { getCurrentUser } from "@/server/utils/getCurrentUser";
+import { createSession, deleteSession } from "@/server/utils/session";
 
 export const authResolvers = {
   Mutation: {
@@ -12,20 +13,12 @@ export const authResolvers = {
       const { user, session } = await AuthService.login(email, password);
 
       // Guardamos cookie segura
-      const cookieStore = await cookies();
-      cookieStore.set(COOKIE_NAME, session, {
-        httpOnly: true,
-        secure: true, //process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
-      });
+      await createSession(session);
 
       return user;
     },
     logout: async () => {
-      const cookieStore = await cookies();
-      cookieStore.delete(COOKIE_NAME);
+      await deleteSession();
       return true;
     }
   },

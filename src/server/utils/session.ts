@@ -1,5 +1,6 @@
 // lib/session.ts
 import { SignJWT, jwtVerify } from "jose";
+import { cookies } from "next/headers";
 
 const secretKey = process.env.JWT_SECRET;
 
@@ -37,4 +38,35 @@ export async function decrypt(token: string | undefined) {
     console.error("JWT verification failed", e);
     return null;
   }
+}
+
+export async function createSession(userId: string) {
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7d
+  const session = await encrypt({ userId }, "7d")
+  const _cookies = await cookies()
+
+  _cookies.set(COOKIE_NAME, session, {
+    httpOnly: true,
+    secure: true,//process.env.NODE_ENV === "production"
+    expires: expiresAt,
+    sameSite: "lax",
+    path: "/",
+  })
+}
+
+export async function deleteSession() {
+  const _cookies = await cookies()
+  _cookies.delete(COOKIE_NAME)
+}
+
+export async function isSessionValid(
+  cookieValue: string | undefined | null,
+): Promise<boolean> {
+  if (!cookieValue) {
+    return false
+  }
+
+  const session = await decrypt(cookieValue)
+
+  return Boolean(session)
 }
