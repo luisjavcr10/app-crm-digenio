@@ -43,7 +43,7 @@ export const LoginForm = () => {
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="shadow-input rounded-[12px] py-2 px-4 border border-neutral-3 outline-neutral-3"
+              className="shadow-input rounded-[12px] py-2 px-4 border border-neutral-3 outline-neutral-3 caret-neutral-3"
               type="email"
             />
           </div>
@@ -52,7 +52,7 @@ export const LoginForm = () => {
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="shadow-input rounded-[12px] py-2 px-4 border border-neutral-3 outline-neutral-3"
+              className="shadow-input rounded-[12px] py-2 px-4 border border-neutral-3 outline-neutral-3 caret-neutral-3"
               type="password"
             />
             <Link href="/recovery-password" className="text-[12px]">

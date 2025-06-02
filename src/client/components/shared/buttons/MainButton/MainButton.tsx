@@ -16,7 +16,7 @@ export const MainButton = ({
                 ${disabled ? 'bg-gray-400' : 'bg-primary-1 hover:bg-alert-red'} 
                 text-neutral-5 
                 rounded-[12px] 
-                ${disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}
+                ${disabled ? 'cursor-progress opacity-70' : 'cursor-pointer'}
                 transition-all duration-200
                 `}
         >
