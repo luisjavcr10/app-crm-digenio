@@ -1,6 +1,4 @@
 import { AuthService } from "./service";
-import { cookies } from "next/headers";
-import { COOKIE_NAME } from "@/server/utils/session";
 import { getCurrentUser } from "@/server/utils/getCurrentUser";
 import { createSession, deleteSession } from "@/server/utils/session";
 
