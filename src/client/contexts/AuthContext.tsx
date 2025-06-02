@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_MUTATION } from "../services/auth";
+import { LOGIN_MUTATION, LOGOUT_MUTATION } from "../services/auth";
 
 interface LoginPaylaod {
   email: string;
@@ -19,7 +19,6 @@ interface User {
 type AuthContextType = {
   user:User,
   isAuthenticated: boolean;
-  token: string | null;
   loading: boolean;
   error: string | null;
   handleLogin: (user: LoginPaylaod) => Promise<boolean>;
@@ -34,9 +33,9 @@ type AuthProviderProps = {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [logout] = useMutation(LOGOUT_MUTATION);
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [token, setToken] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
   const [user, setUser] = useState<User>({
     email: "",
@@ -47,15 +46,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   });
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("auth_token");
     const user = localStorage.getItem("user");
     if (user) {
       const parsedUser = JSON.parse(user);
       setUser(parsedUser);
-    };
-    if (storedToken) {
       setIsAuthenticated(true);
-      setToken(storedToken);
     };
     setInitialized(true);
   }, []);
@@ -65,13 +60,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const { data } = await login({ variables: user });
   
       if (data?.login) {
-        const { token, user } = data.login;
-  
-        localStorage.setItem("auth_token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        setUser(user);
+        const { login } = data;
+
+        localStorage.setItem("user", JSON.stringify(login));
+        setUser(login);
         setIsAuthenticated(true);
-        setToken(token);
         return true;
       }
     } catch (err: unknown) {
@@ -82,17 +75,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return false;
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("auth_token");
+  const handleLogout = async () => {
+    await logout();
     localStorage.removeItem("user");
     setIsAuthenticated(false);
-    setToken(null);
   };
 
   const value: AuthContextType = {
     user:user,
     isAuthenticated: isAuthenticated,
-    token: token,
     loading: loading,
     error: error?.message || null,
     handleLogin,

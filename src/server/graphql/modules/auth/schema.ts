@@ -5,6 +5,11 @@ export const authTypeDefs = `#graphql
   }
 
   extend type Mutation {
-    login(email: String!, password: String!): AuthPayload
+    login(email: String!, password: String!): User!
+    logout: Boolean!
+  }
+
+  extend type Query {
+    me: User
   }
 `;
