@@ -30,8 +30,8 @@ export default function OkrsPage() {
   const [okrs, setOkrs] = useState<okrProps[]>([]);
   const [filteredOkrs, setFilteredOkrs] = useState<okrProps[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [startDateFilter, setStartDateFilter] = useState<string>("");
-  const [endDateFilter, setEndDateFilter] = useState<string>("");
+  //const [startDateFilter, setStartDateFilter] = useState<string>("");
+  //const [endDateFilter, setEndDateFilter] = useState<string>("");
 
   const { data, loading, error } = useQuery(GET_OKRS_QUERY);
 
@@ -51,30 +51,30 @@ export default function OkrsPage() {
     }
 
     // Filtrar por fecha de inicio
-    if (startDateFilter) {
-      // Convertir filtro a formato Date para comparar correctamente
-      const [year, month, day] = startDateFilter.split('-').map(Number);
-      const filterDate = new Date(year, month - 1, day);
-      result = result.filter(okr => {
-        const okrStartDate = parseCustomDate(okr.startDate);
-        return okrStartDate && okrStartDate >= filterDate;
-      });
-    }
-
-    // Filtrar por fecha de fin
-    if (endDateFilter) {
-      // Convertir filtro a formato Date para comparar correctamente
-      const [year, month, day] = endDateFilter.split('-').map(Number);
-      const filterDate = new Date(year, month - 1, day);
-      result = result.filter(okr => {
-        const okrEndDate = parseCustomDate(okr.endDate);
-        return okrEndDate && okrEndDate <= filterDate;
-      });
-    }
+    //if (startDateFilter) {
+    //  // Convertir filtro a formato Date para comparar correctamente
+    //  const [year, month, day] = startDateFilter.split('-').map(Number);
+    //  const filterDate = new Date(year, month - 1, day);
+    //  result = result.filter(okr => {
+    //    const okrStartDate = parseCustomDate(okr.startDate);
+    //    return okrStartDate && okrStartDate >= filterDate;
+    //  });
+    //}
+//
+    //// Filtrar por fecha de fin
+    //if (endDateFilter) {
+    //  // Convertir filtro a formato Date para comparar correctamente
+    //  const [year, month, day] = endDateFilter.split('-').map(Number);
+    //  const filterDate = new Date(year, month - 1, day);
+    //  result = result.filter(okr => {
+    //    const okrEndDate = parseCustomDate(okr.endDate);
+    //    return okrEndDate && okrEndDate <= filterDate;
+    //  });
+    //}
 
     setFilteredOkrs(result);
-  }, [statusFilter, startDateFilter, endDateFilter, okrs]);
-
+  }, [statusFilter, okrs]);
+//  }, [statusFilter, startDateFilter, endDateFilter, okrs]);
   const handleAddOkr = (newOkr: okrProps) => {
     setOkrs([newOkr, ...okrs]);
     setFilteredOkrs([newOkr, ...filteredOkrs]);
