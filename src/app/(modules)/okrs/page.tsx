@@ -19,11 +19,11 @@ interface okrProps {
 }
 
 // Función para convertir fecha de formato DD-MM-YYYY a Date
-const parseCustomDate = (dateString: string) => {
-  if (!dateString) return null;
-  const [day, month, year] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day);
-};
+//const parseCustomDate = (dateString: string) => {
+//  if (!dateString) return null;
+//  const [day, month, year] = dateString.split('-').map(Number);
+//  return new Date(year, month - 1, day);
+//};
 
 export default function OkrsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
