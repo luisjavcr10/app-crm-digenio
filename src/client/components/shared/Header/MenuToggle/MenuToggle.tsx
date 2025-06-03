@@ -47,7 +47,7 @@ export const MenuToggle = ({
         absolute top-full right-4 
         mt-3 py-3 z-30 
         transition-all duration-300
-        ${isScrolled?'bg-neutral-2 dark:bg-neutral-4 text-neutral-5 dark:text-neutral-1':'bg-neutral-4 dark:bg-neutral-1 text-neutral-1 dark:text-neutral-5'}
+        ${isScrolled?'bg-white text-neutral-2 dark:bg-black dark:text-neutral-4 ':'bg-neutral-4 dark:bg-neutral-1 text-neutral-1 dark:text-neutral-5'}
         rounded-[12px] shadow-toggle 
         text-[12px] `}
     >
