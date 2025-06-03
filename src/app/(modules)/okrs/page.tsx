@@ -1,57 +1,87 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DataServer } from "@/client/components/shared/icons/DataServer";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { OkrFormModal } from "@/client/components/private/okrs/OkrFormModal";
 import { OkrCard } from "@/client/components/private/okrs/OkrCard";
+import { useQuery } from "@apollo/client";
+import { GET_OKRS_QUERY } from "@/client/services/okrs";
 
 interface okrProps {
-  nombresResponsable: string;
-  nombreEquipo: string;
-  descripcion: string;
-  fechaInicio: string;
-  fechaFin: string;
-  titulo: string;
-  estado: string;
+  id: string;
+  title: string;
+  description: string;
+  owner: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+  userId: string;
 }
 
-const okrsList = [
-  {
-    titulo:"Titulo del OKR",
-    nombresResponsable: "Luis Castillo",
-    nombreEquipo: "Equipo de desarrollo",
-    descripcion: "Elevar la calidad del software entregado, reduciendo defectos críticos en producción y fortaleciendo los procesos de validación.",
-    fechaInicio: "2023-01-01",
-    fechaFin: "2023-06-01",
-    estado: "Completado"
-  },
-  {
-    titulo:"Titulo del OKR",
-    nombresResponsable: "Luis Castillo",
-    nombreEquipo: "Equipo de desarrollo",
-    descripcion: "Elevar la calidad del software entregado, reduciendo defectos críticos en producción y fortaleciendo los procesos de validación.",
-    fechaInicio: "2023-01-01",
-    fechaFin: "2023-06-01",
-    estado: "Completado"
-  },
-  {
-    titulo:"Titulo del OKR",
-    nombresResponsable: "Luis Castillo",
-    nombreEquipo: "Equipo de desarrollo",
-    descripcion: "Elevar la calidad del software entregado, reduciendo defectos críticos en producción y fortaleciendo los procesos de validación.",
-    fechaInicio: "2023-01-01",
-    fechaFin: "2023-06-01",
-    estado: "Completado"
-  }
-];
+// Función para convertir fecha de formato DD-MM-YYYY a Date
+const parseCustomDate = (dateString: string) => {
+  if (!dateString) return null;
+  const [day, month, year] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
 
 export default function OkrsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [okrs, setOkrs] = useState<okrProps[]>(okrsList);
+  const [okrs, setOkrs] = useState<okrProps[]>([]);
+  const [filteredOkrs, setFilteredOkrs] = useState<okrProps[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [startDateFilter, setStartDateFilter] = useState<string>("");
+  const [endDateFilter, setEndDateFilter] = useState<string>("");
+
+  const { data, loading, error } = useQuery(GET_OKRS_QUERY);
+
+  useEffect(() => {
+    if (data?.getOKRs) {
+      setOkrs(data.getOKRs);
+      setFilteredOkrs(data.getOKRs);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    let result = okrs;
+
+    // Filtrar por estado
+    if (statusFilter !== "all") {
+      result = result.filter(okr => okr.status === statusFilter);
+    }
+
+    // Filtrar por fecha de inicio
+    if (startDateFilter) {
+      // Convertir filtro a formato Date para comparar correctamente
+      const [year, month, day] = startDateFilter.split('-').map(Number);
+      const filterDate = new Date(year, month - 1, day);
+      result = result.filter(okr => {
+        const okrStartDate = parseCustomDate(okr.startDate);
+        return okrStartDate && okrStartDate >= filterDate;
+      });
+    }
+
+    // Filtrar por fecha de fin
+    if (endDateFilter) {
+      // Convertir filtro a formato Date para comparar correctamente
+      const [year, month, day] = endDateFilter.split('-').map(Number);
+      const filterDate = new Date(year, month - 1, day);
+      result = result.filter(okr => {
+        const okrEndDate = parseCustomDate(okr.endDate);
+        return okrEndDate && okrEndDate <= filterDate;
+      });
+    }
+
+    setFilteredOkrs(result);
+  }, [statusFilter, startDateFilter, endDateFilter, okrs]);
 
   const handleAddOkr = (newOkr: okrProps) => {
-    setOkrs([newOkr,...okrs]);
-  }
+    setOkrs([newOkr, ...okrs]);
+    setFilteredOkrs([newOkr, ...filteredOkrs]);
+  };
+
+  if (loading) return <p>Loading OKRs...</p>;
+  if (error) return <p>Error loading OKRs: {error.message}</p>;
 
   return (
     <div className="pt-[60px] my-6 mx-8 flex flex-col gap-8">
@@ -73,15 +103,53 @@ export default function OkrsPage() {
         </div>
       </div>
 
+      {/** Filtros */}
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
+        <div className="flex flex-col gap-2 w-full md:w-auto">
+          <select
+            id="status-filter"
+            className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">Todos</option>
+            <option value="Pending">Pendientes</option>
+            <option value="Completed">Completados</option>
+            <option value="In Progress">En progreso</option>
+          </select>
+        </div>
+
+        {/**<div className="flex flex-col md:flex-row gap-4 w-full">
+          <div className="flex flex-col gap-2 w-full md:w-auto">
+            <input
+              type="date"
+              id="start-date"
+              className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              value={startDateFilter}
+              onChange={(e) => setStartDateFilter(e.target.value)}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2 w-full md:w-auto">
+            <input
+              type="date"
+              id="end-date"
+              className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              value={endDateFilter}
+              onChange={(e) => setEndDateFilter(e.target.value)}
+            />
+          </div>
+        </div>*/}
+      </div>
+
       {/** Modal para agregar okrs */}
       {isModalOpen && (
         <OkrFormModal handleSubmit={handleAddOkr} handleClose={() => setIsModalOpen(false)} />
       )}
 
       {/** Contenedor para los okrs */}
-
-      {okrs.length === 0 ? (
-        <div className="min-h-[550px] flex flex-col justify-center items-center gap-4  border border-neutral-3 rounded-[24px]">
+      {filteredOkrs.length === 0 ? (
+        <div className="min-h-[550px] flex flex-col justify-center items-center gap-4 border border-neutral-3 rounded-[24px]">
           <DataServer />
           <p>No data to show</p>
         </div>
@@ -89,7 +157,7 @@ export default function OkrsPage() {
         <div className="min-h-[550px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Listado para moviles */}
           <div className="flex flex-col gap-4 md:hidden">
-            {okrs.map((okr, idx) => (
+            {filteredOkrs.map((okr, idx) => (
               <OkrCard key={idx} index={idx} okr={okr} />
             ))}
           </div>
@@ -97,7 +165,7 @@ export default function OkrsPage() {
           {/* Listado desktop */}
           {[0, 1, 2].map((colIndex) => (
             <div key={colIndex} className="hidden md:flex flex-col gap-4">
-              {okrs
+              {filteredOkrs
                 .filter((_, index) => index % 3 === colIndex)
                 .map((okr, idx) => (
                   <OkrCard key={idx} index={idx} okr={okr} />
