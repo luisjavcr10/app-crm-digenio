@@ -39,7 +39,7 @@ export const Header = () => {
 
   return (
     <header
-      className={` py-1  ${scrolled ? "px-10" : "px-3 shadow-header"}
+      className={` py-1  ${scrolled ? "px-10 md:px-40" : "px-3 shadow-header"}
         transition-all duration-300 
         w-full
         min-h-[60px]

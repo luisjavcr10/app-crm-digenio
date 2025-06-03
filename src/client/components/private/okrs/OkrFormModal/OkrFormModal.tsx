@@ -10,6 +10,8 @@ interface okrProps {
   descripcion: string;
   fechaInicio: string;
   fechaFin: string;
+  titulo: string;
+  estado: string;
 }
 
 
@@ -26,6 +28,8 @@ export const OkrFormModal = ({
     descripcion: "",
     fechaInicio: "",
     fechaFin: "",
+    titulo: "",
+    estado: ""
   });
 
   return (
