@@ -39,7 +39,7 @@ export const Header = () => {
 
   return (
     <header
-      className={` py-1  ${scrolled ? "px-10" : "px-3 shadow-header"}
+      className={` py-1  ${scrolled ? "px-10 md:px-40" : "px-3 shadow-header"}
         transition-all duration-300 
         w-full
         min-h-[60px]
@@ -56,7 +56,7 @@ export const Header = () => {
           rounded-[16px]
           ${
             scrolled
-              ? "bg-neutral-2 text-neutral-4 dark:bg-neutral-4 dark:text-neutral-2"
+              ? "bg-neutral-2 text-neutral-4 dark:bg-neutral-4 dark:text-neutral-2 mt-1"
               : "bg-neutral-5 dark:bg-neutral-1"
           }`}
       >
