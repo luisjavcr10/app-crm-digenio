@@ -5,6 +5,7 @@ interface OkrDateInputProps {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 export const OkrDateInput = ({
@@ -12,6 +13,7 @@ export const OkrDateInput = ({
   value,
   onChange,
   className = "",
+  disabled
 }: OkrDateInputProps) => {
   return (
     <div className={`scheme-light dark:scheme-dark flex flex-col lg:flex-row gap-4 lg:gap-8 ${className}`}>
@@ -20,6 +22,7 @@ export const OkrDateInput = ({
         value={value}
         onChange={e => onChange(e.target.value)}
         type="date"
+        disabled={disabled}
         className="caret-neutral-3 outline-neutral-3 dark:outline-neutral-2 border border-neutral-3 dark:border-neutral-2 rounded-[12px] py-2 px-4"
       />
     </div>
