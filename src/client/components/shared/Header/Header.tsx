@@ -103,7 +103,7 @@ export const Header = () => {
               transition-all duration-300
         ${
           scrolled
-            ? "bg-neutral-4 dark:bg-neutral-2 text-neutral-1 dark:text-neutral-5 hover:bg-neutral-3 dark:hover:bg-neutral-1"
+            ? "bg-neutral-2 dark:bg-neutral-4 text-neutral-5 dark:text-neutral-1 hover:bg-neutral-1 dark:hover:bg-neutral-3"
             : "bg-neutral-2 dark:bg-neutral-4 text-neutral-5 dark:text-neutral-1 hover:bg-neutral-1 dark:hover:bg-neutral-3"
         }
               text-[12px] 
