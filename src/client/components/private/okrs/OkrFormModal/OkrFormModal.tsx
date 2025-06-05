@@ -7,6 +7,7 @@ import { useMutation } from "@apollo/client";
 import {
   CREATE_OKR_MUTATION,
   UPDATE_OKR_MUTATION,
+  DELETE_OKR_MUTATION
 } from "@/client/services/okrs";
 
 interface okrProps {
@@ -45,6 +46,7 @@ export const OkrFormModal = ({
 
   const [createOkr, { loading: creating, error: createError }] = useMutation(CREATE_OKR_MUTATION);
   const [updateOkr, { loading: updating, error: updateError }] = useMutation(UPDATE_OKR_MUTATION);
+  const [deleteOkr, { loading: deleting, error: deleteError }] = useMutation(DELETE_OKR_MUTATION);
 
   useEffect(() => {
     if (passedOkr) {
@@ -91,6 +93,17 @@ export const OkrFormModal = ({
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const { data } = await deleteOkr({ variables: { id: okr.id } });
+      if (data?.deleteOKR) {
+        handleClose();
+      }
+    } catch (err) {
+      console.error("Error deleting OKR:", err);
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-[#1f1f1f80]" onClick={handleClose} />
@@ -104,9 +117,7 @@ export const OkrFormModal = ({
                 : "Detalle del OKR"
               : "Agregar nuevo OKR"}
           </h2>
-          {passedOkr && !isEditing && (
-            <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
-          )}
+          
         </div>
 
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2 ">
@@ -170,6 +181,12 @@ export const OkrFormModal = ({
             disabled={isViewMode}
           />
         </div>
+        {passedOkr && !isEditing && (
+          <div className="w-full py-4 px-6 flex justify-center items-center gap-4">
+            <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
+            <MainButton text={deleting ? "Eliminando..." : "Eliminar"} handleClick={handleDelete} disabled={deleting} />
+          </div>
+          )}
 
         {(isEditing || !passedOkr) && (
           <div className="w-full py-4 px-6 flex justify-center items-center">
@@ -189,9 +206,9 @@ export const OkrFormModal = ({
           </div>
         )}
 
-        {(createError || updateError) && (
+        {(createError || updateError || deleteError) && (
           <p className="text-red-500 text-center pb-4">
-            Error: {(createError || updateError)?.message}
+            Error: {(createError || updateError || deleteError)?.message}
           </p>
         )}
       </div>

@@ -34,6 +34,7 @@ export const MenuToggle = ({
   }, [isOpen, handleOpen]);
 
   const handleLogoutClick = () => {
+    handleOpen();
     handleLogout();
     router.push("/");
   }
