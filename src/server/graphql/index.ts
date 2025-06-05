@@ -6,6 +6,5 @@ import { userTypeDefs } from './modules/users/schema';
 import { okrsTypeDefs } from './modules/okrs/schema';
 import { okrsResolvers } from './modules/okrs/resolvers';
 
-
 export const typeDefs = mergeTypeDefs([authTypeDefs, userTypeDefs, okrsTypeDefs]);
 export const resolvers = mergeResolvers([authResolvers, userResolvers, okrsResolvers]);

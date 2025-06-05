@@ -25,7 +25,6 @@ export const OkrFormModal = ({
   handleClose,
   handleSubmit,
   okr: passedOkr,
-  okrs,
 }: Readonly<{
   handleClose: () => void;
   handleSubmit: (okr: okrProps) => void;

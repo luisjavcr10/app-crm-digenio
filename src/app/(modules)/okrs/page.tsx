@@ -26,7 +26,7 @@ export default function OkrsPage() {
   const [startDateFilter, setStartDateFilter] = useState<string>("");
   const [endDateFilter, setEndDateFilter] = useState<string>("");
 
-  const { data, loading, error } = useQuery(GET_OKRS_QUERY);
+  const { data} = useQuery(GET_OKRS_QUERY);
 
   useEffect(() => {
     if (data?.getOKRs) {
@@ -39,11 +39,11 @@ export default function OkrsPage() {
     let result = [...okrs];
 
     // Función para convertir fecha de formato DD-MM-YYYY a Date
-    const parseCustomDate = (dateString: string) => {
-      if (!dateString) return null;
-      const [day, month, year] = dateString.split('-').map(Number);
-      return new Date(year, month - 1, day);
-    };
+    //const parseCustomDate = (dateString: string) => {
+    //  if (!dateString) return null;
+    //  const [day, month, year] = dateString.split('-').map(Number);
+    //  return new Date(year, month - 1, day);
+    //};
 
     // Filtrar por estado
     if (statusFilter !== "all") {
