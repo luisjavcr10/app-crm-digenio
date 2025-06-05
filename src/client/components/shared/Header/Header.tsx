@@ -56,7 +56,7 @@ export const Header = () => {
           rounded-[16px]
           ${
             scrolled
-              ? "bg-white text-neutral-2 dark:bg-black dark:text-neutral-4 mt-1"
+              ? "bg-neutral-4 text-neutral-2 dark:bg-black dark:text-neutral-4 mt-1 shadow-input"
               : "bg-neutral-5 dark:bg-neutral-1"
           }`}
       >
