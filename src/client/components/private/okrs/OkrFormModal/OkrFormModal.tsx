@@ -4,11 +4,14 @@ import { OkrTextInput } from "../OkrTextInput";
 import { OkrTextareaInput } from "../OkrTextareaInput";
 import { OkrDateInput } from "../OkrDateInput";
 import { useMutation } from "@apollo/client";
+import ReactMarkdown from "react-markdown";
 import {
   CREATE_OKR_MUTATION,
   UPDATE_OKR_MUTATION,
   DELETE_OKR_MUTATION
 } from "@/client/services/okrs";
+import { useLazyQuery } from "@apollo/client";
+import { GET_DEEPSEEK_RECOMMENDATION } from "@/client/services/ia";
 
 interface okrProps {
   id: string;
@@ -47,6 +50,10 @@ export const OkrFormModal = ({
   const [createOkr, { loading: creating, error: createError }] = useMutation(CREATE_OKR_MUTATION);
   const [updateOkr, { loading: updating, error: updateError }] = useMutation(UPDATE_OKR_MUTATION);
   const [deleteOkr, { loading: deleting, error: deleteError }] = useMutation(DELETE_OKR_MUTATION);
+  const [activeTab, setActiveTab] = useState<'form' | 'recomendaciones'>('form');
+const [showRecommendations, setShowRecommendations] = useState(false);
+const [getRecommendation, { data: recommendationData, loading: loadingRecommendation, error: errorRecommendation }] = useLazyQuery(GET_DEEPSEEK_RECOMMENDATION);
+
 
   useEffect(() => {
     if (passedOkr) {
@@ -105,7 +112,7 @@ export const OkrFormModal = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50 ">
       <div className="absolute inset-0 bg-[#1f1f1f80]" onClick={handleClose} />
 
       <div className="w-9/12 max-h-11/12 lg:max-h-9/12 overflow-y-auto bg-neutral-5 dark:bg-neutral-1 border border-neutral-3 dark:border-neutral-2 rounded-[12px] relative z-10">
@@ -181,12 +188,61 @@ export const OkrFormModal = ({
             disabled={isViewMode}
           />
         </div>
-        {passedOkr && !isEditing && (
-          <div className="w-full py-4 px-6 flex justify-center items-center gap-4">
-            <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
-            <MainButton text={deleting ? "Eliminando..." : "Eliminar"} handleClick={handleDelete} disabled={deleting} />
-          </div>
-          )}
+        
+
+      {passedOkr && !isEditing && (
+        <div className="w-full py-4 px-6 flex justify-center items-center gap-4">
+          <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
+          <MainButton text={deleting ? "Eliminando..." : "Eliminar"} handleClick={handleDelete} disabled={deleting} />          <MainButton text="Recomendaciones para lograr el OKR" handleClick={() => {
+            setActiveTab('recomendaciones');
+            setShowRecommendations(true);
+            getRecommendation({
+              variables: {
+                messages: [
+                  { role: 'system', content: 'Eres un experto en OKRs. Da recomendaciones para lograr el siguiente OKR.' },
+                  { role: 'user', content: `Título: ${okr.title}\nDescripción: ${okr.description}\nResponsable: ${okr.owner}\nEstado: ${okr.status}\nFecha inicio: ${okr.startDate}\nFecha fin: ${okr.endDate}` }
+                ]
+              }
+            });
+          }} />
+        </div>
+      )}
+
+{showRecommendations && activeTab === 'recomendaciones' && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <div className="bg-white dark:bg-neutral-1 rounded-lg p-8 max-w-2xl max-w-[600px] max-h-[600px] overflow-y-auto relative shadow-xl border border-gray-200 dark:border-neutral-700">
+      <button
+        className="absolute top-3 right-3 text-2xl font-bold hover:text-red-600 transition"
+        onClick={() => setShowRecommendations(false)}
+        aria-label="Cerrar modal de recomendaciones"
+      >
+        ×
+      </button>
+      <h3 className="text-2xl font-bold mb-4">Resumen del OKR</h3>
+      <div className="mb-4">
+        <p><strong>Título:</strong> {okr.title}</p>
+        <p><strong>Descripción:</strong> {okr.description}</p>
+        <p><strong>Responsable:</strong> {okr.owner}</p>
+        <p><strong>Estado:</strong> {okr.status}</p>
+        <p><strong>Fecha inicio:</strong> {okr.startDate}</p>
+        <p><strong>Fecha fin:</strong> {okr.endDate}</p>
+      </div>
+      <h4 className="text-xl font-semibold mb-2">Recomendaciones IA</h4>
+      {loadingRecommendation && <p>Cargando recomendaciones...</p>}
+      {errorRecommendation && (
+        <p className="text-red-500">Error: {errorRecommendation.message}</p>
+      )}
+      {recommendationData?.getDeepSeekRecommendation?.choices?.[0]?.message?.content && (
+        <div className="bg-neutral-4 p-4 prose dark:prose-invert max-w-none rounded">
+          <ReactMarkdown>
+            {recommendationData.getDeepSeekRecommendation.choices[0].message.content}
+          </ReactMarkdown>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
 
         {(isEditing || !passedOkr) && (
           <div className="w-full py-4 px-6 flex justify-center items-center">
@@ -215,3 +271,4 @@ export const OkrFormModal = ({
     </div>
   );
 };
+
