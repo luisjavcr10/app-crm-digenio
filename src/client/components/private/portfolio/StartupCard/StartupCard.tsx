@@ -61,8 +61,8 @@ export const StartupCard = ({
           <p className="text-[12px]"> {st.currentValue === 0
                   ? "Idea"
                   : st.currentValue === st.expectedValue
-                  ? "Crecimiento"
-                  : "Escala"}</p>
+                  ? "Escala"
+                  : "Crecimiento"}</p>
         </div>
 
         <ProgressBar percentage={percentage} />
