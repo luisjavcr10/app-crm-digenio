@@ -1,13 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
+import { GET_ALL_STARTUPS_QUERY } from "@/client/services/startups";
+import { StartupCard } from "@/client/components/private/portfolio/StartupCard";
+import { StartupModal } from "@/client/components/private/portfolio/StartupModal";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
 import { NoData } from "@/client/components/shared/NoData";
-import { StartupCard } from "@/client/components/private/portfolio/StartupCard";
-import { GET_ALL_STARTUPS_QUERY } from "@/client/services/startups";
-
-import { StartupModal } from "@/client/components/private/portfolio/StartupModal/StartupModal";
 
 interface IStartup {
   _id: string;

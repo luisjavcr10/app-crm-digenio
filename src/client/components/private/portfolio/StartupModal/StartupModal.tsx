@@ -51,7 +51,7 @@ export const StartupModal = ({
 
   const [createStartup, { loading: creating, error: createError }] = useMutation(CREATE_STARTUP_MUTATION);
   const [updateStartup, { loading: updating, error: updateError }] = useMutation(UPDATE_STARTUP_MUTATION);
-  const [updateStartupMetrics, { loading: updatingMetrics, error: updateMetricsError }] = useMutation(UPDATE_STARTUP_METRICS_MUTATION);
+  const [updateStartupMetrics, { error: updateMetricsError }] = useMutation(UPDATE_STARTUP_METRICS_MUTATION);
   const [deleteStartup, { loading: deleting, error: deleteError }] = useMutation(DELETE_STARTUP_MUTATION);
 
   useEffect(() => {
