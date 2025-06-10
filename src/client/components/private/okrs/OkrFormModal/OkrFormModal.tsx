@@ -181,6 +181,7 @@ export const OkrFormModal = ({
             disabled={isViewMode}
           />
         </div>
+        
         {passedOkr && !isEditing && (
           <div className="w-full py-4 px-6 flex justify-center items-center gap-4">
             <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
