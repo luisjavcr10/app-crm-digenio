@@ -13,28 +13,6 @@ export const startupsTypeDefs = `#graphql
     updatedAt: String
   }
 
-  input CreateStartupInput {
-    client: String!
-    name: String!
-    description: String!
-    responsible: String!
-    monthlyMetric: String!
-    metric: String!
-    currentValue: Float
-    expectedValue: Float!
-  }
-
-  input UpdateStartupInput {
-    client: String
-    name: String
-    description: String
-    responsible: String
-    monthlyMetric: String
-    metric: String
-    currentValue: Float
-    expectedValue: Float
-  }
-
   type Query {
     getStartup(id: ID!): Startup
     getAllStartups: [Startup!]!
@@ -43,8 +21,29 @@ export const startupsTypeDefs = `#graphql
   }
 
   type Mutation {
-    createStartup(input: CreateStartupInput!): Startup!
-    updateStartup(id: ID!, input: UpdateStartupInput!): Startup!
+    createStartup(
+      client: String!
+      name: String!
+      description: String!
+      responsible: String!
+      monthlyMetric: String!
+      metric: String!
+      currentValue: Float
+      expectedValue: Float!
+    ): Startup!
+
+    updateStartup(
+      id: ID!
+      client: String
+      name: String
+      description: String
+      responsible: String
+      monthlyMetric: String
+      metric: String
+      currentValue: Float
+      expectedValue: Float
+    ): Startup!
+
     deleteStartup(id: ID!): Startup!
     updateStartupMetrics(id: ID!, currentValue: Float!): Startup!
   }
