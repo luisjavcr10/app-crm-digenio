@@ -26,15 +26,30 @@ export class IaService {
       const text = await response.text();
       console.log("Respuesta de DeepSeek:", text);
       // Intenta parsear como JSON
-      let data: any;
+      //let data: any;
+      //try {
+      //  data = JSON.parse(text);
+      //} catch (parseError) {
+      //  throw new Error(`Respuesta inválida desde DeepSeek:\n\n${text}`);
+      //}
+//
+      //if (!response.ok) {
+      //  throw new Error(`DeepSeek API error: ${data?.error?.message || response.statusText}`);
+      //}
+
+      //SOLUCION A LO DE ARRIBA
+      let data: DeepSeekResponse;
       try {
-        data = JSON.parse(text);
+        data = JSON.parse(text) as DeepSeekResponse;
       } catch (parseError) {
+        console.log(parseError);
         throw new Error(`Respuesta inválida desde DeepSeek:\n\n${text}`);
       }
 
       if (!response.ok) {
-        throw new Error(`DeepSeek API error: ${data?.error?.message || response.statusText}`);
+        throw new Error(
+          `DeepSeek API error: ${response.statusText}`
+        );
       }
 
       return data as DeepSeekResponse;
