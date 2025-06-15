@@ -91,7 +91,7 @@ employeeSchema.pre<IEmployee>("validate", async function (next) {
 
       this.employeeId = `EMP-${counter.seq}`;
       next();
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(
         error instanceof Error
           ? error

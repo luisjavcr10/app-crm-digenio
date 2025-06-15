@@ -1,5 +1,5 @@
 import dbConnect from "@/server/db/dbConnect";
-import { Startup, IStartup } from "../../models/Startup";
+import { Startup, IStartup } from "../../../db/models/Startup";
 import { GraphQLError } from "graphql";
 
 export const startupResolvers = {

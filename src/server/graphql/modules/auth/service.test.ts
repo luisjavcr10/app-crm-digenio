@@ -1,7 +1,7 @@
 import { AuthService } from './service';
 import dbConnect from '@/server/db/dbConnect';
 import { encrypt } from '@/server/utils/session';
-import { User } from '../../models/User';
+import { User } from '../../../db/models/User';
 
 jest.mock('@/server/db/dbConnect', () => jest.fn());
 jest.mock('@/server/utils/session', () => ({

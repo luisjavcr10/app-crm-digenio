@@ -1,4 +1,4 @@
-import { User } from "../../models/User";
+import { User } from "../../../db/models/User";
 import dbConnect from "@/server/db/dbConnect";
 import { encrypt } from "@/server/utils/session";
 
