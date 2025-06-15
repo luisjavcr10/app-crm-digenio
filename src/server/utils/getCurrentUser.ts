@@ -1,8 +1,8 @@
 "server-only";
 import { cookies } from "next/headers";
 import { COOKIE_NAME, decrypt} from '../utils/session'
-import dbConnect from "../db/dbConnect";
-import { User } from "../db/models/User";
+import dbConnect from "../database/dbConnect";
+import { User } from "../database/models/User";
 
 export async function getCurrentUser() {
   const cookieStore = await cookies();

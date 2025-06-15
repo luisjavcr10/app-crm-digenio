@@ -1,5 +1,5 @@
-import { User } from "../../../db/models/User";
-import dbConnect from "@/server/db/dbConnect";
+import { User } from "../../../database/models/User";
+import dbConnect from "@/server/database/dbConnect";
 import { encrypt } from "@/server/utils/session";
 
 export class AuthService{

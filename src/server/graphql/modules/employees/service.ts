@@ -1,7 +1,7 @@
-import { Employee } from "../../../db/models/Employee";
-import { User } from "../../../db/models/User";
-import dbConnect from "@/server/db/dbConnect";
-import { IEmployee } from "../../../db/models/Employee";
+import { Employee } from "../../../database/models/Employee";
+import { User } from "../../../database/models/User";
+import dbConnect from "@/server/database/dbConnect";
+import { IEmployee } from "../../../database/models/Employee";
 import mongoose from "mongoose";
 
 export class EmployeeService {

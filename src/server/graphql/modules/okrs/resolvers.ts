@@ -1,5 +1,5 @@
-import dbConnect from "@/server/db/dbConnect";
-import { OKR } from "../../../db/models/Okr";
+import dbConnect from "@/server/database/dbConnect";
+import { OKR } from "../../../database/models/Okr";
 
 export const okrsResolvers = {
   Query: {
