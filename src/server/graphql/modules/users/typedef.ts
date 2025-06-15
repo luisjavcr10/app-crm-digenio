@@ -1,36 +1,45 @@
 export const userTypeDefs = `#graphql
   type User {
     id: ID!
+    name: String!
     email: String!
     password: String!
-    firstName: String!
-    lastName: String!
-    role: String
-    active: Boolean
+    role: Role!
+    status: Status!
+    createdAt: String!
+    updatedAt: String!
   }
 
-  type Query{
+  enum Role {
+    ADMIN
+    USER
+  }
+
+  enum Status {
+    active
+    inactive
+    on_leave
+  }
+
+  type Query {
     users: [User!]!
     user(id: ID!): User!
   }
 
-  type Mutation{
+  type Mutation {
     createUser(
+      name: String!
       email: String!
       password: String!
-      firstName: String!
-      lastName: String!
-      role: String
-      active: Boolean
+      role: Role
     ): User!
     updateUser(
       id: ID!
+      name: String
       email: String
       password: String
-      firstName: String
-      lastName: String
-      role: String
-      active: Boolean
+      role: Role
+      status: Status
     ): User!
     deleteUser(id: ID!): User!
   }
