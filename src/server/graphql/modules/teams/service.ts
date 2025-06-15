@@ -9,42 +9,83 @@ export class TeamService {
     membersIds: string[] = []
   ) {
     await dbConnect();
-
-    // Verificar que el manager existe
-    const manager = await Employee.findById(managerId);
+  
+    // Verificar que el manager existe y poblar su userId
+    const manager = await Employee.findById(managerId).populate('userId');
     if (!manager) {
       throw new Error("El empleado manager no existe");
     }
-
+  
     // Crear el equipo incluyendo al manager como miembro
     const newTeam = await Team.create({
       name,
       description,
       manager: managerId,
-      members: [...new Set([managerId, ...membersIds])], // Elimina duplicados
+      members: [...new Set([managerId, ...membersIds])],
     });
-
+  
     // Actualizar los empleados con la referencia al nuevo equipo
     await Employee.updateMany(
       { _id: { $in: newTeam.members } },
       { $addToSet: { teams: newTeam._id } }
     );
-
-    return newTeam;
+  
+    // Retornar el equipo creado con toda la información poblada
+    const populatedTeam = await Team.findById(newTeam._id)
+      .populate({
+        path: 'managerInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      })
+      .populate({
+        path: 'membersInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      });
+  
+    return populatedTeam;
   };
 
   static async getTeamById(id: string) {
     await dbConnect();
     return await Team.findById(id)
-      .populate("managerInfo")
-      .populate("membersInfo");
+      .populate({
+        path: 'managerInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      })
+      .populate({
+        path: 'membersInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      });
   };
 
   static async getAllTeams() {
     await dbConnect();
     return await Team.find()
-      .populate("managerInfo")
-      .populate("membersInfo");
+      .populate({
+        path: 'managerInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      })
+      .populate({
+        path: 'membersInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      });
   };
 
   static async updateTeam(
@@ -69,14 +110,28 @@ export class TeamService {
       updateData.members = [
         ...new Set([
           updateData.manager,
-          ...(updateData.members || team.members.map((m:string) => m.toString())),
+          ...(updateData.members || team.members.map((m: string) => m.toString())),
         ]),
       ];
     }
 
     const updatedTeam = await Team.findByIdAndUpdate(id, updateData, {
       new: true,
-    }).populate("managerInfo membersInfo");
+    })
+      .populate({
+        path: 'managerInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      })
+      .populate({
+        path: 'membersInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      });
 
     // Actualizar referencias en empleados si cambian los miembros
     if (updateData.members) {
@@ -114,4 +169,31 @@ export class TeamService {
     return await Team.findByIdAndDelete(id);
   }
 
+  // Método adicional para obtener equipos con filtros
+  static async getTeamsWithFilters(filters: {
+    status?: "active" | "inactive" | "archived";
+    manager?: string;
+  }) {
+    await dbConnect();
+    
+    const query: any = {};
+    if (filters.status) query.status = filters.status;
+    if (filters.manager) query.manager = filters.manager;
+
+    return await Team.find(query)
+      .populate({
+        path: 'managerInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      })
+      .populate({
+        path: 'membersInfo',
+        populate: {
+          path: 'userId',
+          select: 'email name role status'
+        }
+      });
+  }
 }

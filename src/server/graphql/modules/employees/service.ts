@@ -7,12 +7,16 @@ import mongoose from "mongoose";
 export class EmployeeService {
   static async getEmployees() {
     await dbConnect();
-    return await Employee.find().populate("userId");
+    return await Employee.find()
+      .populate("userId")
+      .populate("teams");
   }
 
   static async getEmployee(id: string) {
     await dbConnect();
-    return await Employee.findById(id).populate("userId");
+    return await Employee.findById(id)
+      .populate("userId")
+      .populate("teams");
   }
 
   static async createEmployee(

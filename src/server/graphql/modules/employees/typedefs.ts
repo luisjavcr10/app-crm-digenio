@@ -14,6 +14,7 @@ export const employeeTypeDefs = `#graphql
     contactInfo: ContactInfo!
     status: EmployeeStatus!
     hireDate: String!
+    teams: [Team!]!
     createdAt: String!
     updatedAt: String!
   }
