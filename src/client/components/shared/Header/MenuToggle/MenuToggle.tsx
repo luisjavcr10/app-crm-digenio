@@ -54,7 +54,7 @@ export const MenuToggle = ({
     >
       <div className="px-6 pb-2">
         <p className="font-[600]">
-          {user.firstName} {user.lastName}
+          {user.name}
         </p>
         <p className="underline">{user.email}</p>
         <button className="mt-4 cursor-pointer hover:text-primary-1">

@@ -11,8 +11,7 @@ interface LoginPaylaod {
 interface User {
   email: string;
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   role: string;
 }
 
@@ -40,8 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User>({
     email: "",
     id: "",
-    firstName: "",
-    lastName: "",
+    name:"",
     role: ""
   });
 
