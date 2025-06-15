@@ -12,6 +12,7 @@ export interface IEmployee extends Document {
   };
   status: "active" | "inactive" | "on_leave";
   hireDate?: Date;
+  teams?: Types.ObjectId[];
 }
 
 interface IEmployeeCounter extends Document {
@@ -73,6 +74,12 @@ const employeeSchema = new Schema<IEmployee>(
     hireDate: {
       type: Date,
       default: Date.now,
+    },
+    teams: {
+      type: [Schema.Types.ObjectId],
+      ref: "Team",
+      default: [],
+      index: true,
     },
   },
   {
