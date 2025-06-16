@@ -169,31 +169,4 @@ export class TeamService {
     return await Team.findByIdAndDelete(id);
   }
 
-  // Método adicional para obtener equipos con filtros
-  static async getTeamsWithFilters(filters: {
-    status?: "active" | "inactive" | "archived";
-    manager?: string;
-  }) {
-    await dbConnect();
-    
-    const query: any = {};
-    if (filters.status) query.status = filters.status;
-    if (filters.manager) query.manager = filters.manager;
-
-    return await Team.find(query)
-      .populate({
-        path: 'managerInfo',
-        populate: {
-          path: 'userId',
-          select: 'email name role status'
-        }
-      })
-      .populate({
-        path: 'membersInfo',
-        populate: {
-          path: 'userId',
-          select: 'email name role status'
-        }
-      });
-  }
 }

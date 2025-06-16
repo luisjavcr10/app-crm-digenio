@@ -68,6 +68,13 @@ const employeeSchema = new Schema<IEmployee>(
   }
 );
 
+employeeSchema.virtual("userInfo", {
+  ref: "User",
+  localField: "userId",
+  foreignField: "_id",
+  justOne: true,
+})
+
 employeeSchema.pre<IEmployee>("validate", async function (next) {
   if (this.isNew && !this.employeeId) {
     try {

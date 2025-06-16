@@ -42,11 +42,13 @@ export class OkrService {
     createdBy: string
   ) {
     await dbConnect();
-    return await OKR.create({
+    const newOkr = await OKR.create({
       ...input,
       status: "pending",
       createdBy
     });
+
+    return newOkr;
   }
 
   static async createDraftOKR(
@@ -55,14 +57,13 @@ export class OkrService {
       description: string;
       owner: Types.ObjectId;
     },
-    createdBy: Types.ObjectId
+    createdBy: string
   ) {
     await dbConnect();
     return await OKR.create({
       ...input,
       status: 'draft',
       createdBy,
-      // Sin fechas requeridas para borradores
     });
   }
 

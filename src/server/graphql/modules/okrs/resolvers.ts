@@ -1,5 +1,6 @@
 import { OkrService } from "./service";
 import { Types } from "mongoose";
+import { IOKR } from "@/server/database/interfaces/IOKR";
 
 export const okrsResolvers = {
   Query: {
@@ -20,27 +21,50 @@ export const okrsResolvers = {
   Mutation: {
     createOKR: async (
       _: undefined,
-      { input, createdBy }: { input: any, createdBy: string }
+      {
+        input,
+        createdBy,
+      }: {
+        input: {
+          title: string;
+          description: string;
+          owner: Types.ObjectId;
+          startDate: Date;
+          endDate: Date;
+        };
+        createdBy: string;
+      }
     ) => {
       return await OkrService.createOKR(input, createdBy);
     },
 
     createDraftOKR: async (
       _: undefined,
-      { input, createdBy }: { input: any, createdBy: string }
+      {
+        input,
+        createdBy,
+      }: {
+        input: {
+          title: string;
+          description: string;
+          owner: Types.ObjectId;
+        };
+        createdBy: string;
+      }
     ) => {
       return await OkrService.createDraftOKR(
-        {
-          ...input,
-          owner: new Types.ObjectId(input.owner)
-        },
-        new Types.ObjectId(createdBy)
+        input,
+        createdBy
       );
     },
 
     publishDraft: async (
       _: undefined,
-      { id, startDate, endDate }: { id: string, startDate: string, endDate: string }
+      {
+        id,
+        startDate,
+        endDate,
+      }: { id: string; startDate: string; endDate: string }
     ) => {
       return await OkrService.publishDraft(
         new Types.ObjectId(id),
@@ -51,17 +75,20 @@ export const okrsResolvers = {
 
     updateOKR: async (
       _: undefined,
-      { id, input }: { id: string, input: any }
+      { id, input }: { id: string; input: {
+        title?: string;
+        description?: string;
+        status?: string;
+        startDate?: string;
+        endDate?: string;
+      } }
     ) => {
       const updates: any = { ...input };
-      
+
       if (input.startDate) updates.startDate = new Date(input.startDate);
       if (input.endDate) updates.endDate = new Date(input.endDate);
-      
-      return await OkrService.updateOKR(
-        new Types.ObjectId(id),
-        updates
-      );
+
+      return await OkrService.updateOKR(new Types.ObjectId(id), updates);
     },
 
     deleteOKR: async (_: undefined, { id }: { id: string }) => {
@@ -70,17 +97,17 @@ export const okrsResolvers = {
   },
 
   OKR: {
-    owner: (parent: any) => {
+    owner: (parent: IOKR) => {
       // Si ya está poblado, devolverlo directamente
-      if (parent.owner?.name) return parent.owner;
+      if (parent.owner) return parent.owner;
       // Si no, hacer populate
-      return parent.populate('owner').then((o: any) => o.owner);
+      return parent.populate("owner").then((o: any) => o.owner);
     },
-    createdBy: (parent: any) => {
+    createdBy: (parent: IOKR) => {
       // Si ya está poblado, devolverlo directamente
-      if (parent.createdBy?.name) return parent.createdBy;
+      if (parent.createdBy) return parent.createdBy;
       // Si no, hacer populate
-      return parent.populate('createdBy').then((o: any) => o.createdBy);
-    }
-  }
+      return parent.populate("createdBy").then((o: any) => o.createdBy);
+    },
+  },
 };

@@ -49,4 +49,20 @@ const okrSchema = new Schema<IOKR>({
   toObject: { virtuals: true }
 });
 
+// Virtual para información del equipo (owner)
+okrSchema.virtual('ownerInfo', {
+  ref: 'Team',
+  localField: 'owner',
+  foreignField: '_id',
+  justOne: true,
+});
+
+// Virtual para información del creador
+okrSchema.virtual('creatorInfo', {
+  ref: 'User',
+  localField: 'createdBy',
+  foreignField: '_id',
+  justOne: true
+});
+
 export const OKR = models.OKR || model<IOKR>("OKR", okrSchema);
