@@ -53,7 +53,6 @@ export class EmployeeService {
       });
       await employee.save({ session });
 
-      // Si todo sale bien, hacer commit
       await session.commitTransaction();
       const populatedEmployee = await Employee.findById(employee._id)
         .populate("userId")
@@ -61,9 +60,8 @@ export class EmployeeService {
 
       return populatedEmployee;
     } catch (error) {
-      // Si hay error, hacer rollback
       await session.abortTransaction();
-      throw error; // Relanzar el error para manejo superior
+      throw error;
     } finally {
       session.endSession();
     }
