@@ -1,8 +1,7 @@
-import { Employee } from "../../../database/models/Employee";
-import { User } from "../../../database/models/User";
-import dbConnect from "@/server/database/dbConnect";
-import { IEmployee } from "../../../database/models/Employee";
 import mongoose from "mongoose";
+import { Employee, User } from "@/server/database/models";
+import { IEmployee } from "@/server/database/interfaces/IEmployee";
+import dbConnect from "@/server/database/dbConnect";
 
 export class EmployeeService {
   static async getEmployees() {

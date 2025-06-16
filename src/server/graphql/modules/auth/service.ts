@@ -1,6 +1,6 @@
-import { User } from "../../../database/models/User";
-import dbConnect from "@/server/database/dbConnect";
+import { User } from "@/server/database/models";
 import { encrypt } from "@/server/utils/session";
+import dbConnect from "@/server/database/dbConnect";
 
 export class AuthService{
     static async login(email:string, password:string){

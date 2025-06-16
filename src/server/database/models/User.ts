@@ -1,14 +1,6 @@
-import { Schema, model, models, Document } from "mongoose";
+import { Schema, model, models } from "mongoose";
+import { IUser } from "../interfaces/IUser";
 import bcrypt from "bcryptjs";
-
-export interface IUser extends Document {
-  name: string;
-  email: string;
-  password: string;
-  role: "ADMIN" | "USER";
-  status: "active" | "inactive" | "on_leave";
-  comparePassword(candidatePassword: string): Promise<boolean>;
-}
 
 const userSchema = new Schema<IUser>(
   {

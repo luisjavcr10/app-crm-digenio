@@ -1,7 +1,7 @@
 import { TeamService } from "./service";
 import { Document } from "mongoose";
-import { ITeam } from "@/server/database/models/Teams";
-import { IEmployee } from "@/server/database/models/Employee";
+import { ITeam } from "@/server/database/interfaces/ITeam";
+import { IEmployee } from "@/server/database/interfaces/IEmployee";
 
 type TeamParent = Document<unknown, ITeam> &
   ITeam & {

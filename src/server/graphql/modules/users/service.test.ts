@@ -1,22 +1,22 @@
-import { AuthService } from './service';
+import { UserService } from "./service";
 
-describe('AuthService', () => {
+describe('UserService', () => {
   describe('getUsers', () => {
     it('debería lanzar un error si no puede obtener usuarios', async () => {
-      await expect(AuthService.getUsers()).rejects.toThrow();
+      await expect(UserService.getUsers()).rejects.toThrow();
     });
   });
 
   describe('getUser', () => {
     it('debería lanzar un error si el ID es inválido', async () => {
-      await expect(AuthService.getUser('id-falso')).rejects.toThrow();
+      await expect(UserService.getUser('id-falso')).rejects.toThrow();
     });
   });
 
   describe('createUser', () => {
     it('debería lanzar un error si los datos del usuario son inválidos', async () => {
       await expect(
-        AuthService.createUser('', '', '', '', '')
+        UserService.createUser('', '', '', 'ADMIN')
       ).rejects.toThrow();
     });
   });
@@ -24,14 +24,14 @@ describe('AuthService', () => {
   describe('updateUser', () => {
     it('debería lanzar un error si no se puede actualizar el usuario', async () => {
       await expect(
-        AuthService.updateUser('id-falso', { email: 'correo@falso.com' })
+        UserService.updateUser('id-falso', { email: 'correo@falso.com' })
       ).rejects.toThrow();
     });
   });
 
   describe('deleteUser', () => {
     it('debería lanzar un error si no se puede eliminar el usuario', async () => {
-      await expect(AuthService.deleteUser('id-falso')).rejects.toThrow();
+      await expect(UserService.deleteUser('id-falso')).rejects.toThrow();
     });
   });
 });

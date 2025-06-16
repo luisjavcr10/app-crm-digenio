@@ -1,4 +1,4 @@
-import { Employee, Team } from "@/server/database";
+import { Employee, Team } from "@/server/database/models";
 import dbConnect from "@/server/database/dbConnect";
 
 export class TeamService {

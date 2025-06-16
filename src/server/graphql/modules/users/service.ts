@@ -1,6 +1,6 @@
-import { User } from "../../../database/models/User";
+import { User } from "@/server/database/models/User";
 import dbConnect from "@/server/database/dbConnect";
-import { IUser } from "../../../database/models/User";
+import { IUser } from "@/server/database/interfaces/IUser";
 
 export class UserService {
     static async getUsers() {
