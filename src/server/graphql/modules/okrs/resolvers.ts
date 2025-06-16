@@ -1,76 +1,86 @@
-import dbConnect from "@/server/database/dbConnect";
-import { OKR } from "@/server/database/models";
+import { OkrService } from "./service";
+import { Types } from "mongoose";
 
 export const okrsResolvers = {
   Query: {
-    getOKRs: async () => {
-      await dbConnect();
-      return await OKR.find();
+    okrs: async () => {
+      return await OkrService.getOkrs();
     },
-    getOKR: async (_: undefined, { id }: { id: string }) => {
-      await dbConnect();
-      return await OKR.findById(id);
+    okr: async (_: undefined, { id }: { id: string }) => {
+      return await OkrService.getOkrById(id);
+    },
+    teamOkrs: async (_: undefined, { teamId }: { teamId: string }) => {
+      return await OkrService.getTeamOkrs(teamId);
+    },
+    draftOkrs: async (_: undefined, { teamId }: { teamId: string }) => {
+      return await OkrService.getDraftOkrs(teamId);
     },
   },
 
   Mutation: {
     createOKR: async (
       _: undefined,
-      {
-        title,
-        description,
-        owner,
-        status,
-        startDate,
-        endDate,
-        userId,
-      }: {
-        title: string;
-        description: string;
-        owner: string;
-        status?: string;
-        startDate: string;
-        endDate: string;
-        userId: string;
-      }
+      { input, createdBy }: { input: any, createdBy: string }
     ) => {
-      await dbConnect();
-      const newOKR = new OKR({
-        title,
-        description,
-        owner,
-        status,
-        startDate,
-        endDate,
-        userId,
-      });
-      return await newOKR.save();
+      return await OkrService.createOKR(input, createdBy);
+    },
+
+    createDraftOKR: async (
+      _: undefined,
+      { input, createdBy }: { input: any, createdBy: string }
+    ) => {
+      return await OkrService.createDraftOKR(
+        {
+          ...input,
+          owner: new Types.ObjectId(input.owner)
+        },
+        new Types.ObjectId(createdBy)
+      );
+    },
+
+    publishDraft: async (
+      _: undefined,
+      { id, startDate, endDate }: { id: string, startDate: string, endDate: string }
+    ) => {
+      return await OkrService.publishDraft(
+        new Types.ObjectId(id),
+        new Date(startDate),
+        new Date(endDate)
+      );
     },
 
     updateOKR: async (
       _: undefined,
-      {
-        id,
-        ...updates
-      }: {
-        id: string;
-        title?: string;
-        description?: string;
-        owner?: string;
-        status?: string;
-        startDate?: string;
-        endDate?: string;
-        userId?: string;
-      }
+      { id, input }: { id: string, input: any }
     ) => {
-      await dbConnect();
-      return await OKR.findByIdAndUpdate(id, updates, { new: true });
+      const updates: any = { ...input };
+      
+      if (input.startDate) updates.startDate = new Date(input.startDate);
+      if (input.endDate) updates.endDate = new Date(input.endDate);
+      
+      return await OkrService.updateOKR(
+        new Types.ObjectId(id),
+        updates
+      );
     },
 
     deleteOKR: async (_: undefined, { id }: { id: string }) => {
-      await dbConnect();
-      const result = await OKR.findByIdAndDelete(id);
-      return !!result;
+      return await OkrService.deleteOKR(new Types.ObjectId(id));
     },
   },
+
+  OKR: {
+    owner: (parent: any) => {
+      // Si ya está poblado, devolverlo directamente
+      if (parent.owner?.name) return parent.owner;
+      // Si no, hacer populate
+      return parent.populate('owner').then((o: any) => o.owner);
+    },
+    createdBy: (parent: any) => {
+      // Si ya está poblado, devolverlo directamente
+      if (parent.createdBy?.name) return parent.createdBy;
+      // Si no, hacer populate
+      return parent.populate('createdBy').then((o: any) => o.createdBy);
+    }
+  }
 };

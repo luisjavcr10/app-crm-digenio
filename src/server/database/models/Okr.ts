@@ -27,6 +27,12 @@ const okrSchema = new Schema<IOKR>({
   startDate: {
     type: Date,
     required: true,
+    validate: {
+      validator: function(this: IOKR, value: Date) {
+        return !this.endDate || value <= this.endDate;
+      },
+      message: "La fecha de inicio debe ser anterior a la fecha de fin"
+    }
   },
   endDate: {
     type: Date,
@@ -36,12 +42,11 @@ const okrSchema = new Schema<IOKR>({
     type: Schema.Types.ObjectId,
     ref:"User",
     required: true,
-    index:true,
   },
 },{
   timestamps:true,
   toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+  toObject: { virtuals: true }
 });
 
 export const OKR = models.OKR || model<IOKR>("OKR", okrSchema);
