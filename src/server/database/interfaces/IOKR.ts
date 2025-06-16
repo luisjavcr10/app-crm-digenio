@@ -11,3 +11,11 @@ export interface IOKR extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IOKRUpdate {
+  title?: string;
+  description?: string;
+  status?: 'draft' | 'pending' | 'in_progress' | 'completed';
+  startDate?: Date;
+  endDate?: Date;
+}

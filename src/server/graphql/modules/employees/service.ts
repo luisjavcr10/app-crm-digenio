@@ -40,24 +40,24 @@ export class EmployeeService {
     await dbConnect();
     const session = await mongoose.startSession();
     session.startTransaction();
-
+  
     try {
-      // Crear User dentro de la transacción
       const user = new User(userData);
       await user.save({ session });
-
-      // Crear Employee dentro de la misma transacción
+  
       const employee = new Employee({
         userId: user._id,
         ...employeeData,
       });
       await employee.save({ session });
-
-      await session.commitTransaction();
+  
+      // Populate dentro de la transacción
       const populatedEmployee = await Employee.findById(employee._id)
         .populate("userId")
+        .session(session)
         .exec();
-
+  
+      await session.commitTransaction();
       return populatedEmployee;
     } catch (error) {
       await session.abortTransaction();
@@ -76,10 +76,21 @@ export class EmployeeService {
 
   static async deleteEmployee(id: string) {
     await dbConnect();
-    const employee = await Employee.findByIdAndDelete(id);
-    if (employee) {
-      await User.findByIdAndDelete(employee.userId);
+    const session = await mongoose.startSession();
+    session.startTransaction();
+  
+    try {
+      const employee = await Employee.findByIdAndDelete(id).session(session);
+      if (employee && employee.userId) {
+        await User.findByIdAndDelete(employee.userId).session(session);
+      }
+      await session.commitTransaction();
+      return employee;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
     }
-    return employee;
   }
 }

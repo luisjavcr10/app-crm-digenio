@@ -1,6 +1,6 @@
 import { OkrService } from "./service";
 import { Types } from "mongoose";
-import { IOKR } from "@/server/database/interfaces/IOKR";
+import { IOKR, IOKRUpdate } from "@/server/database/interfaces/IOKR";
 
 export const okrsResolvers = {
   Query: {
@@ -75,15 +75,18 @@ export const okrsResolvers = {
 
     updateOKR: async (
       _: undefined,
-      { id, input }: { id: string; input: {
-        title?: string;
-        description?: string;
-        status?: string;
-        startDate?: string;
-        endDate?: string;
-      } }
+      { id, input }: { 
+        id: string; 
+        input: {
+          title?: string;
+          description?: string;
+          status?: 'draft' | 'pending' | 'in_progress' | 'completed';
+          startDate?: Date; // Recibe string pero lo convertimos a Date
+          endDate?: Date;
+        }
+      }
     ) => {
-      const updates: any = { ...input };
+      const updates: IOKRUpdate = { ...input };
 
       if (input.startDate) updates.startDate = new Date(input.startDate);
       if (input.endDate) updates.endDate = new Date(input.endDate);
@@ -98,16 +101,12 @@ export const okrsResolvers = {
 
   OKR: {
     owner: (parent: IOKR) => {
-      // Si ya está poblado, devolverlo directamente
       if (parent.owner) return parent.owner;
-      // Si no, hacer populate
-      return parent.populate("owner").then((o: any) => o.owner);
+      return parent.populate("owner").then((o: IOKR) => o.owner);
     },
     createdBy: (parent: IOKR) => {
-      // Si ya está poblado, devolverlo directamente
       if (parent.createdBy) return parent.createdBy;
-      // Si no, hacer populate
-      return parent.populate("createdBy").then((o: any) => o.createdBy);
+      return parent.populate("createdBy").then((o: IOKR) => o.createdBy);
     },
   },
 };

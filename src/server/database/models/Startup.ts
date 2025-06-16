@@ -1,4 +1,4 @@
-import { Schema, model, models, Document } from "mongoose";
+import { Schema, model, models } from "mongoose";
 import { IStartup } from "../interfaces/IStartup";
 
 const startupSchema = new Schema<IStartup>({

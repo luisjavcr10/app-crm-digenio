@@ -1,13 +1,25 @@
 import dbConnect from "@/server/database/dbConnect";
 import { OKR } from "@/server/database/models";
+import { IOKRUpdate } from "@/server/database/interfaces/IOKR";
 import { Types } from "mongoose";
 
 export class OkrService {
   static async getOkrs() {
     await dbConnect();
-    return await OKR.find()
-      .populate('owner')
+    const okrs = await OKR.find()
+      .populate({
+        path: 'owner',
+        populate: {
+          path: 'manager',
+          populate: {
+            path: 'userId',
+            select: 'email name role status'
+          }
+        }
+      })
       .populate('createdBy');
+    console.log(JSON.stringify(okrs, null, 2));
+    return okrs;
   }
 
   static async getOkrById(id: string) {
@@ -86,18 +98,14 @@ export class OkrService {
 
   static async updateOKR(
     id: Types.ObjectId,
-    updates: {
-      title?: string;
-      description?: string;
-      status?: string;
-      startDate?: Date;
-      endDate?: Date;
-    }
+    updates: IOKRUpdate
   ) {
     await dbConnect();
-    return await OKR.findByIdAndUpdate(id, updates, { new: true })
-      .populate('owner')
-      .populate('createdBy');
+    return await OKR.findByIdAndUpdate(id, updates, { 
+      new: true 
+    })
+    .populate('owner')
+    .populate('createdBy');
   }
 
   static async deleteOKR(id: Types.ObjectId) {

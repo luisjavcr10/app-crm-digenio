@@ -73,6 +73,13 @@ employeeSchema.virtual("userInfo", {
   localField: "userId",
   foreignField: "_id",
   justOne: true,
+});
+
+employeeSchema.virtual("teamsInfo", {
+  ref: "Team",
+  localField: "teams",
+  foreignField: "_id",
+  justOne: false,
 })
 
 employeeSchema.pre<IEmployee>("validate", async function (next) {

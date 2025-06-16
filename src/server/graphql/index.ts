@@ -14,5 +14,5 @@ import { iaResolvers } from './modules/ia/resolvers';
 import { startupsTypeDefs } from './modules/startups/typedefs';
 import { startupResolvers } from './modules/startups/resolvers';
 
-export const typeDefs = mergeTypeDefs([authTypeDefs, employeeTypeDefs, userTypeDefs, teamTypeDefs, okrsTypeDefs,iaTypeDefs, startupsTypeDefs]);
-export const resolvers = mergeResolvers([authResolvers, employeeResolvers, userResolvers,teamResolvers, okrsResolvers,iaResolvers, startupResolvers]);
+export const typeDefs = mergeTypeDefs([authTypeDefs, userTypeDefs, employeeTypeDefs, teamTypeDefs, okrsTypeDefs, iaTypeDefs, startupsTypeDefs]);
+export const resolvers = mergeResolvers([authResolvers, userResolvers,, employeeResolvers, teamResolvers, okrsResolvers,iaResolvers, startupResolvers]);

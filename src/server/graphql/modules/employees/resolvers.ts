@@ -1,4 +1,14 @@
 import { EmployeeService } from "./service";
+import { Document } from "mongoose";
+import { IEmployee } from "@/server/database/interfaces/IEmployee";
+import { IUser } from "@/server/database/interfaces/IUser";
+import { ITeam } from "@/server/database/interfaces/ITeam";
+
+type EmployeeParent = Document<unknown, IEmployee> &
+  IEmployee & {
+    userInfo: IUser | null;
+    teamsInfo: [ITeam] | null;
+};
 
 export const employeeResolvers = {
   Query: {
@@ -59,4 +69,24 @@ export const employeeResolvers = {
       return await EmployeeService.deleteEmployee(id);
     },
   },
+
+  Employee:{
+    userId: async (parent: EmployeeParent) => {
+      const employee = parent.userInfo
+        ?
+        parent
+        :
+        await parent.populate('userInfo');
+      return employee.userInfo;
+    },
+    teams: async (parent: EmployeeParent) => {
+      const employee = parent.teams
+      ?
+        parent
+        :
+        await parent.populate('teamsInfo');
+      return employee.teams;
+    }
+  }
+   
 };
