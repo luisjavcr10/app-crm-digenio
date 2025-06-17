@@ -35,7 +35,7 @@ export const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  if (pathname === "/login") return null;
+  if (pathname.startsWith("/auth")) return null;
 
   return (
     <header
