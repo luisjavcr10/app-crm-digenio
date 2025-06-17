@@ -4,7 +4,7 @@ import Link from "next/link";
 export const AuthLayout = ({children}:Readonly<{children:React.ReactNode}>) =>{
   return(
     <div className="min-h-screen w-full flex">
-      <div className="md:min-w-[550px] m-4 flex-1 md:flex-0 flex flex-col gap-10">
+      <div className="md:min-w-[500px] m-4 flex-1 md:flex-0 flex flex-col gap-10">
         <div className="pt-6 mx-4 my-4 md:my-0 flex justify-start">
           <div className="relative w-27 h-8">
             <Link className="cursor-pointer" href="/">
