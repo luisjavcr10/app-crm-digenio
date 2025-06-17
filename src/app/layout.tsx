@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`bg-background text-foreground ${beVietmanPro.className}`}>
+      <body className={`min-h-screen flex flex-col bg-background text-foreground ${beVietmanPro.className}`}>
         <ThemeWrapper>
           <ApolloWrapper>
             <AuthProvider>

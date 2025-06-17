@@ -43,7 +43,7 @@ export const Header = () => {
         transition-all duration-300 
         w-full
         min-h-[60px]
-        
+         bg-neutral-5 dark:bg-neutral-1
         fixed
         top-0
         z-50`}
@@ -57,8 +57,8 @@ export const Header = () => {
           rounded-[16px]
           ${
             scrolled
-              ? "backdrop-blur-xl bg-white/50 dark:bg-black/50 mt-1 shadow-input"
-              : " bg-neutral-5 dark:bg-neutral-1"
+              ? "backdrop-blur-xl bg-neutral-5/50 dark:bg-neutral-1/50 mt-1 shadow-input"
+              : "bg-neutral-5 dark:bg-neutral-1"
           }`}
       >
         <div className="flex justify-center items-center gap-16">
