@@ -4,12 +4,12 @@ import { FormLayout } from "../FormLayout";
 import { FormInput } from "../FormInput";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 
-export const CreatePasswordForm = () => {
+export const ResetPasswordForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleCreatePassword = () =>{
+  const handleResetPassword = () =>{
     if(!password || !confirmPassword){
       setError("Todos los campos son obligatorios");
       return;
@@ -26,7 +26,7 @@ export const CreatePasswordForm = () => {
   return (
     <FormLayout>
       <FormInput
-        labelText="Contraseña"
+        labelText="Nueva contraseña"
         type="password"
         value={password}
         handleChange={(e) => setPassword(e.target.value)}
@@ -45,9 +45,9 @@ export const CreatePasswordForm = () => {
 
       <MainButton
         text={"Guardar contraseña"}
-        handleClick={handleCreatePassword}
+        handleClick={handleResetPassword}
         disabled={false}
       />
     </FormLayout>
   );
-};
+}
