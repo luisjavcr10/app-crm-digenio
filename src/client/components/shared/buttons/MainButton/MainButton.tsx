@@ -12,7 +12,7 @@ export const MainButton = ({
             onClick={handleClick}
             disabled={disabled}
             className={`
-                py-4 px-10 
+                py-3 px-10 
                 ${disabled ? 'bg-gray-400' : 'bg-primary-1 hover:bg-alert-red'} 
                 text-neutral-5 
                 rounded-[12px] 

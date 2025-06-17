@@ -1,10 +1,10 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
 import { ModuleLink } from "./ModuleLink";
 import { MenuToggle } from "./MenuToggle/MenuToggle";
+import { Logo } from "../Logo";
 import { useAuth } from "@/client/hooks/useAuth";
 import { moduleLinks } from "@/client/constants/ModuleLinks";
 import { FaCircleUser } from "react-icons/fa6";
@@ -62,9 +62,7 @@ export const Header = () => {
       >
         <div className="flex justify-center items-center gap-16">
           <div className="relative w-27 h-8">
-            <Link className="cursor-pointer" href="/">
-              <Image src="/images/logo.png" fill alt="logo" />
-            </Link>
+            <Logo />
           </div>
 
           {initialized && isAuthenticated && (
