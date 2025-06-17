@@ -7,12 +7,10 @@ import { RiLogoutBoxRFill } from "react-icons/ri";
 import { useEffect, useRef } from "react";
 
 export const MenuToggle = ({
-  isScrolled,
   isOpen,
   handleOpen
 }: Readonly<{
   isOpen: boolean;
-  isScrolled: boolean;
   handleOpen: () => void;
 }>) => {
   const { user, handleLogout } = useAuth();
@@ -48,7 +46,7 @@ export const MenuToggle = ({
         absolute top-full right-4 
         mt-3 py-3 z-30 
         transition-all duration-300
-        ${isScrolled?'bg-white text-neutral-2 dark:bg-black dark:text-neutral-4 ':'bg-neutral-4 dark:bg-neutral-1 text-neutral-1 dark:text-neutral-5'}
+        bg-neutral-4 dark:bg-neutral-1 text-neutral-1 dark:text-neutral-5
         rounded-[12px] shadow-toggle 
         text-[12px] `}
     >

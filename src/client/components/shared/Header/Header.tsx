@@ -89,13 +89,12 @@ export const Header = () => {
               </button>
               {isOpen && (
                 <MenuToggle
-                  isScrolled={scrolled}
                   isOpen={isOpen}
                   handleOpen={handleMenuToggle}
                 />
               )}
             </>
-          ) : (
+          ) : (    
             <Link
               href="/login"
               className={`
