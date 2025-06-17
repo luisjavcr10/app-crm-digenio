@@ -2,12 +2,12 @@
 import { useState } from "react";
 import { FormLayout } from "../FormLayout";
 import { FormInput } from "../FormInput";
-import { MainButton } from "@/client/components/shared/buttons/MainButton";
+//import { MainButton } from "@/client/components/shared/buttons/MainButton";
 
 export const CreatePasswordForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  //const [error, setError] = useState("");
 
   return (
     <FormLayout>

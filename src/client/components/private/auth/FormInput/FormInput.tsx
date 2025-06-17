@@ -17,7 +17,7 @@ export const FormInput = ({
       <input
         value={value}
         onChange={handleChange}
-        className="shadow-input rounded-[12px] py-2 px-4 border border-neutral-3 outline-neutral-3 caret-neutral-3 bg-neutral-4"
+        className="shadow-input rounded-[12px] py-4 px-4 border-[1px] border-neutral-3 outline-neutral-3 caret-neutral-3 bg-neutral-4"
         type={type==='email'? 'email' : 'password'}
       />
       {children}
