@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Card } from "@/client/components/private/home/Card";
-import { cardsInHome } from "@/client/constants/CardsInHome";
+//import { Card } from "@/client/components/private/home/Card";
+//import { cardsInHome } from "@/client/constants/CardsInHome";
+import VectorIcon from "@/client/components/shared/icons/VectorIcon/VectorIcon";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="dark:bg-neutral-2 flex-1 flex flex-col md:flex-row  pt-[60px]">
-      <div className="flex-1 m-6 relative min-h-[200px]">
+    <div className=" mx-6 mb-6 flex-1 flex flex-col md:flex-row">
+      <div className={`w-full duration-1000 ${isOpen ? 'max-w-8/12' : 'max-w-full'} mt-6 relative min-h-[200px]`}>
         {/* Background image */}
         <Image
           className="z-0 object-cover rounded-[12px]"
@@ -37,7 +38,7 @@ export default function Home() {
         <div
           className="pt-3 pl-3 hidden md:flex gap-2
             absolute z-10 bottom-0 right-0 
-            bg-neutral-5 dark:bg-neutral-2 rounded-tl-[12px]
+            bg-neutral-5 dark:bg-neutral-1 rounded-tl-[12px]
             "
         >
           {!isOpen && (
@@ -47,39 +48,37 @@ export default function Home() {
           )}
           <div
             onClick={() => setIsOpen(!isOpen)}
-            className={`${
-              isOpen ? "rotate-180" : ""
-            } cursor-pointer border border-neutral-3 rounded-[12px] shadow-button-home px-4 py-2 text-[24px]`}
+            className={`cursor-pointer border border-neutral-3 rounded-[12px] shadow-button-home px-4 py-2 text-[24px]`}
           >
-            ↗
+            <VectorIcon className={`${
+              isOpen
+                ? "transition-all rotate-180 duration-1000"
+                : "transition-all duration-1000"
+            } `}/>
           </div>
         </div>
       </div>
 
       {/* Main text mobile */}
-      <div
-        className="
-            py-3 px-8 flex flex-col gap-4
-            md:hidden 
-            text-center text-[40px] font-playfair font-[700]"
-      >
+      <div className="py-3 px-8 flex flex-col gap-4 md:hidden text-center text-[40px] font-playfair font-[700]">
         <p>Estrategias, diseño y producción</p>
         <p className="text-[16px] font-[500]">
           Con ideas de negocio únicas y personas apasionadas por su trabajo.
         </p>
       </div>
 
-      {isOpen && (
-        <div className="max-w-[400px] mx-6 my-4 md:ml-5 md:p-10 md:mr-12 flex flex-col gap-4 justify-around items-center">
-          {cardsInHome.map((card, index) => (
-            <Card
-              title={card.title}
-              description={card.description}
-              key={index}
-            />
-          ))}
-        </div>
-      )}
+      {/** Lo que haremos aqui es meter gsap, y que cuando la animacion de la imagen termine, recien se quite el invisible a este contenedor, para que ocupe el espacio que ya le hicimos con la animacion de arriba.
+       * <div
+        className={`
+            max-w-[400px] 
+            my-4 md:ml-6 md:p-10
+            ${isOpen ? "flex" : "hidden"} 
+            flex-col justify-around items-center gap-4`}
+      >
+        {cardsInHome.map((card, index) => (
+          <Card title={card.title} description={card.description} key={index} />
+        ))}
+      </div>*/}
     </div>
   );
 }

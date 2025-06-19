@@ -1,9 +1,17 @@
 export const moduleLinks =[
     {
       href:"/okrs",
-      moduleTitle:"OKRs"
+      moduleTitle:"Objetivos"
     },{
       href:"/portfolio",
-      moduleTitle:"Portfolio"
+      moduleTitle:"Startups"
+    }
+    ,{
+      href:"/seguimietno",
+      moduleTitle:"Seguimiento"
+    }
+    ,{
+      href:"/users",
+      moduleTitle:"Usuarios"
     }
   ]

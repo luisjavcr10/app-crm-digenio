@@ -39,20 +39,15 @@ export const Header = () => {
 
   return (
     <header
-      className={` py-1  ${scrolled ? "px-10 md:px-40" : "px-3 shadow-header"}
-        transition-all duration-300 
-        w-full
-        min-h-[60px]
-         bg-neutral-5 dark:bg-neutral-1
-        fixed
-        top-0
-        z-50`}
+      className={`py-1 ${scrolled ? "px-10 md:px-40" : "px-3 shadow-header"}
+    transition-all duration-300 
+    w-full max-w-full min-h-[60px] sticky top-0 z-50`}
     >
       <nav
         className={`
           py-2 px-5 
           relative 
-          flex justify-between items-center 
+          flex justify-end items-center 
           transition-all duration-300 
           rounded-[16px]
           ${
@@ -61,7 +56,7 @@ export const Header = () => {
               : "bg-neutral-5 dark:bg-neutral-1"
           }`}
       >
-        <div className="flex justify-center items-center gap-16">
+        {<div className="flex justify-center items-center gap-16">
           <div className="relative w-27 h-8">
             <Logo />
           </div>
@@ -78,7 +73,7 @@ export const Header = () => {
               ))}
             </div>
           )}
-        </div>
+        </div>}
 
         {initialized ? (
           isAuthenticated ? (
@@ -88,13 +83,10 @@ export const Header = () => {
                 <IoMenu className="block md:hidden w-[34px] h-[34px]" />
               </button>
               {isOpen && (
-                <MenuToggle
-                  isOpen={isOpen}
-                  handleOpen={handleMenuToggle}
-                />
+                <MenuToggle isOpen={isOpen} handleOpen={handleMenuToggle} />
               )}
             </>
-          ) : (    
+          ) : (
             <Link
               href="/login"
               className={`
