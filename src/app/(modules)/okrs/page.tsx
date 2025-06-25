@@ -71,7 +71,7 @@ export default function OkrsPage() {
   };
 
   return (
-    <div className="pt-[60px] my-6 mx-8 flex flex-col gap-8">
+    <div className="my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
       <TitleSection name="OKRs" description="Gestión de objetivos para alinear y dar seguimiento a las metas de la empresa.">
         <MainButton text="Agregar nuevo OKR" handleClick={() => setIsModalOpen(true)} />
       </TitleSection>

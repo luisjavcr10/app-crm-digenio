@@ -17,8 +17,8 @@ export const Header = () => {
   const pathname = usePathname();
   const { isAuthenticated, initialized } = useAuth();
   const [scrolled, setScrolled] = useState(false);
-  const toggleSidebar = useSidebarStore((state)=>state.toggle);
-  const isOpen = useSidebarStore((state)=>state.isOpen);
+  const toggleSidebar = useSidebarStore((state) => state.toggle);
+  const isOpen = useSidebarStore((state) => state.isOpen);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,44 +43,51 @@ export const Header = () => {
 
   return (
     <header
-      className={`py-1 ${scrolled ? "px-10 md:px-40" : "px-3 shadow-header"}
-    transition-all duration-300 
-    w-full max-w-full min-h-[60px] sticky top-0 z-50`}
+      className={`py-1 ${
+          !scrolled || (scrolled && isOpen)
+            ? "px-3 shadow-header"
+            : "px-10 md:px-40"
+        }
+      transition-all duration-300 
+      w-full max-w-full min-h-[60px] sticky top-0 z-50`}
     >
       <nav
         className={`
           py-2 px-5 
           relative 
-          flex ${isOpen? 'justify-end' :'justify-between'} items-center 
+          flex ${isOpen ? "justify-end" : "justify-between"} items-center 
           transition-all duration-300 
           rounded-[16px]
           ${
-            scrolled 
-              ? "backdrop-blur-xl bg-neutral-5/50 dark:bg-neutral-1/50 mt-1 shadow-input"
-              : isOpen?"bg-neutral-5 dark:bg-neutral-1" :"bg-neutral-5 dark:bg-neutral-1"
-          }`}
+            !scrolled || (scrolled && isOpen)
+              ? "bg-neutral-5 dark:bg-neutral-1"
+              : "backdrop-blur-xl bg-neutral-5/50 dark:bg-neutral-1/50 mt-1 shadow-input"
+          }
+`}
       >
-       {!isOpen && (<div className="flex justify-center items-center gap-16">
-          <button onClick={toggleSidebar} className="p-2 cursor-pointer">
-            <ChevronLeft className="rotate-180"/>
-          </button>
-          <div className="relative w-27 h-8">
-            <Logo />
-          </div>
-
-          {initialized && isAuthenticated && (
-            <div className="hidden md:flex gap-12">
-              {moduleLinks.map((moduleLink, index) => (
-                <ModuleLink
-                  pathname={pathname}
-                  key={index}
-                  href={moduleLink.href}
-                  moduleTitle={moduleLink.moduleTitle}
-                />
-              ))}
+        {!isOpen && (
+          <div className="flex justify-center items-center gap-16">
+            <button onClick={toggleSidebar} className="p-2 cursor-pointer">
+              <ChevronLeft className="rotate-180" />
+            </button>
+            <div className="relative w-27 h-8">
+              <Logo />
             </div>
-          )}
-        </div>)}
+
+            {initialized && isAuthenticated && (
+              <div className="hidden md:flex gap-12">
+                {moduleLinks.map((moduleLink, index) => (
+                  <ModuleLink
+                    pathname={pathname}
+                    key={index}
+                    href={moduleLink.href}
+                    moduleTitle={moduleLink.moduleTitle}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {initialized ? (
           isAuthenticated ? (
