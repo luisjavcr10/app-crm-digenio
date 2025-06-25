@@ -2,7 +2,7 @@ interface CustomSvgIconProps {
   className?: string;
 }
 
-const VectorIcon: React.FC<CustomSvgIconProps> = ({ className = "" }) => (
+export const VectorIcon: React.FC<CustomSvgIconProps> = ({ className = "" }) => (
   <svg
     width="32"
     height="32"
@@ -20,5 +20,3 @@ const VectorIcon: React.FC<CustomSvgIconProps> = ({ className = "" }) => (
     />
   </svg>
 );
-
-export default VectorIcon;

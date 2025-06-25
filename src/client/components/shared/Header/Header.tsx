@@ -2,19 +2,23 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { ModuleLink } from "./ModuleLink";
-import { MenuToggle } from "./MenuToggle/MenuToggle";
+import { ModuleLink, MenuToggle } from "./subcomponents";
 import { Logo } from "../Logo";
 import { useAuth } from "@/client/hooks/useAuth";
+import { useSidebarStore } from "@/client/store/sidebarStore";
 import { moduleLinks } from "@/client/constants/ModuleLinks";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 
+import { ChevronLeft } from "../icons/sidebarToggles";
+
 export const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenMenu, setisOpenMenu] = useState(false);
   const pathname = usePathname();
   const { isAuthenticated, initialized } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+  const toggleSidebar = useSidebarStore((state)=>state.toggle);
+  const isOpen = useSidebarStore((state)=>state.isOpen);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,7 +36,7 @@ export const Header = () => {
   }, []);
 
   const handleMenuToggle = () => {
-    setIsOpen(!isOpen);
+    setisOpenMenu(!isOpenMenu);
   };
 
   if (pathname.startsWith("/auth")) return null;
@@ -47,16 +51,19 @@ export const Header = () => {
         className={`
           py-2 px-5 
           relative 
-          flex justify-end items-center 
+          flex ${isOpen? 'justify-end' :'justify-between'} items-center 
           transition-all duration-300 
           rounded-[16px]
           ${
-            scrolled
+            scrolled 
               ? "backdrop-blur-xl bg-neutral-5/50 dark:bg-neutral-1/50 mt-1 shadow-input"
-              : "bg-neutral-5 dark:bg-neutral-1"
+              : isOpen?"bg-neutral-5 dark:bg-neutral-1" :"bg-neutral-5 dark:bg-neutral-1"
           }`}
       >
-        {<div className="flex justify-center items-center gap-16">
+       {!isOpen && (<div className="flex justify-center items-center gap-16">
+          <button onClick={toggleSidebar} className="p-2 cursor-pointer">
+            <ChevronLeft className="rotate-180"/>
+          </button>
           <div className="relative w-27 h-8">
             <Logo />
           </div>
@@ -73,7 +80,7 @@ export const Header = () => {
               ))}
             </div>
           )}
-        </div>}
+        </div>)}
 
         {initialized ? (
           isAuthenticated ? (
@@ -82,8 +89,8 @@ export const Header = () => {
                 <FaCircleUser className="hidden md:block w-[34px] h-[34px]" />
                 <IoMenu className="block md:hidden w-[34px] h-[34px]" />
               </button>
-              {isOpen && (
-                <MenuToggle isOpen={isOpen} handleOpen={handleMenuToggle} />
+              {isOpenMenu && (
+                <MenuToggle isOpen={isOpenMenu} handleOpen={handleMenuToggle} />
               )}
             </>
           ) : (

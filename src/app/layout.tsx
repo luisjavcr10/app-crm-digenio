@@ -6,6 +6,7 @@ import { ThemeWrapper } from "@/client/contexts/ThemeWrapper";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { Header } from "@/client/components/shared/Header";
 import { Footer } from "@/client/components/shared/Footer";
+import { Sidebar } from "@/client/components/shared/Sidebar";
 
 const beVietmanPro = Be_Vietnam_Pro({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -33,9 +34,7 @@ export default function RootLayout({
             <AuthProvider>
               <div className="flex-1 flex flex-row">
 
-                <div className="w-[350px]">
-                  sidebar
-                </div>
+                <Sidebar />
 
                 <div className="flex-1 flex flex-col">
                   <Header />

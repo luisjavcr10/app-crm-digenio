@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/client/hooks/useAuth";
-import { ThemeSwitch } from "../ThemeSwitch";
+import { ThemeSwitch } from "./ThemeSwitch";
 import { GoHomeFill } from "react-icons/go";
 import { RiLogoutBoxRFill } from "react-icons/ri";
 import { useEffect, useRef } from "react";
