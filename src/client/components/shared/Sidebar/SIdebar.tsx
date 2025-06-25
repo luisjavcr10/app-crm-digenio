@@ -80,7 +80,7 @@ export const Sidebar = () => {
   return (
     <div
       className={`${
-        isOpen ? "flex top-0 left-0 z-50" : "hidden"
+        isOpen ? "flex z-50" : "hidden"
       } w-[350px] relative shadow-sidebar`}
     >
       <button onClick={close} className="absolute top-1 right-1 p-4 cursor-pointer">

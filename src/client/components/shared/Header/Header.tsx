@@ -45,11 +45,11 @@ export const Header = () => {
     <header
       className={`py-1 ${
           !scrolled || (scrolled && isOpen)
-            ? "px-3 shadow-header"
+            ? "px-3 shadow-header bg-neutral-5"
             : "px-10 md:px-40"
         }
       transition-all duration-300 
-      w-full max-w-full min-h-[60px] sticky top-0 z-50`}
+      w-full max-w-full min-h-[60px] sticky top-0 z-40`}
     >
       <nav
         className={`
