@@ -79,9 +79,16 @@ export const Sidebar = () => {
 
   return (
     <div
-      className={`${
-        isOpen ? "flex z-50" : "hidden"
-      } w-[350px] relative shadow-sidebar`}
+      className={`
+        relative 
+        shadow-sidebar 
+        z-50 
+        transition-all 
+        duration-300 
+        ease-in-out
+        overflow-hidden
+        ${isOpen ? 'w-[350px]' : 'w-0'}
+      `}
     >
       <button onClick={close} className="absolute top-1 right-1 p-4 cursor-pointer">
         <ChevronLeft />
