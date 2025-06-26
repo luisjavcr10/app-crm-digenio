@@ -2,16 +2,20 @@
 
 import { useState } from "react";
 import Image from "next/image";
-//import { Card } from "@/client/components/private/home/Card";
-//import { cardsInHome } from "@/client/constants/CardsInHome";
-import {VectorIcon} from "@/client/components/shared/icons";
+import { Card } from "@/client/components/private/home/Card";
+import { cardsInHome } from "@/client/constants/CardsInHome";
+import { VectorIcon } from "@/client/components/shared/icons";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className=" mx-6 mb-6 flex-1 flex flex-col md:flex-row">
-      <div className={`w-full duration-1000 ${isOpen ? 'max-w-8/12' : 'max-w-full'} mt-6 relative min-h-[200px]`}>
+    <div className="mx-6 mb-6 flex-1 flex flex-col md:flex-row">
+      <div
+        className={`transition-all duration-1000 ease-in-out mt-6 relative min-h-[200px] w-full ${
+          isOpen ? 'md:w-[calc(100%-500px)]' : 'md:w-full'
+        }`}
+      >
         {/* Background image */}
         <Image
           className="z-0 object-cover rounded-[12px]"
@@ -50,11 +54,13 @@ export default function Home() {
             onClick={() => setIsOpen(!isOpen)}
             className={`cursor-pointer border border-neutral-3 rounded-[12px] shadow-button-home px-4 py-2 text-[24px]`}
           >
-            <VectorIcon className={`${
-              isOpen
-                ? "transition-all rotate-180 duration-1000"
-                : "transition-all duration-1000"
-            } `}/>
+            <VectorIcon
+              className={`${
+                isOpen
+                  ? "transition-all rotate-180 duration-1000"
+                  : "transition-all duration-1000"
+              } `}
+            />
           </div>
         </div>
       </div>
@@ -67,18 +73,41 @@ export default function Home() {
         </p>
       </div>
 
-      {/** Lo que haremos aqui es meter gsap, y que cuando la animacion de la imagen termine, recien se quite el invisible a este contenedor, para que ocupe el espacio que ya le hicimos con la animacion de arriba.
-       * <div
+      <div
         className={`
-            max-w-[400px] 
-            my-4 md:ml-6 md:p-10
-            ${isOpen ? "flex" : "hidden"} 
-            flex-col justify-around items-center gap-4`}
+          hidden md:flex flex-col justify-around items-center gap-4
+          transition-all duration-1000 ease-in-out
+          overflow-hidden
+          ${isOpen ? 'w-[500px] translate-x-0 opacity-100 my-4 md:ml-6' : 'w-0 translate-x-full opacity-0'}
+        `}
       >
-        {cardsInHome.map((card, index) => (
-          <Card title={card.title} description={card.description} key={index} />
-        ))}
-      </div>*/}
+        <div className="w-[450px] flex flex-col justify-around items-center gap-4">
+          {cardsInHome.map((card, index) => (
+            <Card
+              title={card.title}
+              description={card.description}
+              key={index}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div
+        className={`
+          flex md:hidden flex-col justify-around items-center gap-4
+          overflow-hidden my-8 
+        `}
+      >
+        <div className="w-full flex flex-col justify-around items-center gap-4">
+          {cardsInHome.map((card, index) => (
+            <Card
+              title={card.title}
+              description={card.description}
+              key={index}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

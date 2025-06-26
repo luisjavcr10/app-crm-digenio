@@ -1,6 +1,6 @@
 export const Card = ({
     title, 
-    description
+    description,
 }:Readonly<{
     title:string,
     description:string

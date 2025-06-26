@@ -84,7 +84,7 @@ export const Sidebar = () => {
         shadow-sidebar 
         z-50 
         transition-all 
-        duration-300 
+        duration-1000 
         ease-in-out
         overflow-hidden
         ${isOpen ? 'w-[350px]' : 'w-0'}
