@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSidebarStore } from "@/client/store/sidebarStore";
 import { ChevronLeft } from "../icons/sidebarToggles";
 import { Logo } from "../Logo";
-import { SbItem } from "./SbItem";
+import { SbItem } from "./subcomponents";
 import { RefreshIcon, DocumentIcon, ChartIcon, UserIcon } from "../icons";
 
 const sidebarItems = [

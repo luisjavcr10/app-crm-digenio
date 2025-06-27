@@ -1,6 +1,6 @@
 import { ChevronLeft } from "../../icons/sidebarToggles";
 import { EyeIcon, ListAddIcon } from "../../icons";
-import { SbSubItem } from "../SbSubItem";
+import { SbSubItem } from "./SbSubItem";
 
 export const SbItem = ({
   title,
