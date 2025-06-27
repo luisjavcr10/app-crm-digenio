@@ -87,7 +87,8 @@ export const Sidebar = () => {
         duration-1000 
         ease-in-out
         overflow-hidden
-        ${isOpen ? 'w-[350px]' : 'w-0'}
+        w-[350px]
+        ${isOpen ? 'translate-x-0' : '-translate-x-full hidden'}
       `}
     >
       <button onClick={close} className="absolute top-1 right-1 p-4 cursor-pointer">

@@ -32,7 +32,7 @@ export default function RootLayout({
         <ThemeWrapper>
           <ApolloWrapper>
             <AuthProvider>
-              <div className="flex-1 flex flex-row">
+              <div className="flex-1 flex">
 
                 <Sidebar />
 

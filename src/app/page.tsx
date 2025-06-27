@@ -10,9 +10,9 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="mx-6 mb-6 flex-1 flex flex-col md:flex-row">
+    <div className="m-6 flex-1 flex flex-col md:flex-row">
       <div
-        className={`transition-all duration-1000 ease-in-out mt-6 relative min-h-[200px] w-full ${
+        className={`transition-all duration-1000 ease-in-out relative min-h-[200px] w-full ${
           isOpen ? 'md:w-[calc(100%-500px)]' : 'md:w-full'
         }`}
       >
