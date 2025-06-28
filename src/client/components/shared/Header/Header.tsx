@@ -2,15 +2,14 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { ModuleLink, MenuToggle } from "./subcomponents";
-import { Logo } from "../Logo";
 import { useAuth } from "@/client/hooks/useAuth";
 import { useSidebarStore } from "@/client/store/sidebarStore";
 import { moduleLinks } from "@/client/constants/ModuleLinks";
+import { ModuleLink, MenuToggle } from "./subcomponents";
+import { Logo } from "../Logo";
+import { ChevronLeft } from "../icons/sidebarToggles";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
-
-import { ChevronLeft } from "../icons/sidebarToggles";
 
 export const Header = () => {
   const [isOpenMenu, setisOpenMenu] = useState(false);
@@ -22,14 +21,11 @@ export const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Cambia el estado cuando el scroll sea mayor a 0
       setScrolled(window.scrollY > 0);
     };
 
-    // Agregar el event listener
     window.addEventListener("scroll", handleScroll);
 
-    // Limpiar el event listener al desmontar
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -67,9 +63,9 @@ export const Header = () => {
       >
         {!isOpen && (
           <div className="flex justify-center items-center gap-16">
-            <button onClick={toggleSidebar} className="p-2 cursor-pointer">
+           {initialized && isAuthenticated && <button onClick={toggleSidebar} className="p-2 cursor-pointer">
               <ChevronLeft className="rotate-180" />
-            </button>
+            </button>}
             <div className="relative w-27 h-8">
               <Logo />
             </div>

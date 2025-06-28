@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 import { Card } from "@/client/components/private/home/Card";
-import { cardsInHome } from "@/client/constants/CardsInHome";
 import { VectorIcon } from "@/client/components/shared/icons";
+import { cardsInHome } from "@/client/constants/CardsInHome";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);

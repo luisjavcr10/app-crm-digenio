@@ -3,58 +3,10 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useSidebarStore } from "@/client/store/sidebarStore";
-import { ChevronLeft } from "../icons/sidebarToggles";
-import { Logo } from "../Logo";
+import { sidebarItems } from "@/client/constants/SidebarItems";
 import { SbItem } from "./subcomponents";
-import { RefreshIcon, DocumentIcon, ChartIcon, UserIcon } from "../icons";
-
-const sidebarItems = [
-  {
-    id: 0,
-    title: "Objetivos",
-    items: [
-      {
-        title:"Ver objetivos"
-      },
-      {
-        title:"Crear nuevo objetivo"
-      }
-    ]
-  },
-  {
-    id: 1,
-    title: "Startups",
-    items: [
-      {
-        title:"Ver startups"
-      },
-      {
-        title:"Crear nueva startup"
-      }
-    ]
-  },
-  {
-    id: 2,
-    title: "Seguimiento",
-    items: [
-      {
-        title:"Ver seguimiento"
-      }
-    ]
-  },
-  {
-    id: 3,
-    title: "Usuarios y grupos",
-    items: [
-      {
-        title:"Ver usuarios y grupos"
-      },
-      {
-        title:"Crear nuevo registro"
-      }
-    ]
-  },
-];
+import { Logo } from "../Logo";
+import { RefreshIcon, DocumentIcon, ChartIcon, UserIcon, ChevronLeft } from "../icons";
 
 export const Sidebar = () => {
   const isOpen = useSidebarStore((state) => state.isOpen);
