@@ -49,7 +49,7 @@ export const LoginForm = () => {
         handleChange={(e) => setPassword(e.target.value)}
       >
         <Link href="/auth/recover-password" className="text-[12px]">
-          ¿Te olvidaste tu contraseña?
+          ¿Olvidaste tu contraseña?
         </Link>
       </FormInput>
 

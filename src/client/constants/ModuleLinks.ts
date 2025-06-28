@@ -11,7 +11,7 @@ export const moduleLinks =[
       moduleTitle:"Seguimiento"
     }
     ,{
-      href:"/users",
+      href:"/users-teams",
       moduleTitle:"Usuarios"
     }
   ]
