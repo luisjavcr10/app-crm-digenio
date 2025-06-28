@@ -19,18 +19,18 @@ export class UserService {
         return await newUser.save();
     }
 
-    //static async validatePasswordToken(token: string) {
-    //    await dbConnect();
-    //    const user = await User.findOne({ passwordSetupToken: token});
-    //    if (!user) {
-    //        return false;
-    //    }
-    //    if (!user) {
-    //        return { valid: false, message: "Token inválido o expirado", email: null };
-    //    }
-//
-    //    return { valid: true, email: user.email, message: "Token válido" };
-    //}
+    static async validatePasswordToken(token: string) {
+        await dbConnect();
+        const user = await User.findOne({ passwordSetupToken: token});
+        if (!user) {
+            return false;
+        }
+        if (!user) {
+            return { valid: false, message: "Token inválido o expirado", email: null };
+        }
+
+        return { valid: true, email: user.email, message: "Token válido" };
+    }
 
     static async updateUser(id: string, updateData: Partial<IUser>) {
         await dbConnect();

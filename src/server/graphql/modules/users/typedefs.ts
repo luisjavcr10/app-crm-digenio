@@ -6,17 +6,17 @@ export const userTypeDefs = `#graphql
     password: String!
     role: Role!
     status: Status!
-    #passwordSetupToken: String
-    #passwordSetupExpires: Date
+    passwordSetupToken: String
+    passwordSetupExpires: String
     createdAt: String!
     updatedAt: String!
   }
 
-  #type PasswordValidationResponse {
-  #  valid: Boolean!
-  #  message: String!
-  #  email: String
-  #}
+  type PasswordValidationResponse {
+    valid: Boolean!
+    message: String!
+    email: String
+  }
 
   enum Role {
     ADMIN
@@ -33,7 +33,7 @@ export const userTypeDefs = `#graphql
   type Query {
     users: [User!]!
     user(id: ID!): User!
-    validatePasswordToken(token: String!): Boolean!
+    validatePasswordToken(token: String!): PasswordValidationResponse!
   }
 
   type Mutation {

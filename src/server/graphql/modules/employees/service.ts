@@ -49,8 +49,8 @@ export class EmployeeService {
 
       const token = crypto.randomBytes(32).toString("hex");
       const tokenExpires = new Date(Date.now() + 1000 * 60 * 60); 
-      user.passwordResetToken = token;
-      user.passwordResetExpires = tokenExpires;
+      user.passwordSetupToken = token;
+      user.passwordSetupExpires = tokenExpires;
 
       await user.save({ session });
 
