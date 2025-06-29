@@ -5,6 +5,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: "ADMIN" | "USER";
-  status: "active" | "inactive" | "on_leave";
+  status: "pending" | "active" | "inactive" | "on_leave";
+  passwordSetupToken:string;
+  passwordSetupExpires:Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }

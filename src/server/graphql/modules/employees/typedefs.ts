@@ -67,7 +67,7 @@ export const employeeTypeDefs = `#graphql
   input UserInput {
     name: String!
     email: String!
-    password: String!
+    #password: String!
     role: Role
   }
 

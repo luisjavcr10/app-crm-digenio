@@ -8,6 +8,9 @@ export const userResolvers = {
     user: async (_: undefined, { id }: { id: string }) => {
       return await UserService.getUser(id);
     },
+    //validatePasswordToken: async (_: undefined, { token }: { token: string }) => {
+    //  return await UserService.validatePasswordToken(token);
+    //},
   },
 
   Mutation: {
@@ -27,7 +30,7 @@ export const userResolvers = {
         email: string,
         password: string,
         role: "ADMIN" | "USER",
-        status: "active" | "inactive" | "on_leave"
+        status: "pending" | "active" | "inactive" | "on_leave"
       }>
     ) => {
       return await UserService.updateUser(id, updateData);

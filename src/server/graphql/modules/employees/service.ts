@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
+import crypto from "crypto";
+import dbConnect from "@/server/database/dbConnect";
+import { sendPasswordSetupEmail } from "@/server/utils/sendmail";
 import { Employee, User } from "@/server/database/models";
 import { IEmployee } from "@/server/database/interfaces/IEmployee";
-import dbConnect from "@/server/database/dbConnect";
+
 
 export class EmployeeService {
   static async getEmployees() {
@@ -22,7 +25,7 @@ export class EmployeeService {
     userData: {
       name: string;
       email: string;
-      password: string;
+      //password: string;
       role?: "ADMIN" | "USER";
     },
     employeeData: {
@@ -43,12 +46,21 @@ export class EmployeeService {
   
     try {
       const user = new User(userData);
+
+      const token = crypto.randomBytes(32).toString("hex");
+      const tokenExpires = new Date(Date.now() + 1000 * 60 * 60); 
+      user.passwordResetToken = token;
+      user.passwordResetExpires = tokenExpires;
+
       await user.save({ session });
+
+      await sendPasswordSetupEmail(userData.email,token);
   
       const employee = new Employee({
         userId: user._id,
         ...employeeData,
       });
+      
       await employee.save({ session });
   
       // Populate dentro de la transacción

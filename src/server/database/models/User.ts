@@ -15,7 +15,7 @@ const userSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
     },
     role: {
       type: String,
@@ -24,8 +24,16 @@ const userSchema = new Schema<IUser>(
     },
     status: {
       type: String,
-      enum: ["active", "inactive", "on_leave"],
-      default: "active",
+      enum: ["pending", "active", "inactive", "on_leave"],
+      default: "pending",
+    },
+    passwordSetupToken: {
+      type: String,
+      required: false,
+    },
+    passwordSetupExpires: {
+      type: Date,
+      required: false,
     },
   },
   {
