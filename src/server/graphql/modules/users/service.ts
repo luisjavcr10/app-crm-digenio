@@ -42,4 +42,25 @@ export class UserService {
     static async comparePassword(user: IUser, candidatePassword: string) {
         return await user.comparePassword(candidatePassword);
     }
+
+    static async setPasswordFromToken(token: string, password: string) {
+        await dbConnect();
+        const user = await User.findOne({ passwordSetupToken: token });
+        if (!user) {
+            return { success: false, message: "Token inválido o expirado" };
+        }
+
+        user.password = password;
+        user.status = "active";
+        user.passwordSetupToken = undefined;
+        user.passwordSetupExpires = undefined;
+        
+        await user.save();
+
+        return({
+            success:true,
+            message:"Contraseña creada con éxito. Ya puedes iniciar sesión.",
+        })
+    }
+
 }

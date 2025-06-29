@@ -18,6 +18,11 @@ export const userTypeDefs = `#graphql
     email: String
   }
 
+  type SetPasswordResult{
+    success: Boolean!
+    message: String!
+  }
+
   enum Role {
     ADMIN
     USER
@@ -52,5 +57,9 @@ export const userTypeDefs = `#graphql
       status: Status
     ): User!
     deleteUser(id: ID!): User!
+    setPasswordFromToken(
+      token:String!
+      password:String!
+    ):SetPasswordResult!
   }
 `;

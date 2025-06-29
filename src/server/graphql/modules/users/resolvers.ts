@@ -39,5 +39,9 @@ export const userResolvers = {
     deleteUser: async (_: undefined, { id }: { id: string }) => {
       return await UserService.deleteUser(id);
     },
+
+    setPasswordFromToken: async (_: undefined, { token, password }: { token: string, password: string }) => {
+      return await UserService.setPasswordFromToken(token, password);
+    },
   },
 };
