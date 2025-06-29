@@ -3,8 +3,7 @@ import crypto from "crypto";
 import dbConnect from "@/server/database/dbConnect";
 import { sendPasswordSetupEmail } from "@/server/utils/sendmail";
 import { Employee, User } from "@/server/database/models";
-import { IEmployee } from "@/server/database/interfaces/IEmployee";
-
+import { IEmployee} from "@/server/database/interfaces/IEmployee";
 
 export class EmployeeService {
   static async getEmployees() {

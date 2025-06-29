@@ -23,9 +23,6 @@ export class UserService {
         await dbConnect();
         const user = await User.findOne({ passwordSetupToken: token});
         if (!user) {
-            return false;
-        }
-        if (!user) {
             return { valid: false, message: "Token inválido o expirado", email: null };
         }
 

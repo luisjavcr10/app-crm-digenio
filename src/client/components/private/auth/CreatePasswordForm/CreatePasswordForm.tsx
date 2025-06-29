@@ -4,7 +4,11 @@ import { FormLayout } from "../FormLayout";
 import { FormInput } from "../FormInput";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 
-export const CreatePasswordForm = () => {
+export const CreatePasswordForm = ({
+  token
+}:Readonly<{
+  token:string
+}>) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
