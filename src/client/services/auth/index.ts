@@ -27,3 +27,12 @@ export const VALIDATE_PASSWORD_TOKEN = gql`
   }
 `;
 
+export const SET_PASSWORD_FROM_TOKEN = gql`
+  mutation SetPasswordFromToken($token: String!, $password: String!) {
+    setPasswordFromToken(token: $token, password: $password) {
+      success
+      message
+    }
+  }
+`;
+

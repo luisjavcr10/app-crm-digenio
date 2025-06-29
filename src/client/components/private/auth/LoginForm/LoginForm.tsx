@@ -6,6 +6,7 @@ import { useAuth } from "@/client/hooks/useAuth";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { FormLayout } from "../FormLayout";
 import { FormInput } from "../FormInput";
+import { useMutation } from "@apollo/client";
 
 export const LoginForm = () => {
   const { handleLogin, loading } = useAuth();
@@ -34,7 +35,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <FormLayout>
+    <FormLayout >
       <FormInput
         labelText="Correo Electrónico"
         type="email"
