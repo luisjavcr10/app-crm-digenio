@@ -60,7 +60,7 @@ export const RecoverPasswordForm = () => {
         <MainButton
           text={loading ? "Enviando..." : "Solicitar restablecimiento"}
           handleClick={handleResetPassword}
-          disabled={loading || !email.trim()}
+          disabled={loading}
         />
       </FormLayout>
       

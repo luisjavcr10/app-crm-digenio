@@ -1,23 +1,12 @@
 "use client";
 import React from "react";
-import { PageTitle } from "@/client/components/private/auth/PageTitle/PageTitle";
-import { ResetPasswordForm } from "@/client/components/private/auth/ResetPasswordForm";
 import { useQuery } from "@apollo/client";
+import { PageTitle } from "@/client/components/private/auth/PageTitle";
+import { ResetPasswordForm } from "@/client/components/private/auth/ResetPasswordForm";
 import { VALIDATE_RESET_PASSWORD_TOKEN } from "@/client/services/auth";
+import { SearchParamsProps, ValidateResetPasswordTokenResponse } from "../types";
 
-interface ResetPasswordPageProps {
-  searchParams: Promise<{ token?: string }>;
-}
-
-interface ValidateResetPasswordTokenResponse {
-  validateResetPasswordToken: {
-    email: string | null;
-    message: string;
-    valid: boolean;
-  };
-}
-
-export default function ResetPasswordPage({ searchParams }: ResetPasswordPageProps) {
+export default function ResetPasswordPage({ searchParams }: SearchParamsProps) {
   const resolvedSearchParams = React.use(searchParams);
   const token = resolvedSearchParams.token;
   
@@ -26,7 +15,7 @@ export default function ResetPasswordPage({ searchParams }: ResetPasswordPagePro
     {
       variables: { token },
       skip: !token,
-      errorPolicy: 'all', // Permite recibir datos parciales incluso con errores
+      errorPolicy: 'all',
     }
   );
 

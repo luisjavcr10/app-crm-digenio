@@ -1,24 +1,13 @@
 "use client";
 
 import React from "react";
-import { PageTitle } from "@/client/components/private/auth/PageTitle/PageTitle";
-import { CreatePasswordForm } from "@/client/components/private/auth/CreatePasswordForm/CreatePasswordForm";
 import { useQuery } from "@apollo/client";
+import { PageTitle } from "@/client/components/private/auth/PageTitle";
+import { CreatePasswordForm } from "@/client/components/private/auth/CreatePasswordForm";
 import { VALIDATE_PASSWORD_TOKEN } from "@/client/services/auth";
+import { SearchParamsProps, ValidatePasswordTokenResponse } from "../types";
 
-interface CreatePasswordPageProps {
-  searchParams: Promise<{ token?: string }>;
-}
-
-interface ValidatePasswordTokenResponse {
-  validatePasswordToken: {
-    email: string | null;
-    message: string;
-    valid: boolean;
-  };
-}
-
-export default function CreatePasswordPage({ searchParams }: CreatePasswordPageProps) {
+export default function CreatePasswordPage({ searchParams }: SearchParamsProps) {
   const resolvedSearchParams = React.use(searchParams);
   const token = resolvedSearchParams.token;
   
@@ -27,7 +16,7 @@ export default function CreatePasswordPage({ searchParams }: CreatePasswordPageP
     {
       variables: { token },
       skip: !token,
-      errorPolicy: 'all', // Permite recibir datos parciales incluso con errores
+      errorPolicy: 'all',
     }
   );
 
