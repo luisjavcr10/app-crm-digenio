@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useMutation } from "@apollo/client";
 import { FormLayout } from "../FormLayout";
 import { FormInput } from "../FormInput";
@@ -14,9 +15,11 @@ export const CreatePasswordForm = ({
   const [SetPasswordFromToken, { loading }] = useMutation(
     SET_PASSWORD_FROM_TOKEN
   );
+  const router = useRouter();
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleCreatePassword = async () => {
     if (!password || !confirmPassword) {
@@ -42,9 +45,7 @@ export const CreatePasswordForm = ({
       const result = response.data.setPasswordFromToken;
 
       if (result.success) {
-        // puedes redirigir o mostrar un mensaje
-        alert("¡Contraseña creada con éxito! Ya puedes iniciar sesión.");
-        // router.push('/login') si usas next/router
+        setIsOpen(true);
       } else {
         setError(
           result.message || "Ocurrió un error al guardar la contraseña."
@@ -55,31 +56,48 @@ export const CreatePasswordForm = ({
     }
   };
 
+  const handleModal = () =>{
+    router.push('/auth/login')
+  }
+
   return (
-    <FormLayout >
-      <FormInput
-        labelText="Contraseña"
-        type="password"
-        value={password}
-        handleChange={(e) => setPassword(e.target.value)}
-      />
+    <>
+      <FormLayout>
+        <FormInput
+          labelText="Contraseña"
+          type="password"
+          value={password}
+          handleChange={(e) => setPassword(e.target.value)}
+        />
 
-      <FormInput
-        labelText="Confirmar contraseña"
-        type="password"
-        value={confirmPassword}
-        handleChange={(e) => setConfirmPassword(e.target.value)}
-      >
-        <p className="text-[12px]">✅ Las contraseñas deben coincidir</p>
-      </FormInput>
+        <FormInput
+          labelText="Confirmar contraseña"
+          type="password"
+          value={confirmPassword}
+          handleChange={(e) => setConfirmPassword(e.target.value)}
+        >
+          <p className="text-[12px]">✅ Las contraseñas deben coincidir</p>
+        </FormInput>
 
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
 
-      <MainButton
-        text={"Guardar contraseña"}
-        handleClick={handleCreatePassword}
-        disabled={loading}
-      />
-    </FormLayout>
+        <MainButton
+          text={"Guardar contraseña"}
+          handleClick={handleCreatePassword}
+          disabled={loading}
+        />
+      </FormLayout>
+
+      {isOpen && <div className="fixed inset-0 bg-[#1f1f1f80] flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full flex flex-col items-center">
+          <h2 className="text-[16px] text-center mb-4">¡Contraseña creada con éxito! Ya puedes iniciar sesión.</h2>
+          <MainButton
+            text={"Ir a login"}
+            handleClick={handleModal}
+            disabled={false}
+          />
+        </div>
+      </div>}
+    </>
   );
 };
