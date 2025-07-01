@@ -52,6 +52,7 @@ export const CreatePasswordForm = ({
         );
       }
     } catch (err: unknown) {
+      console.log(err);
       setError("Error inesperado. Intenta nuevamente.");
     }
   };

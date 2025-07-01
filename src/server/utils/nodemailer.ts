@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 import { SMTP_USER, SMTP_PASSWORD } from "../lib/config";
 
 // Create a test account or replace with real credentials.

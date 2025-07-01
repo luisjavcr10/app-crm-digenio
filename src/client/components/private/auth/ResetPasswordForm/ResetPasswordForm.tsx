@@ -50,6 +50,7 @@ export const ResetPasswordForm = ({
         );
       }
     } catch (err: unknown) {
+      console.log(err);
       setError("Error inesperado. Intenta nuevamente.");
     }
   };
