@@ -54,6 +54,7 @@ export const employeeTypeDefs = `#graphql
     contactInfo: ContactInfoInput!
     status: EmployeeStatus
     hireDate: String
+    teams: [ID!]
   }
 
   input EmployeeUpdateInput {

@@ -43,6 +43,7 @@ export const employeeResolvers = {
           };
           status?: 'active' | 'inactive' | 'on_leave';
           hireDate?: Date;
+          teams?: string[];
         }
       }
     ) => {

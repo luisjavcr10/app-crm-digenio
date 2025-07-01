@@ -27,7 +27,7 @@ export default function OkrsPage() {
   const [startDateFilter, setStartDateFilter] = useState<string>("");
   const [endDateFilter, setEndDateFilter] = useState<string>("");
 
-  const { data} = useQuery(GET_OKRS_QUERY);
+  const { data } = useQuery(GET_OKRS_QUERY);
 
   useEffect(() => {
     if (data?.getOKRs) {

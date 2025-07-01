@@ -37,6 +37,7 @@ export class EmployeeService {
       };
       status?: "active" | "inactive" | "on_leave";
       hireDate?: Date;
+      teams?: string[];
     }
   ) {
     await dbConnect();

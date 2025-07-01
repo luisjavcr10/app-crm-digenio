@@ -43,7 +43,7 @@ export default function PortfolioPage() {
   });
 
   return (
-    <div className="pt-[60px] my-6 mx-8 flex flex-col gap-8">
+    <div className="my-6 mx-8 flex flex-col gap-8">
       <TitleSection
         name="Portafolio de startups"
         description="Registro y monitoreo de los proyectos o productos que contribuyen al cumplimiento de los objetivos."
