@@ -7,7 +7,7 @@ export const moduleLinks =[
       moduleTitle:"Startups"
     }
     ,{
-      href:"/seguimietno",
+      href:"/follow-up",
       moduleTitle:"Seguimiento"
     }
     ,{

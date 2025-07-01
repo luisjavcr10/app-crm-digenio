@@ -19,12 +19,12 @@ export const sidebarItems = [
     items: [
       {
         title:"Ver startups",
-        path: "/startups"
+        path: "/portfolio"
       },
       {
         title:"Crear nueva startup",
 
-        path: "/startups"
+        path: "/portfolio"
       }
     ]
   },
@@ -34,7 +34,7 @@ export const sidebarItems = [
     items: [
       {
         title:"Ver seguimiento",
-        path: "/seguimiento"
+        path: "/follow-up"
       }
     ]
   },
@@ -44,11 +44,11 @@ export const sidebarItems = [
     items: [
       {
         title:"Ver usuarios y grupos",
-        path: "/users"
+        path: "/users-teams"
       },
       {
         title:"Crear nuevo registro",
-        path: "/users"
+        path: "/users-teams"
       }
     ]
   },

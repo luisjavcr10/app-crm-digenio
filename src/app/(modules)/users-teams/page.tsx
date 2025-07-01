@@ -9,6 +9,7 @@ import { EMPLOYEES, TEAMS } from "@/client/services/employees";
 import { UsersList } from "@/client/components/private/users-teams/UsersList";
 import { TeamsList } from "@/client/components/private/users-teams/TeamsList";
 import { ModalUT } from "@/client/components/private/users-teams/ModalUT";
+import { VscTriangleUp } from "react-icons/vsc";
 
 interface UserProps {
   id:string;
@@ -74,6 +75,10 @@ export default function Page (){
       <TitleSection name="USUARIOS Y EQUIPOS" description="Visualización de usuarios, sus cargos, equipos y métricas de satisfacción (NPS).">
         <MainButton text="Agregar nuevo usuario/equipo" handleClick={()=>setIsOpen(true)} />
       </TitleSection>
+
+      <div className="h-[20px] w-full bg-nps rounded-[12px] relative">
+        <VscTriangleUp className="absolute top-[75%] left-[80%] translate-x-[-50%] translate-y-[-50%] text-neutral-1" />
+      </div>
 
 
       <div className="flex gap-4 text-[12px]">

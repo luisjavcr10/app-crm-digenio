@@ -1,7 +1,7 @@
 export const TitleSection = ({
   children, name, description
 }:Readonly<{
-  children:React.ReactNode, name:string, description:string
+  children?:React.ReactNode, name:string, description:string
 }>) => {
   return (
     <div className="flex flex-col lg:flex-row justify-between items-start gap-8">

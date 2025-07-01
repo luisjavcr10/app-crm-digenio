@@ -13,6 +13,7 @@ export const SbItem = ({
   isOpen: boolean;
   subItems: {
     title: string;
+    path:string;
   }[];
   handleOpen: () => void;
   icon: React.ReactElement
@@ -35,6 +36,7 @@ export const SbItem = ({
         subItems.map((subItem, index) => (
           <SbSubItem 
             key={index}
+            href={subItem.path}
             icon={index===1? <ListAddIcon /> : <EyeIcon />}
             title={subItem.title}
           />

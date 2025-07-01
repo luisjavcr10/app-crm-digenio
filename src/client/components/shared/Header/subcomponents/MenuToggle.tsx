@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/client/hooks/useAuth";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { GoHomeFill } from "react-icons/go";
-import { RiLogoutBoxRFill } from "react-icons/ri";
+import { RiLogoutBoxRFill,RiSurveyLine } from "react-icons/ri";
 import { useEffect, useRef } from "react";
 
 export const MenuToggle = ({
@@ -64,6 +64,14 @@ export const MenuToggle = ({
         <ThemeSwitch />
       </div>
       <div className="px-6 pt-2 border-t border-neutral-3">
+        <Link href="/survey" className="flex justify-between hover:text-primary-1">
+          <div className="relative">
+            Encuesta mensual
+            <div className="absolute top-0 -right-3 bg-alert-red rounded-full animate-ping w-[8px] h-[8px]"></div>
+            <div className="absolute top-0 -right-3 bg-alert-red rounded-full  w-[8px] h-[8px]"></div>
+          </div>
+          <RiSurveyLine className="w-[15px] h-[15px]" />
+        </Link>
         <Link href="/" className="flex justify-between hover:text-primary-1">
           <p>Pagina de inicio</p>
           <GoHomeFill className="w-[15px] h-[15px]" />
