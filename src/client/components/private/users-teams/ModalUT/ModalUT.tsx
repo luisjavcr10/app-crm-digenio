@@ -62,7 +62,7 @@ export const ModalUT = ({
       name: "",
       email: "",
     },
-    teams: [],
+    teams: [] as string[],
     contactInfo: {
       phone: "",
       emergencyContact: "943721646",
@@ -250,7 +250,7 @@ export const ModalUT = ({
                   className="caret-neutral-3 placeholder-neutral-3 border placeholder:text-[12px] outline-neutral-3 dark:outline-neutral-2 border-neutral-3 dark:border-neutral-2 rounded-[12px] py-2 px-4 flex-1"
                   value={user.teams[0] || ""}
                   onChange={(e) =>
-                    setUser({ ...user, teams: [e.target.value] })
+                    setUser({ ...user, teams: [e.target.value]  })
                   }
                 >
                   <option value="">Seleccione un equipo</option>
