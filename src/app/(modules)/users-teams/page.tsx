@@ -22,6 +22,7 @@ interface UserProps {
     status:string;
   };
   teams:{
+    id:string;
     name:string
   }[];
   contactInfo:{
@@ -58,6 +59,7 @@ export default function Page (){
   useEffect(() => {
     if(employeesData){
       setUsers(employeesData.employees);
+      console.log(employeesData.employees);
     }
   }, [employeesData])
 
@@ -85,7 +87,7 @@ export default function Page (){
       </div>
 
       {isOpen && (
-        <ModalUT teams={teams} handleClose={()=>setIsOpen(false)} />
+        <ModalUT users={users} teams={teams} handleClose={()=>setIsOpen(false)} />
       )}
 
 
@@ -95,9 +97,9 @@ export default function Page (){
       :
         entity === "users" 
         ? 
-          <UsersList users={users} /> 
+          <UsersList teams={teams} users={users} /> 
         :
-          <TeamsList teams={teams} />
+          <TeamsList users={users} teams={teams} />
       }
     </div>
   )

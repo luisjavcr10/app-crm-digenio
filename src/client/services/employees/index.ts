@@ -5,6 +5,7 @@ export const EMPLOYEES = gql`
     employees {
       id
       teams {
+        id
         name
       }
       position
@@ -36,6 +37,31 @@ export const TEAMS = gql`
           name
         }
       }
+      manager {
+        userId {
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_EMPLOYEE = gql`
+  mutation CreateEmployee($userData: UserInput!, $employeeData: EmployeeInput!) {
+    createEmployee(userData: $userData, employeeData: $employeeData) {
+    userId {
+      email
+      name
+    }
+  }
+  }
+`;
+
+export const CREATE_TEAM = gql`
+  mutation CreateTeam($input: CreateTeamInput!) {
+    createTeam(input: $input) {
+      id
+      name
       manager {
         userId {
           name

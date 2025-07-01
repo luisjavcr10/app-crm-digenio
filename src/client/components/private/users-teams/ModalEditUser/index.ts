@@ -1,0 +1,1 @@
+export { ModalEditUser } from './ModalEditUser';
