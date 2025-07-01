@@ -8,5 +8,7 @@ export interface IUser extends Document {
   status: "pending" | "active" | "inactive" | "on_leave";
   passwordSetupToken:string;
   passwordSetupExpires:Date;
+  resetPasswordToken:string;
+  resetPasswordExpires: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }

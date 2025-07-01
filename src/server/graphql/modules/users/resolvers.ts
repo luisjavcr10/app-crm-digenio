@@ -43,5 +43,13 @@ export const userResolvers = {
     setPasswordFromToken: async (_: undefined, { token, password }: { token: string, password: string }) => {
       return await UserService.setPasswordFromToken(token, password);
     },
+
+    requestPasswordReset: async (_: undefined, { email }: { email: string }) => {
+      return await UserService.requestPasswordReset(email);
+    },
+
+    resetPasswordWithToken: async (_: undefined, { token, newPassword }: { token: string, newPassword: string }) => {
+      return await UserService.resetPasswordWithToken(token, newPassword);
+    },
   },
 };

@@ -35,6 +35,14 @@ const userSchema = new Schema<IUser>(
       type: Date,
       required: false,
     },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,

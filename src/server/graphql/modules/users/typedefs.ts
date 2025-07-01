@@ -8,6 +8,8 @@ export const userTypeDefs = `#graphql
     status: Status!
     passwordSetupToken: String
     passwordSetupExpires: String
+    resetPasswordToken: String
+    resetPasswordExpires: String
     createdAt: String!
     updatedAt: String!
   }
@@ -61,5 +63,17 @@ export const userTypeDefs = `#graphql
       token:String!
       password:String!
     ):SetPasswordResult!
+    requestPasswordReset(email: String!): PasswordResetRequestResponse!
+    resetPasswordWithToken(token: String!, newPassword: String!): PasswordResetResult!
+  }
+
+  type PasswordResetRequestResponse {
+    success: Boolean!
+    message: String!
+  }
+
+  type PasswordResetResult {
+    success: Boolean!
+    message: String!
   }
 `;
