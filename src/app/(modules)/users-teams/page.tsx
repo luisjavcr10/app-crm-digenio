@@ -1,53 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
-import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import { NoData } from "@/client/components/shared/NoData";
 import { useQuery } from "@apollo/client";
-import { EMPLOYEES, TEAMS } from "@/client/services/employees";
 import { UsersList } from "@/client/components/private/users-teams/UsersList";
 import { TeamsList } from "@/client/components/private/users-teams/TeamsList";
 import { ModalUT } from "@/client/components/private/users-teams/ModalUT";
+import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
+import { MainButton } from "@/client/components/shared/buttons/MainButton";
+import { NoData } from "@/client/components/shared/NoData";
+import { EMPLOYEES, TEAMS } from "@/client/services/employees";
+import { UserProps, TeamProps } from "./types";
 import { VscTriangleUp } from "react-icons/vsc";
-
-interface UserProps {
-  id:string;
-  position: string;
-  department: string;
-  skills: string[];
-  hireDate:string;
-  userId:{
-    name:string;
-    email:string;
-    status:string;
-  };
-  teams:{
-    id:string;
-    name:string
-  }[];
-  contactInfo:{
-    phone:string;
-    emergencyContact:string;
-  }
-}
-
-interface TeamProps {
-  id:string;
-  name:string;
-  description:string;
-  status:string;
-  manager:{
-    userId:{
-      name:string
-    }
-  };
-  members :{
-    userId:{
-      name:string
-    }
-  }[];
-}
 
 export default function Page (){
   const { data:teamsData } = useQuery(TEAMS);
