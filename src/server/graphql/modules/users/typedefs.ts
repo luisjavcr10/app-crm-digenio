@@ -25,6 +25,16 @@ export const userTypeDefs = `#graphql
     message: String!
   }
 
+  type PasswordResetRequestResponse {
+    success: Boolean!
+    message: String!
+  }
+
+  type PasswordResetResult {
+    success: Boolean!
+    message: String!
+  }
+
   enum Role {
     ADMIN
     USER
@@ -51,6 +61,7 @@ export const userTypeDefs = `#graphql
       password: String!
       role: Role
     ): User!
+
     updateUser(
       id: ID!
       name: String
@@ -59,22 +70,16 @@ export const userTypeDefs = `#graphql
       role: Role
       status: Status
     ): User!
+
     deleteUser(id: ID!): User!
+
     setPasswordFromToken(
       token:String!
       password:String!
     ):SetPasswordResult!
+    
     requestPasswordReset(email: String!): PasswordResetRequestResponse!
+
     resetPasswordWithToken(token: String!, newPassword: String!): PasswordResetResult!
-  }
-
-  type PasswordResetRequestResponse {
-    success: Boolean!
-    message: String!
-  }
-
-  type PasswordResetResult {
-    success: Boolean!
-    message: String!
   }
 `;

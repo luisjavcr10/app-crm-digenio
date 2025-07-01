@@ -10,11 +10,6 @@ export async function sendPasswordSetupEmail(email: string, token: string) {
     <p>Este enlace expirará en 1 hora.</p>
   `;
 
-  console.log(link);
-  console.log(html);
-  console.log(SMTP_USER);
-  console.log(email);
-
   await transporter.sendMail({
     from: SMTP_USER,
     to: email,
@@ -26,16 +21,11 @@ export async function sendPasswordSetupEmail(email: string, token: string) {
 export async function sendResetPasswordEmail(email: string, token: string) {
   const link = `${APP_URL}/auth/reset-password?token=${token}`;
   const html = `
-    <h1>Bienvenido</h1>
+    <h1>Hola de nuevo</h1>
     <p>Para recuperar tu contraseña, haz clic en el siguiente enlace:</p>
     <a href="${link}">Crear contraseña</a>
     <p>Este enlace expirará en 1 hora.</p>
   `;
-
-  console.log(link);
-  console.log(html);
-  console.log(SMTP_USER);
-  console.log(email);
 
   await transporter.sendMail({
     from: SMTP_USER,

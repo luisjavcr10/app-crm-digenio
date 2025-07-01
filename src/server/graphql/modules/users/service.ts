@@ -1,7 +1,7 @@
-import { User } from "@/server/database/models/User";
-import dbConnect from "@/server/database/dbConnect";
-import { IUser } from "@/server/database/interfaces/IUser";
 import crypto from "crypto";
+import dbConnect from "@/server/database/dbConnect";
+import { User } from "@/server/database/models/User";
+import { IUser } from "@/server/database/interfaces/IUser";
 import { sendResetPasswordEmail } from "@/server/utils/sendmail";
 
 export class UserService {
@@ -24,6 +24,16 @@ export class UserService {
     await dbConnect();
     const newUser = new User({ name, email, password, role });
     return await newUser.save();
+  }
+
+  static async updateUser(id: string, updateData: Partial<IUser>) {
+    await dbConnect();
+    return await User.findByIdAndUpdate(id, updateData, { new: true });
+  }
+
+  static async deleteUser(id: string) {
+    await dbConnect();
+    return await User.findByIdAndDelete(id);
   }
 
   static async validatePasswordToken(token: string) {
@@ -52,16 +62,6 @@ export class UserService {
     }
 
     return { valid: true, email: user.email, message: "Token válido" };
-  }
-
-  static async updateUser(id: string, updateData: Partial<IUser>) {
-    await dbConnect();
-    return await User.findByIdAndUpdate(id, updateData, { new: true });
-  }
-
-  static async deleteUser(id: string) {
-    await dbConnect();
-    return await User.findByIdAndDelete(id);
   }
 
   static async comparePassword(user: IUser, candidatePassword: string) {

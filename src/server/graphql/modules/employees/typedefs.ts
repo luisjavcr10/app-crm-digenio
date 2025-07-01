@@ -1,7 +1,19 @@
 export const employeeTypeDefs = `#graphql
-  type ContactInfo {
-    phone: String!
-    emergencyContact: String!
+  type Query {
+    employees: [Employee!]!
+    employee(id: ID!): Employee!
+  }
+
+  type Mutation {
+    createEmployee(
+      userData: UserInput!
+      employeeData: EmployeeInput!
+    ): Employee!
+    updateEmployee(
+      id: ID!
+      updateData: EmployeeUpdateInput!
+    ): Employee!
+    deleteEmployee(id: ID!): Employee!
   }
 
   type Employee {
@@ -19,27 +31,15 @@ export const employeeTypeDefs = `#graphql
     updatedAt: String!
   }
 
+  type ContactInfo {
+    phone: String!
+    emergencyContact: String!
+  }
+
   enum EmployeeStatus {
     active
     inactive
     on_leave
-  }
-
-  type Query {
-    employees: [Employee!]!
-    employee(id: ID!): Employee!
-  }
-
-  type Mutation {
-    createEmployee(
-      userData: UserInput!
-      employeeData: EmployeeInput!
-    ): Employee!
-    updateEmployee(
-      id: ID!
-      updateData: EmployeeUpdateInput!
-    ): Employee!
-    deleteEmployee(id: ID!): Employee!
   }
 
   input ContactInfoInput {
@@ -68,7 +68,6 @@ export const employeeTypeDefs = `#graphql
   input UserInput {
     name: String!
     email: String!
-    #password: String!
     role: Role
   }
 
