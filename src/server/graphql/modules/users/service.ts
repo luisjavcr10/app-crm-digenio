@@ -40,6 +40,20 @@ export class UserService {
     return { valid: true, email: user.email, message: "Token válido" };
   }
 
+  static async validateResetPasswordToken(token: string) {
+    await dbConnect();
+    const user = await User.findOne({ resetPasswordToken: token });
+    if (!user) {
+      return {
+        valid: false,
+        message: "Token inválido o expirado",
+        email: null,
+      };
+    }
+
+    return { valid: true, email: user.email, message: "Token válido" };
+  }
+
   static async updateUser(id: string, updateData: Partial<IUser>) {
     await dbConnect();
     return await User.findByIdAndUpdate(id, updateData, { new: true });

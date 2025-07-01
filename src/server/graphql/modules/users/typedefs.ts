@@ -41,6 +41,7 @@ export const userTypeDefs = `#graphql
     users: [User!]!
     user(id: ID!): User!
     validatePasswordToken(token: String!): PasswordValidationResponse!
+    validateResetPasswordToken(token: String!): PasswordValidationResponse!
   }
 
   type Mutation {

@@ -11,6 +11,9 @@ export const userResolvers = {
     validatePasswordToken: async (_: undefined, { token }: { token: string }) => {
       return await UserService.validatePasswordToken(token);
     },
+    validateResetPasswordToken: async (_: undefined, { token }: { token: string }) => {
+      return await UserService.validateResetPasswordToken(token);
+    },
   },
 
   Mutation: {
