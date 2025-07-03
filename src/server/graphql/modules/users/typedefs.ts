@@ -4,7 +4,7 @@ export const userTypeDefs = `#graphql
     name: String!
     email: String!
     password: String!
-    role: Role!
+    role: [Role!]!
     status: Status!
     passwordSetupToken: String
     passwordSetupExpires: String
@@ -37,7 +37,8 @@ export const userTypeDefs = `#graphql
 
   enum Role {
     ADMIN
-    USER
+    TEAMLEADER
+    EMPLOYEE
   }
 
   enum Status {
@@ -59,7 +60,7 @@ export const userTypeDefs = `#graphql
       name: String!
       email: String!
       password: String!
-      role: Role
+      role: [Role!]!
     ): User!
 
     updateUser(
@@ -67,7 +68,7 @@ export const userTypeDefs = `#graphql
       name: String
       email: String
       password: String
-      role: Role
+      role: [Role]
       status: Status
     ): User!
 

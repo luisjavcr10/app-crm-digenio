@@ -4,7 +4,6 @@ export interface IEmployee extends Document {
   userId: Types.ObjectId;
   employeeId: string;
   position: string;
-  department: string;
   skills: string[];
   contactInfo: {
     phone: string;

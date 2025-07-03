@@ -19,7 +19,7 @@ export class UserService {
     name: string,
     email: string,
     password: string,
-    role?: "ADMIN" | "USER"
+    role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
   ) {
     await dbConnect();
     const newUser = new User({ name, email, password, role });

@@ -20,7 +20,7 @@ export const userResolvers = {
     createUser: async (
       _: undefined, 
       { name, email, password, role }: 
-      { name: string, email: string, password: string, role?: "ADMIN" | "USER" }
+      { name: string, email: string, password: string, role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[] }
     ) => {
       return await UserService.createUser(name, email, password, role);
     },
@@ -32,7 +32,7 @@ export const userResolvers = {
         name: string,
         email: string,
         password: string,
-        role: "ADMIN" | "USER",
+        role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
         status: "pending" | "active" | "inactive" | "on_leave"
       }>
     ) => {

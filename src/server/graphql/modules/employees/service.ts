@@ -24,12 +24,10 @@ export class EmployeeService {
     userData: {
       name: string;
       email: string;
-      //password: string;
-      role?: "ADMIN" | "USER";
+      role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
     },
     employeeData: {
       position: string;
-      department: string;
       skills: string[];
       contactInfo: {
         phone: string;

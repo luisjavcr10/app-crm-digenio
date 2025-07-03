@@ -21,7 +21,6 @@ export const employeeTypeDefs = `#graphql
     userId: User!
     employeeId: String
     position: String!
-    department: String!
     skills: [String!]!
     contactInfo: ContactInfo!
     status: EmployeeStatus!
@@ -49,7 +48,6 @@ export const employeeTypeDefs = `#graphql
 
   input EmployeeInput {
     position: String!
-    department: String!
     skills: [String!]!
     contactInfo: ContactInfoInput!
     status: EmployeeStatus
@@ -59,7 +57,6 @@ export const employeeTypeDefs = `#graphql
 
   input EmployeeUpdateInput {
     position: String
-    department: String
     skills: [String!]
     contactInfo: ContactInfoInput
     status: EmployeeStatus
@@ -68,11 +65,12 @@ export const employeeTypeDefs = `#graphql
   input UserInput {
     name: String!
     email: String!
-    role: Role
+    role: [Role!]!
   }
 
   enum Role {
     ADMIN
-    USER
+    TEAMLEADER
+    EMPLOYEE
   }
 `;

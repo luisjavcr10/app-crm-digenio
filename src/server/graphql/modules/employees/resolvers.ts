@@ -30,11 +30,10 @@ export const employeeResolvers = {
         userData: {
           name: string;
           email: string;
-          role?: "ADMIN" | "USER";
+          role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
         },
         employeeData: {
           position: string;
-          department: string;
           skills: string[];
           contactInfo: {
             phone: string;
@@ -53,7 +52,6 @@ export const employeeResolvers = {
       _: undefined,
       { id, updateData }: { id: string, updateData: Partial<{
         position: string;
-        department: string;
         skills: string[];
         contactInfo: {
           phone: string;

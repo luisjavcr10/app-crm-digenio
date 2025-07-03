@@ -4,7 +4,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: "ADMIN" | "USER";
+  role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]; 
   status: "pending" | "active" | "inactive" | "on_leave";
   passwordSetupToken:string;
   passwordSetupExpires:Date;
