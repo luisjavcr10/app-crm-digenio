@@ -7,9 +7,9 @@ import {
   UPDATE_STARTUP_MUTATION,
   DELETE_STARTUP_MUTATION,
 } from "@/client/services/startups";
-import { ModalLayout } from "@/client/components/shared/ModalLayout";
-import { OkrTextInput } from "../../okrs/OkrTextInput";
-import { OkrTextareaInput } from "../../okrs/OkrTextareaInput";
+import { ModalLayout } from "@/client/components/shared/modal/ModalLayout";
+import { OkrTextInput } from "../../../shared/formElements/TextInput";
+import { OkrTextareaInput } from "../../../shared/formElements/TextareaInput";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { ProgressBar } from "../ProgressBar";
 

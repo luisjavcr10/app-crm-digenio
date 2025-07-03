@@ -4,17 +4,17 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { UsersList } from "@/client/components/private/users-teams/UsersList";
 import { TeamsList } from "@/client/components/private/users-teams/TeamsList";
+import { SwitchEntity } from "@/client/components/private/users-teams/SwitchEntity";
 import { ModalUT } from "@/client/components/private/users-teams/ModalUT";
 import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import { NoData } from "@/client/components/shared/NoData";
 import { EMPLOYEES, TEAMS } from "@/client/services/employees";
 import { UserProps, TeamProps } from "./types";
 import { VscTriangleUp } from "react-icons/vsc";
 
 export default function Page (){
-  const { data:teamsData } = useQuery(TEAMS);
-  const { data:employeesData } = useQuery(EMPLOYEES);
+  const { data:teamsData, loading:loadingTeams, refetch:refetchTeams } = useQuery(TEAMS);
+  const { data:employeesData, loading:loadingEmployees, refetch:refetchEmployees } = useQuery(EMPLOYEES);
   const [users, setUsers] = useState<UserProps[]>([]);
   const [teams, setTeams] = useState<TeamProps[]>([]);
   const [entity, setEntity] = useState<"users" | "teams">("users");
@@ -23,7 +23,6 @@ export default function Page (){
   useEffect(() => {
     if(employeesData){
       setUsers(employeesData.employees);
-      console.log(employeesData.employees);
     }
   }, [employeesData])
 
@@ -32,6 +31,18 @@ export default function Page (){
       setTeams(teamsData.teams);
     }
   }, [teamsData])
+
+  const handleCloseCreateModalWithSave = async () =>{
+    setIsOpen(false);
+    try {
+      await Promise.all([
+        refetchEmployees(),
+        refetchTeams()
+      ]);
+    } catch (error) {
+      console.error('Error al actualizar los datos:', error);
+    }
+  }
 
   return(
     <div className="my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
@@ -44,30 +55,23 @@ export default function Page (){
       </div>
 
 
-      <div className="flex gap-4 text-[12px]">
-        <div onClick={()=>setEntity("users")} className={`cursor-pointer px-3 py-1 rounded-[6px] border border-neutral-3 ${entity ==="users"?'bg-neutral-4':''}`}>
-          Usuarios
-        </div>
-
-        <div onClick={()=>setEntity("teams")} className={`cursor-pointer px-3 py-1 rounded-[6px] border border-neutral-3 ${entity ==="teams"?'bg-neutral-4':''}`}>
-          Equipos
-        </div>
-      </div>
+      <SwitchEntity 
+          entity={entity}
+          click1={() => setEntity("users")}
+          click2={() => setEntity("teams")}
+        />
 
       {isOpen && (
-        <ModalUT users={users} teams={teams} handleClose={()=>setIsOpen(false)} />
+        <ModalUT handleClose={()=>setIsOpen(false)} handleSave={handleCloseCreateModalWithSave} />
       )}
 
 
-      {users.length===0 
-      ?
-        <NoData />
-      :
+      {
         entity === "users" 
         ? 
-          <UsersList teams={teams} users={users} /> 
+          <UsersList loading={loadingEmployees} teams={teams} users={users} /> 
         :
-          <TeamsList users={users} teams={teams} />
+          <TeamsList loading={loadingTeams} users={users} teams={teams} />
       }
     </div>
   )

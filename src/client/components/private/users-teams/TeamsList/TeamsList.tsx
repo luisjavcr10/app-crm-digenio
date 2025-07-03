@@ -4,10 +4,12 @@ import { TeamProps, UserProps } from "@/app/(modules)/users-teams/types";
 
 export const TeamsList = ({
   teams,
-  users
+  users,
+  loading
 }:Readonly<{
   teams:TeamProps[];
-  users:UserProps[]; // Agregamos users para poder seleccionar managers
+  users:UserProps[]; 
+  loading:boolean;
 }>) => {
   const [isModalEditTeamOpen, setIsModalEditTeamOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<TeamProps | null>(null);
@@ -32,6 +34,14 @@ export const TeamsList = ({
     setIsModalEditTeamOpen(false);
     setSelectedTeam(null);
   };
+
+  if(loading){
+    return(
+      <div className="px-2 grid grid-cols-5 gap-0 bg-neutral-4 text-black dark:text-white rounded-[12px] mb-4 font-bold">
+          Cargando equipos...
+      </div>
+    )
+  }
 
   return(
     <div className="text-[12px]">

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import { OkrTextInput } from "../OkrTextInput";
-import { OkrTextareaInput } from "../OkrTextareaInput";
-import { OkrDateInput } from "../OkrDateInput";
+import { OkrTextInput } from "../../../shared/formElements/TextInput";
+import { OkrTextareaInput } from "../../../shared/formElements/TextareaInput";
+import { OkrDateInput } from "../../../shared/formElements/DateInput";
 import { useMutation } from "@apollo/client";
 import ReactMarkdown from "react-markdown";
 import {

@@ -35,3 +35,15 @@ export interface TeamProps {
     }
   }[];
 }
+
+export interface EmployeeLigthProps{
+  id:string,
+  userId:{
+    name:string
+  }
+}
+
+export interface TeamLigthProps{
+  id:string,
+  name:string
+}

@@ -1,6 +1,6 @@
 import React from "react";
 
-interface OkrTextInputProps {
+interface TextInputProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -9,12 +9,12 @@ interface OkrTextInputProps {
   disabled?: boolean;
 }
 
-export const OkrTextInput = ({
+export const TextInput = ({
   value,
   onChange,
   placeholder = "",
   disabled,
-}: OkrTextInputProps) => {
+}: TextInputProps) => {
   return (
       <input
         value={value}

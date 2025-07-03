@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { OkrTextInput } from "../../okrs/OkrTextInput";
+import { TextInput } from "../../../shared/formElements";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { TeamProps, UserProps } from "@/app/(modules)/users-teams/types";
 
@@ -35,7 +35,7 @@ export const ModalEditUser = ({
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2">
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
                 <p className="min-w-[100px]">Nombres</p>
-                <OkrTextInput
+                <TextInput
                   label="Nombres"
                   value={userLocal.userId.name}
                   onChange={(value) =>
@@ -48,7 +48,7 @@ export const ModalEditUser = ({
                   disabled={false}
                 />
                 <p className="min-w-[100px]">Correo</p>
-                <OkrTextInput
+                <TextInput
                   label="correo"
                   value={userLocal.userId.email}
                   onChange={(value) =>
@@ -63,7 +63,7 @@ export const ModalEditUser = ({
               </div>
               <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
                 <p className="min-w-[100px]">Area</p>
-                <OkrTextInput
+                <TextInput
                   label="area"
                   value={userLocal.department}
                   onChange={(value) => setUserLocal({ ...userLocal, department: value })}
@@ -71,7 +71,7 @@ export const ModalEditUser = ({
                   disabled={false}
                 />
                 <p className="min-w-[100px]">Posición</p>
-                <OkrTextInput
+                <TextInput
                   label="posicion"
                   value={userLocal.position}
                   onChange={(value) => setUserLocal({ ...userLocal, position: value })}
@@ -81,7 +81,7 @@ export const ModalEditUser = ({
               </div>
               <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
                 <p className="min-w-[100px]">Telefono</p>
-                <OkrTextInput
+                <TextInput
                   label="telefono"
                   value={userLocal.contactInfo.phone}
                   onChange={(value) =>

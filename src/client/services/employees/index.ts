@@ -25,6 +25,26 @@ export const EMPLOYEES = gql`
   }
 `;
 
+export const ID_NAME_EMPLOYEES = gql`
+  query Employees {
+    employees {
+      id
+      userId {
+        name
+      }
+    }
+  }
+`;
+
+export const ID_NAME_TEAMS = gql`
+  query Teams {
+    teams {
+      id
+      name
+    }
+  }
+`;
+
 export const TEAMS = gql`
   query Teams{
     teams {

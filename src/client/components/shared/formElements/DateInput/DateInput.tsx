@@ -1,6 +1,6 @@
 import React from "react";
 
-interface OkrDateInputProps {
+interface DateInputProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -8,13 +8,13 @@ interface OkrDateInputProps {
   disabled?: boolean;
 }
 
-export const OkrDateInput = ({
+export const DateInput = ({
   label,
   value,
   onChange,
   className = "",
   disabled
-}: OkrDateInputProps) => {
+}: DateInputProps) => {
   return (
     <div className={`scheme-light dark:scheme-dark flex flex-col lg:flex-row gap-4 lg:gap-8 ${className}`}>
       <p className="min-w-[100px]">{label}</p>

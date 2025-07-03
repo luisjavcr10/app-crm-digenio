@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { OkrTextInput } from "../../okrs/OkrTextInput";
-import { OkrTextareaInput } from "../../okrs/OkrTextareaInput";
+import { TextInput, TextareaInput } from "../../../shared/formElements";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { TeamProps, UserProps } from "@/app/(modules)/users-teams/types";
 
@@ -50,7 +49,7 @@ export const ModalEditTeam = ({
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2">
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="min-w-[100px]">Nombre</p>
-            <OkrTextInput
+            <TextInput
               label="Nombre"
               value={teamLocal.name}
               onChange={(value) =>
@@ -104,7 +103,7 @@ export const ModalEditTeam = ({
 
           <div className="flex flex-col gap-2">
             <p className="min-w-[100px]">Descripción</p>
-            <OkrTextareaInput
+            <TextareaInput
               label="Descripción"
               value={teamLocal.description}
               onChange={(value) =>

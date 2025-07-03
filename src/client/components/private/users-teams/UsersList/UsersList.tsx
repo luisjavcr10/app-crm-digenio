@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { ModalEditUser } from "../ModalEditUser";
 import { TeamProps, UserProps } from "@/app/(modules)/users-teams/types";
+import { NoData } from "@/client/components/shared/NoData";
 
 export const UsersList = ({
   users,
-  teams
+  teams,
+  loading
 }:Readonly<{
   users:UserProps[];
-  teams:TeamProps[]
+  teams:TeamProps[];
+  loading:boolean
 }>) =>{
   const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProps | null>(null);
@@ -33,6 +36,20 @@ export const UsersList = ({
     setSelectedUser(null);
   };
 
+  if(loading){
+    return(
+      <div className="text-[12px] text-center p-2 gap-0 bg-neutral-4 text-black dark:text-white rounded-[12px] mb-4 font-bold">
+          Cargando usuarios...
+      </div>
+    )
+  }
+
+  if(users.length === 0){
+    return(
+      <NoData />
+    )
+  }
+
   return(
     <div className="text-[12px]">
         <div className="px-2 grid grid-cols-10 gap-0 bg-[#FFEAEA] text-black dark:text-white rounded-[12px] mb-4 font-bold">
@@ -45,7 +62,7 @@ export const UsersList = ({
           <div className="col-span-2 p-2">Opciones</div>
         </div>
 
-        {usersList.map((user) => (
+        {users.map((user) => (
           <div key={user.id}>
             <div className="px-2 grid grid-cols-10 gap-0 border border-neutral-3 text-black dark:text-white rounded-[12px] mb-4">
               <div className="col-span-2 p-2">{user.userId.name}</div>

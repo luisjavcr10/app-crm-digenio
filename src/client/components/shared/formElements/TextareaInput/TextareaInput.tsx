@@ -1,4 +1,4 @@
-interface OkrTextareaInputProps {
+interface TextareaInputProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -7,14 +7,14 @@ interface OkrTextareaInputProps {
   disabled?: boolean;
 }
 
-export const OkrTextareaInput = ({
+export const TextareaInput = ({
   label,
   value,
   onChange,
   placeholder = "",
   className = "",
   disabled
-}: OkrTextareaInputProps) => {
+}: TextareaInputProps) => {
   return (
     <div className={`flex flex-col lg:flex-row gap-4 lg:gap-8 ${className}`}>
       <p className="min-w-[100px]">{label}</p>
