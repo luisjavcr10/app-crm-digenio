@@ -7,15 +7,19 @@ import { TeamLigthProps } from "@/app/(modules)/users-teams/types";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { useMutation } from "@apollo/client";
 
-export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
-  const { data: teams } = useQuery(ID_NAME_TEAMS);
-  const [createEmployee, { loading: loadingEmployee }] =
-    useMutation(CREATE_EMPLOYEE);
-
+export const UserForm = ({
+  mode,
+  handleSave 
+}: { 
+  mode: "create" | "edit" | "view"
+  handleSave: () => void 
+}) => {
+  //States
+  const [error, setError] = useState<string>("");
   const [user, setUser] = useState({
     position: "",
     department: "",
-    skills: ["TypeScript"],
+    skills: [] as string[],
     userId: {
       name: "",
       email: "",
@@ -26,8 +30,12 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
       emergencyContact: "943721646",
     },
   });
-  const [error, setError] = useState<string>("");
+  
+  //Requests
+  const { data: teams } = useQuery(ID_NAME_TEAMS);
+  const [createEmployee, { loading: loadingEmployee }] = useMutation(CREATE_EMPLOYEE);
 
+  //Functions
   const handleCreateEmployee = async () => {
     setError("");
     if (user.userId.name === "") {
@@ -76,6 +84,7 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
     handleSave();
   };
 
+  //Effects
   useEffect(() => {
     if (teams) {
       setTeams(teams.teams);
@@ -85,7 +94,7 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2">
+      <div className="w-full flex flex-col gap-6 pt-4 pb-8 px-6 border-b border-neutral-3 dark:border-neutral-2">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           <p className="min-w-[100px]">Nombres</p>
           <TextInput
@@ -98,7 +107,7 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
               })
             }
             placeholder="Nombre completo del colaborador"
-            disabled={false}
+            disabled={mode==='view'? true : false}
           />
           <p className="min-w-[100px]">Correo</p>
           <TextInput
@@ -111,7 +120,7 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
               })
             }
             placeholder="Correo electronico del colaborador"
-            disabled={false}
+            disabled={mode==='view'? true : false}
           />
         </div>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
@@ -121,7 +130,7 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
             value={user.department}
             onChange={(value) => setUser({ ...user, department: value })}
             placeholder="Area"
-            disabled={false}
+            disabled={mode==='view'? true : false}
           />
           <p className="min-w-[100px]">Posición</p>
           <TextInput
@@ -129,7 +138,7 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
             value={user.position}
             onChange={(value) => setUser({ ...user, position: value })}
             placeholder="Posicion"
-            disabled={false}
+            disabled={mode==='view'? true : false}
           />
         </div>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
@@ -144,13 +153,14 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
               })
             }
             placeholder="Area"
-            disabled={false}
+            disabled={mode==='view'? true : false}
           />
           <p className="min-w-[100px]">Equipo</p>
           <select
             name="equipo"
-            className="caret-neutral-3 placeholder-neutral-3 border placeholder:text-[12px] outline-neutral-3 dark:outline-neutral-2 border-neutral-3 dark:border-neutral-2 rounded-[12px] py-2 px-4 flex-1"
+            className="caret-neutral-3 placeholder-neutral-3 border text-neutral-3 text-[12px] outline-neutral-3 dark:outline-neutral-2 border-neutral-3 dark:border-neutral-2 rounded-[12px] py-2 px-4 flex-1"
             value={user.teams[0] || ""}
+            disabled={mode==='view'? true : false}
             onChange={(e) => setUser({ ...user, teams: [e.target.value] })}
           >
             <option value="">Seleccione un equipo</option>
@@ -162,7 +172,7 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
           </select>
         </div>
       </div>
-      <div className="w-full py-4 px-6 flex flex-col justify-center items-center gap-4">
+      { mode !== "view" && <div className="w-full py-4 px-6 flex flex-col justify-center items-center gap-4">
         <p className="text-alert-red text-[12px]">{error}</p>
 
         <MainButton
@@ -170,7 +180,7 @@ export const UserForm = ({ handleSave }: { handleSave: () => void }) => {
           handleClick={handleCreateEmployee}
           disabled={loadingEmployee}
         />
-      </div>
+      </div>}
     </>
   );
 };

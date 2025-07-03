@@ -68,7 +68,7 @@ export default function Page (){
         />
 
       {isOpen && (
-        <ModalCreateUT handleClose={()=>setIsOpen(false)} handleSave={handleCloseCreateModalWithSave} />
+        <ModalCreateUT mode="create" handleClose={()=>setIsOpen(false)} handleSave={handleCloseCreateModalWithSave} />
       )}
 
       {

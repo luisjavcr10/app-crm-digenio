@@ -5,9 +5,11 @@ import { UserForm } from "../UserForm";
 import { TeamForm } from "../TeamForm";
 
 export const ModalCreateUT = ({
+  mode,
   handleClose,
   handleSave,
 }: Readonly<{
+  mode: "create" | "edit" | "view";
   handleClose: () => void;
   handleSave: () => void;
 }>) => {
@@ -25,9 +27,9 @@ export const ModalCreateUT = ({
       />
 
       {entity === "users" ? (
-        <UserForm handleSave={handleSave} />
+        <UserForm mode={mode} handleSave={handleSave} />
       ) : (
-        <TeamForm handleSave={handleSave} />
+        <TeamForm mode={mode} handleSave={handleSave} />
       )}
 
     </ModalLayout>
