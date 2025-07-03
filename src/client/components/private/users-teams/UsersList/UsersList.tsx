@@ -80,7 +80,7 @@ export const UsersList = ({
               <div className="col-span-2 p-2">
                 <button 
                   onClick={() => handleEditUser(user)} 
-                  className="px-4 cursor-pointer"
+                  className="px-4 cursor-pointer hover:underline"
                 >
                   Editar
                 </button>

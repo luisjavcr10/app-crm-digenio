@@ -17,7 +17,7 @@ export const ModalCreateUT = ({
 
   return (
     <ModalLayout onClose={handleClose}>
-      <ModalTitle text="Agregar nuevo usuario / equipo" />
+      <ModalTitle onClose={handleClose} text="Agregar nuevo usuario / equipo" />
 
       <SwitchEntity
         entity={entity}

@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { ID_NAME_EMPLOYEES, CREATE_TEAM } from "@/client/services/employees";
 import { EmployeeLigthProps } from "@/app/(modules)/users-teams/types";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
+import { FormLayout } from "@/client/components/shared/formElements";
 
 export const TeamForm = ({
   mode,
@@ -61,7 +62,7 @@ export const TeamForm = ({
 
   return (
     <>
-      <div className="w-full flex flex-col gap-6 pt-4 pb-8 px-6 border-b border-neutral-3 dark:border-neutral-2">
+      <FormLayout>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           <p className="min-w-[100px]">Nombre</p>
           <TextInput
@@ -109,7 +110,7 @@ export const TeamForm = ({
           placeholder="Descripción detallada del equipo"
           disabled={mode==='view'? true : false}
         />
-      </div>
+      </FormLayout>
       { mode !== "view" && <div className="w-full py-4 px-6 flex flex-col justify-center items-center gap-4">
         <p className="text-alert-red text-[12px]">{error}</p>
 
