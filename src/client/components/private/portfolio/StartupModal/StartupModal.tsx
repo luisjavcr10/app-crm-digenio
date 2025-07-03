@@ -7,9 +7,8 @@ import {
   UPDATE_STARTUP_MUTATION,
   DELETE_STARTUP_MUTATION,
 } from "@/client/services/startups";
-import { ModalLayout } from "@/client/components/shared/modal/ModalLayout";
-import { OkrTextInput } from "../../../shared/formElements/TextInput";
-import { OkrTextareaInput } from "../../../shared/formElements/TextareaInput";
+import { ModalLayout } from "@/client/components/shared/modal";
+import {TextInput, TextareaInput} from "../../../shared/formElements";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { ProgressBar } from "../ProgressBar";
 
@@ -168,7 +167,7 @@ export const StartupModal = ({
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2">
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="min-w-[100px]">Cliente</p>
-            <OkrTextInput
+            <TextInput
               label="Cliente"
               value={formData.client}
               onChange={(value) => setFormData({ ...formData, client: value })}
@@ -179,7 +178,7 @@ export const StartupModal = ({
 
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="min-w-[100px]">Nombre</p>
-            <OkrTextInput
+            <TextInput
               label="Nombre"
               value={formData.name}
               onChange={(value) => setFormData({ ...formData, name: value })}
@@ -188,7 +187,7 @@ export const StartupModal = ({
             />
           </div>
 
-          <OkrTextareaInput
+          <TextareaInput
             label="Descripción"
             value={formData.description}
             onChange={(value) =>
@@ -200,7 +199,7 @@ export const StartupModal = ({
 
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="min-w-[100px]">Responsable</p>
-            <OkrTextInput
+            <TextInput
               label="Responsable"
               value={formData.responsible}
               onChange={(value) =>
@@ -213,7 +212,7 @@ export const StartupModal = ({
 
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="max-w-[100px]">Métrica mensual</p>
-            <OkrTextInput
+            <TextInput
               label="Métrica mensual"
               value={formData.monthlyMetric}
               onChange={(value) =>

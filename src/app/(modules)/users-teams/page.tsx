@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 import { UsersList } from "@/client/components/private/users-teams/UsersList";
 import { TeamsList } from "@/client/components/private/users-teams/TeamsList";
 import { SwitchEntity } from "@/client/components/private/users-teams/SwitchEntity";
-import { ModalUT } from "@/client/components/private/users-teams/ModalUT";
+import { ModalCreateUT } from "@/client/components/private/users-teams/ModalCreateUT";
 import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { EMPLOYEES, TEAMS } from "@/client/services/employees";
@@ -46,8 +46,14 @@ export default function Page (){
 
   return(
     <div className="my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
-      <TitleSection name="USUARIOS Y EQUIPOS" description="Visualización de usuarios, sus cargos, equipos y métricas de satisfacción (NPS).">
-        <MainButton text="Agregar nuevo usuario/equipo" handleClick={()=>setIsOpen(true)} />
+      <TitleSection 
+        name="USUARIOS Y EQUIPOS" 
+        description="Visualización de usuarios, sus cargos, equipos y métricas de satisfacción (NPS)."
+      >
+        <MainButton 
+          text="Agregar nuevo usuario/equipo" 
+          handleClick={()=>setIsOpen(true)} 
+        />
       </TitleSection>
 
       <div className="h-[20px] w-full bg-nps rounded-[12px] relative">
@@ -62,9 +68,8 @@ export default function Page (){
         />
 
       {isOpen && (
-        <ModalUT handleClose={()=>setIsOpen(false)} handleSave={handleCloseCreateModalWithSave} />
+        <ModalCreateUT handleClose={()=>setIsOpen(false)} handleSave={handleCloseCreateModalWithSave} />
       )}
-
 
       {
         entity === "users" 

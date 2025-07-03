@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import { OkrTextInput } from "../../../shared/formElements/TextInput";
-import { OkrTextareaInput } from "../../../shared/formElements/TextareaInput";
-import { OkrDateInput } from "../../../shared/formElements/DateInput";
-import { useMutation } from "@apollo/client";
+import {TextInput, TextareaInput, DateInput} from "@/client/components/shared/formElements";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import ReactMarkdown from "react-markdown";
 import {
   CREATE_OKR_MUTATION,
   UPDATE_OKR_MUTATION,
   DELETE_OKR_MUTATION
 } from "@/client/services/okrs";
-import { useLazyQuery } from "@apollo/client";
 import { GET_DEEPSEEK_RECOMMENDATION } from "@/client/services/ia";
 
 interface okrProps {
@@ -130,7 +127,7 @@ export const OkrFormModal = ({
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2 ">
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="min-w-[100px]">Responsable</p>
-            <OkrTextInput
+            <TextInput
               label="Responsable"
               value={okr.owner}
               onChange={(value) => setOkr({ ...okr, owner: value })}
@@ -141,7 +138,7 @@ export const OkrFormModal = ({
 
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="min-w-[100px]">Título:</p>
-            <OkrTextInput
+            <TextInput
               label="Título"
               value={okr.title}
               onChange={(value) => setOkr({ ...okr, title: value })}
@@ -150,7 +147,7 @@ export const OkrFormModal = ({
             />
           </div>
 
-          <OkrTextareaInput
+          <TextareaInput
             label="Descripción"
             value={okr.description}
             onChange={(value) => setOkr({ ...okr, description: value })}
@@ -174,14 +171,14 @@ export const OkrFormModal = ({
             </select>
           </div>
 
-          <OkrDateInput
+          <DateInput
             label="Fecha inicio"
             value={okr.startDate}
             onChange={(value) => setOkr({ ...okr, startDate: value })}
             disabled={isViewMode}
           />
 
-          <OkrDateInput
+          <DateInput
             label="Fecha fin"
             value={okr.endDate}
             onChange={(value) => setOkr({ ...okr, endDate: value })}

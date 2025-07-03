@@ -4,7 +4,7 @@ import { ModalTitle, ModalLayout } from "@/client/components/shared/modal";
 import { UserForm } from "../UserForm";
 import { TeamForm } from "../TeamForm";
 
-export const ModalUT = ({
+export const ModalCreateUT = ({
   handleClose,
   handleSave,
 }: Readonly<{
