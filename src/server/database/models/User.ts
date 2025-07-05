@@ -17,7 +17,7 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: false,
     },
-    role: {
+    roles: {
       type: [String],
       enum: ["ADMIN", "TEAMLEADER", "EMPLOYEE"],
       required:true

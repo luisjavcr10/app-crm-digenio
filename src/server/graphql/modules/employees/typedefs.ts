@@ -65,7 +65,7 @@ export const employeeTypeDefs = `#graphql
   input UserInput {
     name: String!
     email: String!
-    role: [Role!]!
+    roles: [Role!]!
   }
 
   enum Role {

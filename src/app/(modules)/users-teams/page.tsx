@@ -20,6 +20,8 @@ export default function Page (){
   const [entity, setEntity] = useState<"users" | "teams">("users");
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  console.log(employeesData);
+
   useEffect(() => {
     if(employeesData){
       setUsers(employeesData.employees);

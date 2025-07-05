@@ -1,12 +1,12 @@
 export interface UserProps {
   id:string;
   position: string;
-  department: string;
   skills: string[];
   hireDate:string;
   userId:{
     name:string;
     email:string;
+    roles:("ADMIN" | "TEAMLEADER" | "EMPLOYEE" )[];
     status:string;
   };
   teams:{

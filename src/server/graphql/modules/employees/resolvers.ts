@@ -30,7 +30,7 @@ export const employeeResolvers = {
         userData: {
           name: string;
           email: string;
-          role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
+          roles: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
         },
         employeeData: {
           position: string;

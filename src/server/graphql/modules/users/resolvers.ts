@@ -19,10 +19,10 @@ export const userResolvers = {
   Mutation: {
     createUser: async (
       _: undefined, 
-      { name, email, password, role }: 
-      { name: string, email: string, password: string, role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[] }
+      { name, email, password, roles }: 
+      { name: string, email: string, password: string, roles: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[] }
     ) => {
-      return await UserService.createUser(name, email, password, role);
+      return await UserService.createUser(name, email, password, roles);
     },
 
     updateUser: async (
@@ -32,7 +32,7 @@ export const userResolvers = {
         name: string,
         email: string,
         password: string,
-        role: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
+        roles: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
         status: "pending" | "active" | "inactive" | "on_leave"
       }>
     ) => {

@@ -9,7 +9,6 @@ export const EMPLOYEES = gql`
         name
       }
       position
-      department
       skills
       contactInfo {
         emergencyContact
@@ -20,6 +19,7 @@ export const EMPLOYEES = gql`
         name
         email
         status
+        roles
       }
     }
   }
