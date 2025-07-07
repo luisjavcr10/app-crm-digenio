@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { TeamProps, UserProps } from "@/app/(modules)/users-teams/types";
+import { UserProps } from "@/app/(modules)/users-teams/types";
 import { ModalLayout } from "@/client/components/shared/modal";
 import { ModalTitle } from "@/client/components/shared/modal";
 import { UserForm } from "../UserForm";
