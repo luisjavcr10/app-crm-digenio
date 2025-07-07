@@ -76,7 +76,7 @@ export default function Page (){
       {
         entity === "users" 
         ? 
-          <UsersList loading={loadingEmployees} teams={teams} users={users} /> 
+          <UsersList loading={loadingEmployees} users={users} /> 
         :
           <TeamsList loading={loadingTeams} users={users} teams={teams} />
       }

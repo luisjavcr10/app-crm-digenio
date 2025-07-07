@@ -36,42 +36,42 @@ export class TeamService {
         path: 'managerInfo',
         populate: {
           path: 'userId',
-          select: 'email name role status'
+          select: 'email name roles status'
         }
       })
       .populate({
         path: 'membersInfo',
         populate: {
           path: 'userId',
-          select: 'email name role status'
+          select: 'email name roles status'
         }
       });
   
     return populatedTeam;
   };
 
-  static async getTeamById(id: string) {
+  static async getAllTeams() {
     await dbConnect();
-    return await Team.findById(id)
+    return await Team.find()
       .populate({
         path: 'managerInfo',
         populate: {
           path: 'userId',
-          select: 'email name role status'
+          select: 'email name roles status'
         }
       })
       .populate({
         path: 'membersInfo',
         populate: {
           path: 'userId',
-          select: 'email name role status'
+          select: 'email name roles status'
         }
       });
   };
 
-  static async getAllTeams() {
+    static async getTeamById(id: string) {
     await dbConnect();
-    return await Team.find()
+    return await Team.findById(id)
       .populate({
         path: 'managerInfo',
         populate: {
