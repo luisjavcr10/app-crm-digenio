@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TextInput } from "../../../shared/formElements";
-import { useQuery } from "@apollo/client";
-import { ID_NAME_TEAMS } from "@/client/services/employees";
 import { CREATE_EMPLOYEE } from "@/client/services/employees";
-import { TeamLigthProps, UserProps } from "@/app/(modules)/users-teams/types";
+import { UserProps } from "@/app/(modules)/users-teams/types";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { useMutation } from "@apollo/client";
 import {
@@ -48,10 +46,7 @@ export const UserForm = ({
     teamsAdded: [] as string[],
   });
 
-  //Requests
-  const { data: teams } = useQuery(ID_NAME_TEAMS);
-  const [createEmployee, { loading: loadingEmployee }] =
-    useMutation(CREATE_EMPLOYEE);
+  const [createEmployee, { loading: loadingEmployee }] = useMutation(CREATE_EMPLOYEE);
 
   //Functions
   const handleCreateEmployee = async () => {
@@ -98,14 +93,6 @@ export const UserForm = ({
     });
     handleSave();
   };
-
-  //Effects
-  useEffect(() => {
-    if (teams) {
-      setTeams(teams.teams);
-    }
-  }, [teams]);
-  const [teamsState, setTeams] = useState<TeamLigthProps[]>([]);
 
   return (
     <>
@@ -195,6 +182,7 @@ export const UserForm = ({
             disabled={mode === "view" ? true : false}
           />
         </FormSection>
+
         {mode !== 'create' && <FormSection>
           <p className="min-w-[100px]">Equipos</p>
           <div className="flex gap-4">
@@ -211,6 +199,7 @@ export const UserForm = ({
               </p>
           </div>
         </FormSection>}
+
         <FormSection>
           <p className="min-w-[100px]">Habilidades</p>
           <div className="flex gap-4">
@@ -258,6 +247,7 @@ export const UserForm = ({
             ))}
           </div>
         </FormSection>
+
         <FormSection>
           <p className="w-[100px]">Telefono</p>
           <TextInput
@@ -289,6 +279,7 @@ export const UserForm = ({
             disabled={mode === "view" ? true : false}
           />
         </FormSection>
+
       </FormLayout>
 
       {mode !== "view" && (
