@@ -7,8 +7,13 @@ import { useSidebarStore } from "@/client/store/sidebarStore";
 import { SbItem, SbSubItem } from "./subcomponents";
 import { Logo } from "../Logo";
 import { RefreshIcon, DocumentIcon, ChartIcon, UserIcon, ChevronLeft,EyeIcon, ListAddIcon } from "../icons";
+import { useOkrModalStore, useStartupModalStore, useUsersModalStore } from "@/client/store/modalsStore";
 
 export const Sidebar = () => {
+  const openOkrModal = useOkrModalStore((state) => state.open);
+  const openStartupModal = useStartupModalStore((state) => state.open);
+  const openUsersModal = useUsersModalStore((state) => state.open);
+  
   const { user } = useAuth();
   const isOpen = useSidebarStore((state) => state.isOpen);
   const close = useSidebarStore((state) => state.close);
@@ -64,6 +69,7 @@ export const Sidebar = () => {
                 {user.roles.includes('ADMIN') && 
                 <SbSubItem 
                   href="/okrs"
+                  openModal={openOkrModal}
                   icon={<ListAddIcon />}
                   title="Crear objetivo"
                 />
@@ -87,6 +93,7 @@ export const Sidebar = () => {
               {user.roles.includes('TEAMLEADER') && 
               <SbSubItem 
                 href="/portfolio"
+                openModal={openStartupModal}
                 icon={<ListAddIcon />}
                 title="Crear startup"
               />
@@ -124,6 +131,7 @@ export const Sidebar = () => {
               />
               <SbSubItem 
                 href="/users-teams"
+                openModal={openUsersModal}
                 icon={<ListAddIcon />}
                 title="Crear nuevo registro"
               />

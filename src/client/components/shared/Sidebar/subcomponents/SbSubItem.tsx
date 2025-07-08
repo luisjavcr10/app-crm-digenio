@@ -3,16 +3,21 @@ import { useRouter } from "next/navigation";
 export const SbSubItem = ({ 
   icon,
   title,
-  href 
+  href,
+  openModal
 }: Readonly<{ 
   icon: React.ReactElement,
   title: string;
   href:string;
+  openModal?: () => void;
 }>) => {
   const router = useRouter();
 
   const handleRoute = () =>{
     router.push(href);
+    if(openModal){
+      openModal();
+    }
   }
 
   return (
