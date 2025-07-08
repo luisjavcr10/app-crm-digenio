@@ -26,7 +26,6 @@ export const Sidebar = () => {
     false,
   ]);
 
-  console.log(indexItemOpen)
   const handleSidebarItems = (index: number) => {
     setIndexItemOpen((prevState) => {
       const newState = [...prevState];

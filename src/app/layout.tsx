@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`min-h-screen flex flex-col bg-background text-foreground ${beVietmanPro.className}`}
+        className={`h-screen flex flex-col bg-background text-foreground ${beVietmanPro.className}`}
       >
         <ThemeWrapper>
           <ApolloWrapper>

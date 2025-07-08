@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
+import { useSidebarStore } from "@/client/store/sidebarStore";
 
 const questions = [
   "¿Qué tan satisfecho estás con tu trabajo en general?",
@@ -16,6 +17,7 @@ const questions = [
 ]
 
 export default function SurveyPage() {
+  const isOpenSidebar = useSidebarStore((state)=> state.isOpen);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   // Estado para almacenar las respuestas - inicializado con null para cada pregunta
@@ -46,7 +48,7 @@ export default function SurveyPage() {
   };
 
   return (
-    <div className="my-6 mx-8 flex flex-col gap-8">
+    <div className={`my-6 mx-8 flex flex-col gap-8 ${isOpenSidebar? 'overflow-auto':''}`}>
       <div className="flex flex-col gap-4">
         <p className="text-[36px] font-[600]">Encuesta de Clima y Satisfacción Laboral</p>
 

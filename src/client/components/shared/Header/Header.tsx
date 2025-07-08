@@ -21,14 +21,14 @@ export const Header = () => {
   const isOpen = useSidebarStore((state) => state.isOpen);
 
   useEffect(() => {
-    setHasMounted(true); // <- NUEVO
+    setHasMounted(true);
 
     const handleScroll = () => {
       setScrolled(window.scrollY > 0);
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // por si ya está scrolleado
+    handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -39,7 +39,7 @@ export const Header = () => {
     setisOpenMenu(!isOpenMenu);
   };
 
-  if (!hasMounted) return null; // <- NUEVO
+  if (!hasMounted) return null;
 
   if (pathname.startsWith("/auth")) return null;
 
