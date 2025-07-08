@@ -1,0 +1,1 @@
+export { ModalShowTeam } from './ModalShowTeam';

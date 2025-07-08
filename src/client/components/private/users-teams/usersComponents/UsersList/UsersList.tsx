@@ -4,24 +4,29 @@ import { ModalShowUser } from "../ModalShowUser";
 import { UserProps } from "@/app/(modules)/users-teams/types";
 import { NoData } from "@/client/components/shared/NoData";
 
-interface UsersListProps {
-  users: UserProps[];
-  loading: boolean;
-}
-
-export const UsersList = ({ users, loading }: Readonly<UsersListProps>) => {
+export const UsersList = ({
+  users, 
+  loading,
+  refetch,
+}: Readonly<{
+  users:UserProps[];
+  loading:boolean;
+  refetch:()=>void;
+}>) => {
   const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false);
   const [isModalShowUserOpen, setIsModalShowUserOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProps | null>(null);
 
-  const handleEditUser = (user: UserProps) => {
+  const handleEditUser = async (user: UserProps) => {
     setSelectedUser(user);
     setIsModalEditUserOpen(true);
+    await refetch();
   };
 
-  const handleShowUser = (user: UserProps) => {
+  const handleShowUser = async (user: UserProps) => {
     setSelectedUser(user);
     setIsModalShowUserOpen(true);
+    await refetch();
   };
 
   const handleCloseEditModal = () => {

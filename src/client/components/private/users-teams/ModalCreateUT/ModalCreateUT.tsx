@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { SwitchEntity } from "../SwitchEntity";
 import { ModalTitle, ModalLayout } from "@/client/components/shared/modal";
-import { UserForm } from "../UserForm";
-import { TeamForm } from "../TeamForm";
+import { UserForm } from "../usersComponents/UserForm";
+import { TeamForm } from "../teamsComponents/TeamForm";
 
 export const ModalCreateUT = ({
   mode,

@@ -25,11 +25,13 @@ export interface TeamProps {
   description:string;
   status:string;
   manager:{
+    id:string;
     userId:{
       name:string
     }
   };
   members :{
+    id:string;
     userId:{
       name:string
     }

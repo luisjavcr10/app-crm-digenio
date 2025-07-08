@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import { UsersList } from "@/client/components/private/users-teams/UsersList";
-import { TeamsList } from "@/client/components/private/users-teams/TeamsList";
+import { UsersList } from "@/client/components/private/users-teams/usersComponents/UsersList";
+import { TeamsList } from "@/client/components/private/users-teams/teamsComponents/TeamsList";
 import { SwitchEntity } from "@/client/components/private/users-teams/SwitchEntity";
 import { ModalCreateUT } from "@/client/components/private/users-teams/ModalCreateUT";
 import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
@@ -34,8 +34,7 @@ export default function Page (){
     }
   }, [teamsData])
 
-  const handleCloseCreateModalWithSave = async () =>{
-    setIsOpen(false);
+  const refetchEntities = async () =>{
     try {
       await Promise.all([
         refetchEmployees(),
@@ -44,6 +43,11 @@ export default function Page (){
     } catch (error) {
       console.error('Error al actualizar los datos:', error);
     }
+  }
+
+  const handleCloseCreateModalWithSave = async () =>{
+    setIsOpen(false);
+    await refetchEntities()
   }
 
   return(
@@ -76,9 +80,9 @@ export default function Page (){
       {
         entity === "users" 
         ? 
-          <UsersList loading={loadingEmployees} users={users} /> 
+          <UsersList refetch={refetchEntities} loading={loadingEmployees} users={users} /> 
         :
-          <TeamsList loading={loadingTeams} users={users} teams={teams} />
+          <TeamsList loading={loadingTeams} teams={teams} />
       }
     </div>
   )

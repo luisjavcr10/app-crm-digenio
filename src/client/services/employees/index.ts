@@ -53,11 +53,13 @@ export const TEAMS = gql`
       description
       status
       members {
+        id
         userId {
           name
         }
       }
       manager {
+        id
         userId {
           name
         }

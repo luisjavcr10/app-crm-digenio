@@ -1,44 +1,47 @@
 import { useState } from "react"
 import { ModalEditTeam } from "../ModalEditTeam";
-import { TeamProps, UserProps } from "@/app/(modules)/users-teams/types";
+import { ModalShowTeam } from "../ModalShowTeam";
+import { TeamProps } from "@/app/(modules)/users-teams/types";
 
 export const TeamsList = ({
   teams,
-  users,
   loading
 }:Readonly<{
   teams:TeamProps[];
-  users:UserProps[]; 
   loading:boolean;
 }>) => {
   const [isModalEditTeamOpen, setIsModalEditTeamOpen] = useState(false);
+  const [isModalShowTeamOpen, setIsModalShowTeamOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<TeamProps | null>(null);
-  const [teamsList, setTeamsList] = useState<TeamProps[]>(teams);
 
   const handleEditTeam = (team: TeamProps) => {
     setSelectedTeam(team);
     setIsModalEditTeamOpen(true);
   };
 
-  const handleSaveTeam = (updatedTeam: TeamProps) => {
-    setTeamsList(prevTeams => 
-      prevTeams.map(team => 
-        team.id === updatedTeam.id ? updatedTeam : team
-      )
-    );
+  const handleShowTeam = (team: TeamProps) => {
+    setSelectedTeam(team);
+    setIsModalShowTeamOpen(true);
+  };
+
+  const handleSaveTeam = () => {
+
+  };
+
+  const handleCloseEditModal = () => {
     setIsModalEditTeamOpen(false);
     setSelectedTeam(null);
   };
 
-  const handleCloseModal = () => {
-    setIsModalEditTeamOpen(false);
+  const handleCloseShowModal = () => {
+    setIsModalShowTeamOpen(false);
     setSelectedTeam(null);
   };
 
   if(loading){
     return(
-      <div className="px-2 grid grid-cols-5 gap-0 bg-neutral-4 text-black dark:text-white rounded-[12px] mb-4 font-bold">
-          Cargando equipos...
+      <div className="text-[12px] text-center p-2 bg-neutral-4 text-black dark:text-white rounded-[12px] mb-4 font-bold">
+        Cargando equipos...
       </div>
     )
   }
@@ -53,13 +56,19 @@ export const TeamsList = ({
           <div className="col-span-1 p-2">Opciones</div>
         </div>
 
-        {teamsList.map((team) => (
+        {teams.map((team) => (
           <div className="px-2 grid grid-cols-5 gap-0 border border-neutral-3 text-black dark:text-white rounded-[12px] mb-4" key={team.id}>
             <div className="col-span-1 p-2">{team.name}</div>
             <div className="col-span-1 p-2">{team.description}</div>
             <div className="col-span-1 p-2">{team.manager.userId.name}</div>
             <div className="col-span-1 p-2">{team.status}</div>
             <div className="col-span-1 p-2">
+              <button 
+                onClick={() => handleShowTeam(team)} 
+                className="px-4 cursor-pointer"
+              >
+                Ver
+              </button>
               <button 
                 onClick={() => handleEditTeam(team)} 
                 className="px-4 cursor-pointer"
@@ -74,9 +83,15 @@ export const TeamsList = ({
         {isModalEditTeamOpen && selectedTeam && (
           <ModalEditTeam 
             team={selectedTeam} 
-            users={users}
-            onClose={handleCloseModal}
+            onClose={handleCloseEditModal}
             onSave={handleSaveTeam}
+          />
+        )}
+
+        {isModalShowTeamOpen && selectedTeam && (
+          <ModalShowTeam 
+            team={selectedTeam} 
+            onClose={handleCloseShowModal}
           />
         )}
     </div>
