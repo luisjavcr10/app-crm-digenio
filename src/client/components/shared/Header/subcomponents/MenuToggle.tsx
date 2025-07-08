@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/client/hooks/useAuth";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { GoHomeFill } from "react-icons/go";
-import { RiLogoutBoxRFill,RiSurveyLine } from "react-icons/ri";
+import { RiLogoutBoxRFill, RiSurveyLine } from "react-icons/ri";
 import { useEffect, useRef } from "react";
 
 export const MenuToggle = ({
@@ -24,10 +24,18 @@ export const MenuToggle = ({
       }
     };
 
+    const handleScroll = () => {
+      if (isOpen) {
+        handleOpen();
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [isOpen, handleOpen]);
 
@@ -35,7 +43,7 @@ export const MenuToggle = ({
     handleOpen();
     handleLogout();
     router.push("/");
-  }
+  };
 
   if (!isOpen) return null;
 

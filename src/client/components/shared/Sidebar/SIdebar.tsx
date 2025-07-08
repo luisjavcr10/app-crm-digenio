@@ -14,7 +14,7 @@ export const Sidebar = () => {
   const openStartupModal = useStartupModalStore((state) => state.open);
   const openUsersModal = useUsersModalStore((state) => state.open);
   
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const isOpen = useSidebarStore((state) => state.isOpen);
   const close = useSidebarStore((state) => state.close);
   const pathname = usePathname();
@@ -34,6 +34,8 @@ export const Sidebar = () => {
       return newState;
     });
   };
+
+  if(!isAuthenticated) return null;
 
   if (pathname.startsWith("/auth")) return null;
 

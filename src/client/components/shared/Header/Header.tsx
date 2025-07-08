@@ -13,18 +13,22 @@ import { IoMenu } from "react-icons/io5";
 
 export const Header = () => {
   const [isOpenMenu, setisOpenMenu] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false); // <- NUEVO
   const pathname = usePathname();
   const { user ,isAuthenticated, initialized } = useAuth();
-  const [scrolled, setScrolled] = useState(false);
   const toggleSidebar = useSidebarStore((state) => state.toggle);
   const isOpen = useSidebarStore((state) => state.isOpen);
 
   useEffect(() => {
+    setHasMounted(true); // <- NUEVO
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 0);
     };
 
     window.addEventListener("scroll", handleScroll);
+    handleScroll(); // por si ya está scrolleado
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -34,6 +38,8 @@ export const Header = () => {
   const handleMenuToggle = () => {
     setisOpenMenu(!isOpenMenu);
   };
+
+  if (!hasMounted) return null; // <- NUEVO
 
   if (pathname.startsWith("/auth")) return null;
 
@@ -119,10 +125,9 @@ export const Header = () => {
               Inicia sesión
             </Link>
           )
-        ) : (
-          <></>
-        )}
+        ) : null}
       </nav>
     </header>
   );
 };
+
