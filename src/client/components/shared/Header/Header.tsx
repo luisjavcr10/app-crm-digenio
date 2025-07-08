@@ -14,7 +14,7 @@ import { IoMenu } from "react-icons/io5";
 export const Header = () => {
   const [isOpenMenu, setisOpenMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false); // <- NUEVO
+  const [hasMounted, setHasMounted] = useState(false);
   const pathname = usePathname();
   const { user ,isAuthenticated, initialized } = useAuth();
   const toggleSidebar = useSidebarStore((state) => state.toggle);
@@ -47,7 +47,7 @@ export const Header = () => {
     <header
       className={`py-1 ${
           !scrolled || (scrolled && isOpen)
-            ? "px-3 shadow-header bg-neutral-5"
+            ? "px-3 shadow-header dark:border-b dark:border-neutral-3 "
             : "px-10 md:px-40"
         }
       transition-all duration-300 

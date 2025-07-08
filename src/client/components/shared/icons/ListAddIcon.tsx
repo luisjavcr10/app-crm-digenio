@@ -9,8 +9,7 @@ interface ListAddIconProps {
 export const ListAddIcon: React.FC<ListAddIconProps> = ({
   width = 24,
   height = 24,
-  fill = "#1F1F1F",
-  className = ""
+  className = "text-neutral-2 dark:text-neutral-4"
 }) => {
   return (
     <svg 
@@ -23,7 +22,7 @@ export const ListAddIcon: React.FC<ListAddIconProps> = ({
     >
       <path 
         d="M19 15V12H17V15H14V17H17V20H19V17H22V15H21.063H19ZM4 7H15V9H4V7ZM4 11H15V13H4V11ZM4 15H12V17H4V15Z" 
-        fill={fill}
+        fill="currentColor"
       />
     </svg>
   );
