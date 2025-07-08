@@ -48,7 +48,7 @@ export default function SurveyPage() {
   };
 
   return (
-    <div className={`my-6 mx-8 flex flex-col gap-8 ${isOpenSidebar? 'overflow-auto':''}`}>
+    <div className={`h-full my-6 mx-8 flex flex-col gap-8 ${isOpenSidebar? 'overflow-auto':''}`}>
       <div className="flex flex-col gap-4">
         <p className="text-[36px] font-[600]">Encuesta de Clima y Satisfacción Laboral</p>
 

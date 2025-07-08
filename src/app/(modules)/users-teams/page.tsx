@@ -54,7 +54,7 @@ export default function Page (){
   }
 
   return(
-    <div className="my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
+    <div className="h-full my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
       <TitleSection 
         name="USUARIOS Y EQUIPOS" 
         description="Visualización de usuarios, sus cargos, equipos y métricas de satisfacción (NPS)."
