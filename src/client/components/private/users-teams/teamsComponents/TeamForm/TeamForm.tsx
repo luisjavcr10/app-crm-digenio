@@ -41,10 +41,6 @@ export const TeamForm = ({
   //Requests
   const { data: employees } = useQuery(ID_NAME_EMPLOYEES);
   const [createTeam, { loading: loadingTeam }] = useMutation(CREATE_TEAM);
-  
-  const logs = () =>{
-    console.log(team);
-  }
 
   //Functions
   const handleCreateTeam = async () => {
@@ -296,7 +292,7 @@ export const TeamForm = ({
 
           <MainButton
             text="Guardar"
-            handleClick={logs}
+            handleClick={handleCreateTeam}
             disabled={loadingTeam}
           />
         </div>
