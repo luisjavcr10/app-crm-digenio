@@ -7,6 +7,7 @@ import { useQuery } from "@apollo/client";
 import { GET_OKRS_QUERY } from "@/client/services/okrs";
 import { NoData } from "@/client/components/shared/NoData";
 import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
+import { useOkrModalStore } from "@/client/store/modalsStore";
 
 interface okrProps {
   id: string;
@@ -20,7 +21,9 @@ interface okrProps {
 }
 
 export default function OkrsPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = useOkrModalStore((state) => state.open);
+  const closeModal = useOkrModalStore((state) => state.close);
+  const isOpenModal = useOkrModalStore((state) => state.isOpen);
   const [okrs, setOkrs] = useState<okrProps[]>([]);
   const [filteredOkrs, setFilteredOkrs] = useState<okrProps[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -73,7 +76,7 @@ export default function OkrsPage() {
   return (
     <div className="my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
       <TitleSection name="OKRs" description="Gestión de objetivos para alinear y dar seguimiento a las metas de la empresa.">
-        <MainButton text="Agregar nuevo OKR" handleClick={() => setIsModalOpen(true)} />
+        <MainButton text="Agregar nuevo OKR" handleClick={openModal} />
       </TitleSection>
 
       {/** Filtros */}
@@ -113,10 +116,10 @@ export default function OkrsPage() {
         </div>
       </div>
 
-      {isModalOpen && (
+      {isOpenModal && (
         <OkrFormModal
           handleSubmit={handleAddOkr}
-          handleClose={() => setIsModalOpen(false)}
+          handleClose={closeModal}
         />
       )}
 

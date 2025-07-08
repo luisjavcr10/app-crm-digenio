@@ -7,6 +7,7 @@ import { StartupModal } from "@/client/components/private/portfolio/StartupModal
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
 import { NoData } from "@/client/components/shared/NoData";
+import { useStartupModalStore } from "@/client/store/modalsStore";
 
 interface IStartup {
   _id: string;
@@ -23,11 +24,14 @@ interface IStartup {
 }
 
 export default function PortfolioPage() {
+  const openModal = useStartupModalStore((state) => state.open);
+  const closeModal = useStartupModalStore((state) => state.close);
+  const isOpenModal = useStartupModalStore((state) => state.isOpen);
+
   const { data, refetch } = useQuery<{
     getAllStartups: IStartup[];
   }>(GET_ALL_STARTUPS_QUERY);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [stageFilter, setStageFilter] = useState("all");
 
   const startups = data?.getAllStartups || [];
@@ -39,7 +43,7 @@ export default function PortfolioPage() {
     if (stageFilter === "idea") return percentage === 0;
     if (stageFilter === "crecimiento") return percentage > 0 && percentage < 100;
     if (stageFilter === "escala") return percentage === 100;
-    return true; // 'all'
+    return true;
   });
 
   return (
@@ -50,7 +54,7 @@ export default function PortfolioPage() {
       >
         <MainButton
           text="Agregar nueva startup"
-          handleClick={() => setIsModalOpen(true)}
+          handleClick={openModal}
         />
       </TitleSection>
 
@@ -95,10 +99,10 @@ export default function PortfolioPage() {
         </div>
       )}
 
-      {isModalOpen && (
+      {isOpenModal && (
         <>
           <StartupModal
-            handleClose={() => setIsModalOpen(false)}
+            handleClose={closeModal}
             refetch={refetch}
           />
         </>

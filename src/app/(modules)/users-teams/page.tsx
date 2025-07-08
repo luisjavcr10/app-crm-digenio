@@ -11,14 +11,17 @@ import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { EMPLOYEES, TEAMS } from "@/client/services/employees";
 import { UserProps, TeamProps } from "./types";
 import { VscTriangleUp } from "react-icons/vsc";
+import { useUsersModalStore } from "@/client/store/modalsStore";
 
 export default function Page (){
+  const openModal = useUsersModalStore((state) => state.open);
+  const closeModal = useUsersModalStore((state) => state.close);
+  const isOpenModal = useUsersModalStore((state) => state.isOpen);
   const { data:teamsData, loading:loadingTeams, refetch:refetchTeams } = useQuery(TEAMS);
   const { data:employeesData, loading:loadingEmployees, refetch:refetchEmployees } = useQuery(EMPLOYEES);
   const [users, setUsers] = useState<UserProps[]>([]);
   const [teams, setTeams] = useState<TeamProps[]>([]);
   const [entity, setEntity] = useState<"users" | "teams">("users");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   console.log(employeesData);
 
@@ -46,7 +49,7 @@ export default function Page (){
   }
 
   const handleCloseCreateModalWithSave = async () =>{
-    setIsOpen(false);
+    closeModal();
     await refetchEntities()
   }
 
@@ -58,7 +61,7 @@ export default function Page (){
       >
         <MainButton 
           text="Agregar nuevo usuario/equipo" 
-          handleClick={()=>setIsOpen(true)} 
+          handleClick={openModal} 
         />
       </TitleSection>
 
@@ -73,8 +76,8 @@ export default function Page (){
           click2={() => setEntity("teams")}
         />
 
-      {isOpen && (
-        <ModalCreateUT mode="create" handleClose={()=>setIsOpen(false)} handleSave={handleCloseCreateModalWithSave} />
+      {isOpenModal && (
+        <ModalCreateUT mode="create" handleClose={closeModal} handleSave={handleCloseCreateModalWithSave} />
       )}
 
       {

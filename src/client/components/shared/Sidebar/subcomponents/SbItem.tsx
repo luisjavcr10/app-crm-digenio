@@ -1,22 +1,17 @@
 import { ChevronLeft } from "../../icons/sidebarToggles";
-import { EyeIcon, ListAddIcon } from "../../icons";
-import { SbSubItem } from "./SbSubItem";
 
 export const SbItem = ({
   title,
   isOpen,
-  subItems,
   handleOpen,
   icon,
+  children
 }: Readonly<{
   title: string;
   isOpen: boolean;
-  subItems: {
-    title: string;
-    path:string;
-  }[];
   handleOpen: () => void;
-  icon: React.ReactElement
+  icon: React.ReactElement;
+  children?: React.ReactNode;
 }>) => {
   return (
     <>
@@ -32,15 +27,7 @@ export const SbItem = ({
         <ChevronLeft className={`${isOpen ? "duration-500 rotate-90" : "duration-500 rotate-270"}`} />
       </div>
 
-      {isOpen &&
-        subItems.map((subItem, index) => (
-          <SbSubItem 
-            key={index}
-            href={subItem.path}
-            icon={index===1? <ListAddIcon /> : <EyeIcon />}
-            title={subItem.title}
-          />
-        ))}
+        {children}
     </>
   );
 };

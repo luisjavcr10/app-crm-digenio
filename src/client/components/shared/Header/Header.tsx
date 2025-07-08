@@ -14,7 +14,7 @@ import { IoMenu } from "react-icons/io5";
 export const Header = () => {
   const [isOpenMenu, setisOpenMenu] = useState(false);
   const pathname = usePathname();
-  const { isAuthenticated, initialized } = useAuth();
+  const { user ,isAuthenticated, initialized } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const toggleSidebar = useSidebarStore((state) => state.toggle);
   const isOpen = useSidebarStore((state) => state.isOpen);
@@ -80,6 +80,11 @@ export const Header = () => {
                     moduleTitle={moduleLink.moduleTitle}
                   />
                 ))}
+                {user.roles.includes('ADMIN') && <ModuleLink
+                    pathname={pathname}
+                    href="/users-teams"
+                    moduleTitle="Usuarios"
+                />}
               </div>
             )}
           </div>

@@ -10,8 +10,4 @@ export const moduleLinks =[
       href:"/follow-up",
       moduleTitle:"Seguimiento"
     }
-    ,{
-      href:"/users-teams",
-      moduleTitle:"Usuarios"
-    }
   ]

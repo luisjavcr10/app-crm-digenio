@@ -12,7 +12,7 @@ interface User {
   email: string;
   id: string;
   name: string;
-  role: string;
+  roles: string[];
 }
 
 type AuthContextType = {
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     email: "",
     id: "",
     name:"",
-    role: ""
+    roles: []
   });
 
   useEffect(() => {
