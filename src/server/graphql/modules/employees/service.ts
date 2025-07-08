@@ -103,4 +103,22 @@ export class EmployeeService {
       session.endSession();
     }
   }
+
+  static async softDeleteEmployee(id: string){
+    await dbConnect();
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      const employeeToDelete = await Employee.findByIdAndUpdate(id,{status:'inactive'}).session(session);
+      if(employeeToDelete && employeeToDelete.userId){
+        await User.findByIdAndUpdate(employeeToDelete.userId,{status:'inactive'} ).session(session);
+      }
+      return employeeToDelete.populate("userId");
+    } catch (error) {
+      throw error;
+    }finally{
+      session.endSession();
+    }
+  }
 }
