@@ -7,6 +7,7 @@ import { Be_Vietnam_Pro } from "next/font/google";
 import { Header } from "@/client/components/shared/Header";
 import { Footer } from "@/client/components/shared/Footer";
 import { Sidebar } from "@/client/components/shared/Sidebar";
+import { PageSection } from "@/client/components/private/layout/PageSection";
 
 const beVietmanPro = Be_Vietnam_Pro({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -32,14 +33,13 @@ export default function RootLayout({
         <ThemeWrapper>
           <ApolloWrapper>
             <AuthProvider>
-              <div className="flex-1 flex">
+              <div className="flex">
 
                 <Sidebar />
 
-                <div className="h-full flex-1 flex flex-col">
-                  <Header />
+                <PageSection>
                   {children}
-                </div>
+                </PageSection>
               
               </div>
                   

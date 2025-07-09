@@ -1,4 +1,4 @@
-import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
+import { TitleSection } from "@/client/components/shared/TitleSection";
 import { NoData } from "@/client/components/shared/NoData";
 
 export default function FollowUp() {

@@ -40,7 +40,7 @@ export const Sidebar = () => {
 
   return (
     <div
-      className={`relative z-50 transition-all duration-1000 ease-in-out overflow-hidden shadow-sidebar dark:border-r dark:border-neutral-3 w-[350px]
+      className={`relative z-50 transition-all duration-1000 ease-in-out overflow-hidden shadow-sidebar dark:border-r dark:border-neutral-3 md:h-[calc(100vh-40px)] w-[350px]
         ${isOpen ? 'translate-x-0' : '-translate-x-full hidden'}
       `}
     >

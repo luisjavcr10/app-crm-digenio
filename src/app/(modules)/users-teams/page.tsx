@@ -1,30 +1,36 @@
 "use client";
-
+//hooks
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import { UsersList } from "@/client/components/private/users-teams/usersComponents/UsersList";
-import { TeamsList } from "@/client/components/private/users-teams/teamsComponents/TeamsList";
-import { SwitchEntity } from "@/client/components/private/users-teams/SwitchEntity";
-import { ModalCreateUT } from "@/client/components/private/users-teams/ModalCreateUT";
-import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
-import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import { EMPLOYEES, TEAMS } from "@/client/services/employees";
-import { UserProps, TeamProps } from "./types";
-import { VscTriangleUp } from "react-icons/vsc";
 import { useUsersModalStore } from "@/client/store/modalsStore";
+//types
+import { UserProps, TeamProps } from "./types";
+//services
+import { EMPLOYEES, TEAMS } from "@/client/services/employees";
+//components
+import { SwitchEntity, ModalCreateUT } from "@/client/components/private/users-teams";
+import { UsersList } from "@/client/components/private/users-teams/usersComponents";
+import { TeamsList } from "@/client/components/private/users-teams/teamsComponents";
+import { TitleSection } from "@/client/components/shared/TitleSection";
+import { MainButton } from "@/client/components/shared/buttons/MainButton";
+//icons from react-icons
+import { VscTriangleUp } from "react-icons/vsc";
+
 
 export default function Page (){
+  //stores to handle modal state
   const openModal = useUsersModalStore((state) => state.open);
   const closeModal = useUsersModalStore((state) => state.close);
   const isOpenModal = useUsersModalStore((state) => state.isOpen);
+  //responses from services
   const { data:teamsData, loading:loadingTeams, refetch:refetchTeams } = useQuery(TEAMS);
   const { data:employeesData, loading:loadingEmployees, refetch:refetchEmployees } = useQuery(EMPLOYEES);
+  //states to save responses
   const [users, setUsers] = useState<UserProps[]>([]);
   const [teams, setTeams] = useState<TeamProps[]>([]);
   const [entity, setEntity] = useState<"users" | "teams">("users");
 
-  console.log(employeesData);
-
+  //effectos to update states
   useEffect(() => {
     if(employeesData){
       setUsers(employeesData.employees);
@@ -37,6 +43,7 @@ export default function Page (){
     }
   }, [teamsData])
 
+  //functions to refetch the list of an entity
   const refetchEntities = async () =>{
     try {
       await Promise.all([
@@ -48,6 +55,7 @@ export default function Page (){
     }
   }
 
+  //handler to close the modal and refetch the list
   const handleCloseCreateModalWithSave = async () =>{
     closeModal();
     await refetchEntities()

@@ -5,7 +5,7 @@ import { GET_ALL_STARTUPS_QUERY } from "@/client/services/startups";
 import { StartupCard } from "@/client/components/private/portfolio/StartupCard";
 import { StartupModal } from "@/client/components/private/portfolio/StartupModal";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
+import { TitleSection } from "@/client/components/shared/TitleSection";
 import { NoData } from "@/client/components/shared/NoData";
 import { useStartupModalStore } from "@/client/store/modalsStore";
 
@@ -47,7 +47,7 @@ export default function PortfolioPage() {
   });
 
   return (
-    <div className="h-full my-6 mx-8 flex flex-col gap-8">
+    <div className="h-full my-6 mx-8 flex flex-col gap-8 ">
       <TitleSection
         name="Portafolio de startups"
         description="Registro y monitoreo de los proyectos o productos que contribuyen al cumplimiento de los objetivos."

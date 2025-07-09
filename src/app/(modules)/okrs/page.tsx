@@ -6,7 +6,7 @@ import { OkrCard } from "@/client/components/private/okrs/OkrCard";
 import { useQuery } from "@apollo/client";
 import { GET_OKRS_QUERY } from "@/client/services/okrs";
 import { NoData } from "@/client/components/shared/NoData";
-import { TitleSection } from "@/client/components/shared/TitleSection/TitleSection";
+import { TitleSection } from "@/client/components/shared/TitleSection";
 import { useOkrModalStore } from "@/client/store/modalsStore";
 
 interface okrProps {
