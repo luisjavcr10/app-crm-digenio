@@ -4,7 +4,6 @@ import { AuthProvider } from "@/client/contexts/AuthContext";
 import ApolloWrapper from "@/client/contexts/ApolloWrapper";
 import { ThemeWrapper } from "@/client/contexts/ThemeWrapper";
 import { Be_Vietnam_Pro } from "next/font/google";
-import { Header } from "@/client/components/shared/Header";
 import { Footer } from "@/client/components/shared/Footer";
 import { Sidebar } from "@/client/components/shared/Sidebar";
 import { PageSection } from "@/client/components/private/layout/PageSection";
