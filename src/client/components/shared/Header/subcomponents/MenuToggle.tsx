@@ -45,6 +45,16 @@ export const MenuToggle = ({
     router.push("/");
   };
 
+  const handleAccountConfigClick = () => {
+    handleOpen();
+    // Aquí puedes agregar la lógica para abrir la configuración de la cuenta
+    // Por ejemplo: router.push("/account-settings");
+  };
+
+  const handleLinkClick = () => {
+    handleOpen();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -63,7 +73,10 @@ export const MenuToggle = ({
           {user.name}
         </p>
         <p className="underline">{user.email}</p>
-        <button className="mt-4 cursor-pointer hover:text-primary-1">
+        <button 
+          onClick={handleAccountConfigClick}
+          className="mt-4 cursor-pointer hover:text-primary-1"
+        >
           Configuración de la cuenta
         </button>
       </div>
@@ -72,7 +85,11 @@ export const MenuToggle = ({
         <ThemeSwitch />
       </div>
       <div className="px-6 pt-2 border-t border-neutral-3">
-        <Link href="/survey" className="flex justify-between hover:text-primary-1">
+        <Link 
+          href="/survey" 
+          onClick={handleLinkClick}
+          className="flex justify-between hover:text-primary-1"
+        >
           <div className="relative">
             Encuesta mensual
             <div className="absolute top-0 -right-3 bg-alert-red rounded-full animate-ping w-[8px] h-[8px]"></div>
@@ -80,11 +97,18 @@ export const MenuToggle = ({
           </div>
           <RiSurveyLine className="w-[15px] h-[15px]" />
         </Link>
-        <Link href="/" className="flex justify-between hover:text-primary-1">
+        <Link 
+          href="/" 
+          onClick={handleLinkClick}
+          className="flex justify-between hover:text-primary-1"
+        >
           <p>Pagina de inicio</p>
           <GoHomeFill className="w-[15px] h-[15px]" />
         </Link>
-        <div onClick={handleLogoutClick} className="flex justify-between cursor-pointer hover:text-primary-1">
+        <div 
+          onClick={handleLogoutClick} 
+          className="flex justify-between cursor-pointer hover:text-primary-1"
+        >
           <p>Cerrar sesión</p>
           <RiLogoutBoxRFill className="w-[15px] h-[15px] rounded-2xl" />
         </div>
