@@ -71,7 +71,7 @@ export const UsersList = ({
           className="px-2 grid grid-cols-10 gap-0 border border-neutral-3 text-black dark:text-white rounded-[12px] mb-4"
         >
           <div className="col-span-2 p-2">{user.userId.name}</div>
-          <div className="col-span-2 p-2">{user.userId.email}</div>
+          <div className="col-span-2 p-2 overflow-x-auto">{user.userId.email}</div>
           <div className="col-span-1 p-2">
             {user.teams.map((team) => team.name).join(', ')}
           </div>

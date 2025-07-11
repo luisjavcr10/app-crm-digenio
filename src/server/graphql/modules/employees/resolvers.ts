@@ -66,6 +66,10 @@ export const employeeResolvers = {
     deleteEmployee: async (_: undefined, { id }: { id: string }) => {
       return await EmployeeService.deleteEmployee(id);
     },
+
+    softDeleteEmployee: async (_:undefined, { id }: { id: string }) => {
+      return await EmployeeService.softDeleteEmployee(id);
+    },
   },
 
   Employee:{

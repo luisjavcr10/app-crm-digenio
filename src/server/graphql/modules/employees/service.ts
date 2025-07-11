@@ -3,28 +3,24 @@ import crypto from "crypto";
 import dbConnect from "@/server/database/dbConnect";
 import { sendPasswordSetupEmail } from "@/server/utils/sendmail";
 import { Employee, User } from "@/server/database/models";
-import { IEmployee} from "@/server/database/interfaces/IEmployee";
+import { IEmployee } from "@/server/database/interfaces/IEmployee";
 
 export class EmployeeService {
   static async getEmployees() {
     await dbConnect();
-    return await Employee.find()
-      .populate("userId")
-      .populate("teams");
+    return await Employee.find().populate("userId").populate("teams");
   }
 
   static async getEmployee(id: string) {
     await dbConnect();
-    return await Employee.findById(id)
-      .populate("userId")
-      .populate("teams");
+    return await Employee.findById(id).populate("userId").populate("teams");
   }
 
   static async createEmployee(
     userData: {
       name: string;
       email: string;
-      roles: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[]
+      roles: ("ADMIN" | "TEAMLEADER" | "EMPLOYEE")[];
     },
     employeeData: {
       position: string;
@@ -41,32 +37,32 @@ export class EmployeeService {
     await dbConnect();
     const session = await mongoose.startSession();
     session.startTransaction();
-  
+
     try {
       const user = new User(userData);
 
       const token = crypto.randomBytes(32).toString("hex");
-      const tokenExpires = new Date(Date.now() + 1000 * 60 * 60); 
+      const tokenExpires = new Date(Date.now() + 1000 * 60 * 60);
       user.passwordSetupToken = token;
       user.passwordSetupExpires = tokenExpires;
 
       await user.save({ session });
 
-      await sendPasswordSetupEmail(userData.email,token);
-  
+      await sendPasswordSetupEmail(userData.email, token);
+
       const employee = new Employee({
         userId: user._id,
         ...employeeData,
       });
-      
+
       await employee.save({ session });
-  
+
       // Populate dentro de la transacción
       const populatedEmployee = await Employee.findById(employee._id)
         .populate("userId")
         .session(session)
         .exec();
-  
+
       await session.commitTransaction();
       return populatedEmployee;
     } catch (error) {
@@ -88,7 +84,7 @@ export class EmployeeService {
     await dbConnect();
     const session = await mongoose.startSession();
     session.startTransaction();
-  
+
     try {
       const employee = await Employee.findByIdAndDelete(id).session(session);
       if (employee && employee.userId) {
@@ -104,20 +100,37 @@ export class EmployeeService {
     }
   }
 
-  static async softDeleteEmployee(id: string){
+  static async softDeleteEmployee(id: string): Promise<boolean> {
     await dbConnect();
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-      const employeeToDelete = await Employee.findByIdAndUpdate(id,{status:'inactive'}).session(session);
-      if(employeeToDelete && employeeToDelete.userId){
-        await User.findByIdAndUpdate(employeeToDelete.userId,{status:'inactive'} ).session(session);
+      const employeeToDelete = await Employee.findByIdAndUpdate(
+        id,
+        { status: "inactive" },
+        { new: true, session }
+      );
+
+      if (!employeeToDelete) {
+        await session.abortTransaction();
+        return false;
       }
-      return employeeToDelete.populate("userId");
+
+      if (employeeToDelete.userId) {
+        await User.findByIdAndUpdate(
+          employeeToDelete.userId,
+          { status: "inactive" },
+          { session }
+        );
+      }
+
+      await session.commitTransaction();
+      return true;
     } catch (error) {
+      await session.abortTransaction();
       throw error;
-    }finally{
+    } finally {
       session.endSession();
     }
   }

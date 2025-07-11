@@ -14,6 +14,7 @@ export const employeeTypeDefs = `#graphql
       updateData: EmployeeUpdateInput!
     ): Employee!
     deleteEmployee(id: ID!): Employee!
+    softDeleteEmployee(id: ID!): Boolean
   }
 
   type Employee {
