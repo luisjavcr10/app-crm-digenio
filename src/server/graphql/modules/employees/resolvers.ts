@@ -70,6 +70,10 @@ export const employeeResolvers = {
     softDeleteEmployee: async (_:undefined, { id }: { id: string }) => {
       return await EmployeeService.softDeleteEmployee(id);
     },
+
+    restoreEmployee: async (_:undefined, { id }: { id: string }) => {
+      return await EmployeeService.restoreEmployee(id);
+    },
   },
 
   Employee:{

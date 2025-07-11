@@ -134,4 +134,39 @@ export class EmployeeService {
       session.endSession();
     }
   }
+
+  static async restoreEmployee(id: string): Promise<boolean> {
+    await dbConnect();
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      const employeeToRestore = await Employee.findByIdAndUpdate(
+        id,
+        { status: "active" },
+        { new: true, session }
+      );
+
+      if (!employeeToRestore) {
+        await session.abortTransaction();
+        return false;
+      }
+
+      if (employeeToRestore.userId) {
+        await User.findByIdAndUpdate(
+          employeeToRestore.userId,
+          { status: "active" },
+          { session }
+        );
+      }
+
+      await session.commitTransaction();
+      return true;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
+  }
 }
