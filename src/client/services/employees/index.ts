@@ -98,3 +98,9 @@ export const SOFTDELETE_EMPLOYEE = gql`
     softDeleteEmployee(id: $softDeleteEmployeeId) 
   }
 `
+
+export const SOFTDELETE_TEAM = gql`
+  mutation SoftDeleteTeam($softDeleteTeamId: ID!) {
+    softDeleteTeam(id: $softDeleteTeamId)
+  }
+`;

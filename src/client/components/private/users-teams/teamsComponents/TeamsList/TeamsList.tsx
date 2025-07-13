@@ -1,23 +1,29 @@
-import { useState } from "react"
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { SOFTDELETE_TEAM } from "@/client/services/employees";
 import { ModalEditTeam } from "../ModalEditTeam";
 import { ModalShowTeam } from "../ModalShowTeam";
 import { TeamProps } from "@/app/(modules)/users-teams/types";
 
 export const TeamsList = ({
   teams,
-  loading
+  loading,
+  refetch
 }:Readonly<{
   teams:TeamProps[];
   loading:boolean;
+  refetch: () => void;
 }>) => {
+  const [softDeleteTeam] =
+    useMutation(SOFTDELETE_TEAM);
   const [isModalEditTeamOpen, setIsModalEditTeamOpen] = useState(false);
   const [isModalShowTeamOpen, setIsModalShowTeamOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<TeamProps | null>(null);
 
-  const handleEditTeam = (team: TeamProps) => {
-    setSelectedTeam(team);
-    setIsModalEditTeamOpen(true);
-  };
+  //const handleEditTeam = (team: TeamProps) => {
+  //  setSelectedTeam(team);
+  //  setIsModalEditTeamOpen(true);
+  //};
 
   const handleShowTeam = (team: TeamProps) => {
     setSelectedTeam(team);
@@ -37,6 +43,15 @@ export const TeamsList = ({
     setIsModalShowTeamOpen(false);
     setSelectedTeam(null);
   };
+
+  const handleSoftDelete = async (id: string) =>{
+    await softDeleteTeam({
+      variables: {
+        softDeleteTeamId: id,
+      },
+    });
+    await refetch();
+  }
 
   if(loading){
     return(
@@ -70,12 +85,11 @@ export const TeamsList = ({
                 Ver
               </button>
               <button 
-                onClick={() => handleEditTeam(team)} 
+                onClick={()=>handleSoftDelete(team.id)}
                 className="px-4 cursor-pointer"
               >
-                Editar
+                Eliminar
               </button>
-              <button className="px-4 cursor-pointer">Eliminar</button>
             </div>
           </div>
         ))}

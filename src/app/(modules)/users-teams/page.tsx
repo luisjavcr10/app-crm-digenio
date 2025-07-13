@@ -93,7 +93,7 @@ export default function Page (){
         ? 
           <UsersList refetch={refetchEntities} loading={loadingEmployees} users={users} /> 
         :
-          <TeamsList loading={loadingTeams} teams={teams} />
+          <TeamsList refetch={refetchEntities}  loading={loadingTeams} teams={teams} />
       }
     </div>
   )

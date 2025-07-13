@@ -15,17 +15,17 @@ export const UsersList = ({
   loading: boolean;
   refetch: () => void;
 }>) => {
-  const [softDeleteEmployee, { data, error, loading: loadingMutation }] =
+  const [softDeleteEmployee,] =
     useMutation(SOFTDELETE_EMPLOYEE);
   const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false);
   const [isModalShowUserOpen, setIsModalShowUserOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProps | null>(null);
 
-  const handleEditUser = async (user: UserProps) => {
-    setSelectedUser(user);
-    setIsModalEditUserOpen(true);
-    await refetch();
-  };
+  //const handleEditUser = async (user: UserProps) => {
+  //  setSelectedUser(user);
+  //  setIsModalEditUserOpen(true);
+  //  await refetch();
+  //};
 
   const handleShowUser = async (user: UserProps) => {
     setSelectedUser(user);
@@ -105,12 +105,6 @@ export const UsersList = ({
               className="px-4 cursor-pointer hover:underline"
             >
               Ver
-            </button>
-            <button
-              onClick={() => handleEditUser(user)}
-              className="px-4 cursor-pointer hover:underline"
-            >
-              Editar
             </button>
             <button
               onClick={()=>handlSoftDelete(user.id)}
