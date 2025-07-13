@@ -9,13 +9,13 @@ export class TeamService {
     membersIds: string[] = []
   ) {
     await dbConnect();
-  
+
     // Verificar que el manager existe y poblar su userId
-    const manager = await Employee.findById(managerId).populate('userId');
+    const manager = await Employee.findById(managerId).populate("userId");
     if (!manager) {
       throw new Error("El empleado manager no existe");
     }
-  
+
     // Crear el equipo incluyendo al manager como miembro
     const newTeam = await Team.create({
       name,
@@ -23,70 +23,70 @@ export class TeamService {
       manager: managerId,
       members: [...new Set([managerId, ...membersIds])],
     });
-  
+
     // Actualizar los empleados con la referencia al nuevo equipo
     await Employee.updateMany(
       { _id: { $in: newTeam.members } },
       { $addToSet: { teams: newTeam._id } }
     );
-  
+
     // Retornar el equipo creado con toda la información poblada
     const populatedTeam = await Team.findById(newTeam._id)
       .populate({
-        path: 'managerInfo',
+        path: "managerInfo",
         populate: {
-          path: 'userId',
-          select: 'email name roles status'
-        }
+          path: "userId",
+          select: "email name roles status",
+        },
       })
       .populate({
-        path: 'membersInfo',
+        path: "membersInfo",
         populate: {
-          path: 'userId',
-          select: 'email name roles status'
-        }
+          path: "userId",
+          select: "email name roles status",
+        },
       });
-  
+
     return populatedTeam;
-  };
+  }
 
   static async getAllTeams() {
     await dbConnect();
-    return await Team.find()
+    return await Team.find({ status: "active" })
       .populate({
-        path: 'managerInfo',
+        path: "managerInfo",
         populate: {
-          path: 'userId',
-          select: 'email name roles status'
-        }
+          path: "userId",
+          select: "email name roles status",
+        },
       })
       .populate({
-        path: 'membersInfo',
+        path: "membersInfo",
         populate: {
-          path: 'userId',
-          select: 'email name roles status'
-        }
+          path: "userId",
+          select: "email name roles status",
+        },
       });
-  };
+  }
 
-    static async getTeamById(id: string) {
+  static async getTeamById(id: string) {
     await dbConnect();
     return await Team.findById(id)
       .populate({
-        path: 'managerInfo',
+        path: "managerInfo",
         populate: {
-          path: 'userId',
-          select: 'email name role status'
-        }
+          path: "userId",
+          select: "email name role status",
+        },
       })
       .populate({
-        path: 'membersInfo',
+        path: "membersInfo",
         populate: {
-          path: 'userId',
-          select: 'email name role status'
-        }
+          path: "userId",
+          select: "email name role status",
+        },
       });
-  };
+  }
 
   static async updateTeam(
     id: string,
@@ -110,7 +110,8 @@ export class TeamService {
       updateData.members = [
         ...new Set([
           updateData.manager,
-          ...(updateData.members || team.members.map((m: string) => m.toString())),
+          ...(updateData.members ||
+            team.members.map((m: string) => m.toString())),
         ]),
       ];
     }
@@ -119,54 +120,62 @@ export class TeamService {
       new: true,
     })
       .populate({
-        path: 'managerInfo',
+        path: "managerInfo",
         populate: {
-          path: 'userId',
-          select: 'email name role status'
-        }
+          path: "userId",
+          select: "email name role status",
+        },
       })
       .populate({
-        path: 'membersInfo',
+        path: "membersInfo",
         populate: {
-          path: 'userId',
-          select: 'email name role status'
-        }
+          path: "userId",
+          select: "email name role status",
+        },
       });
 
     // Actualizar referencias en empleados si cambian los miembros
     if (updateData.members) {
       // Remover el equipo de los empleados que ya no son miembros
       await Employee.updateMany(
-        { 
+        {
           teams: team._id,
-          _id: { $nin: updateData.members }
+          _id: { $nin: updateData.members },
         },
         { $pull: { teams: team._id } }
       );
 
       // Agregar el equipo a los nuevos miembros
       await Employee.updateMany(
-        { 
+        {
           _id: { $in: updateData.members },
-          teams: { $ne: team._id }
+          teams: { $ne: team._id },
         },
         { $addToSet: { teams: team._id } }
       );
     }
 
     return updatedTeam;
-  };
-  
+  }
+
   static async deleteTeam(id: string) {
     await dbConnect();
 
     // Primero eliminar las referencias en los empleados
-    await Employee.updateMany(
-      { teams: id },
-      { $pull: { teams: id } }
-    );
+    await Employee.updateMany({ teams: id }, { $pull: { teams: id } });
 
     return await Team.findByIdAndDelete(id);
   }
 
+  static async softDeleteTeam(id: string): Promise<boolean> {
+    await dbConnect();
+    const result = await Team.findByIdAndUpdate(id, { status: "inactive" });
+    return result !== null;
+  }
+
+  static async restoreTeam(id: string): Promise<boolean> {
+    await dbConnect();
+    const result = await Team.findByIdAndUpdate(id, { status: "active" });
+    return result !== null;
+  }
 }

@@ -92,3 +92,9 @@ export const CREATE_TEAM = gql`
     }
   }
 `;
+
+export const SOFTDELETE_EMPLOYEE = gql`
+  mutation SoftDeleteEmployee($softDeleteEmployeeId: ID!) {
+    softDeleteEmployee(id: $softDeleteEmployeeId) 
+  }
+`

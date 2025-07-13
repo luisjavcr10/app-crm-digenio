@@ -65,6 +65,12 @@ export const teamResolvers = {
       await TeamService.deleteTeam(id);
       return true;
     },
+    softDeleteTeam: async (_: unknown, { id }: { id: string }) => {
+      return await TeamService.softDeleteTeam(id);
+    },
+    restoreTeam: async (_: unknown, { id }: { id: string }) => {
+      return await TeamService.restoreTeam(id);
+    },
   },
   Team: {
     manager: async (parent: TeamParent) => {

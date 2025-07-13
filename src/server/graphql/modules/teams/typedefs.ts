@@ -34,5 +34,7 @@ export const teamTypeDefs = `#graphql
     createTeam(input: CreateTeamInput!): Team!
     updateTeam(id: ID!, input: UpdateTeamInput!): Team!
     deleteTeam(id: ID!): Boolean!
+    softDeleteTeam(id: ID!): Boolean!
+    restoreTeam(id: ID!): Boolean!
   }
 `;

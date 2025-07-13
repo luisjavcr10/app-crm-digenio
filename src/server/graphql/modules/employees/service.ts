@@ -8,7 +8,7 @@ import { IEmployee } from "@/server/database/interfaces/IEmployee";
 export class EmployeeService {
   static async getEmployees() {
     await dbConnect();
-    return await Employee.find().populate("userId").populate("teams");
+    return await Employee.find({ status: "active" }).populate("userId").populate("teams");
   }
 
   static async getEmployee(id: string) {

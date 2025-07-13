@@ -1,18 +1,22 @@
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { SOFTDELETE_EMPLOYEE } from "@/client/services/employees";
 import { ModalEditUser } from "../ModalEditUser";
 import { ModalShowUser } from "../ModalShowUser";
 import { UserProps } from "@/app/(modules)/users-teams/types";
 import { NoData } from "@/client/components/shared/NoData";
 
 export const UsersList = ({
-  users, 
+  users,
   loading,
   refetch,
 }: Readonly<{
-  users:UserProps[];
-  loading:boolean;
-  refetch:()=>void;
+  users: UserProps[];
+  loading: boolean;
+  refetch: () => void;
 }>) => {
+  const [softDeleteEmployee, { data, error, loading: loadingMutation }] =
+    useMutation(SOFTDELETE_EMPLOYEE);
   const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false);
   const [isModalShowUserOpen, setIsModalShowUserOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProps | null>(null);
@@ -37,6 +41,15 @@ export const UsersList = ({
   const handleCloseShowModal = () => {
     setIsModalShowUserOpen(false);
     setSelectedUser(null);
+  };
+
+  const handlSoftDelete = async (id: string) => {
+    await softDeleteEmployee({
+      variables: {
+        softDeleteEmployeeId: id,
+      },
+    });
+    await refetch();
   };
 
   if (loading) {
@@ -66,38 +79,43 @@ export const UsersList = ({
 
       {/* Users List */}
       {users.map((user) => (
-        <div 
+        <div
           key={user.id}
           className="px-2 grid grid-cols-10 gap-0 border border-neutral-3 text-black dark:text-white rounded-[12px] mb-4"
         >
           <div className="col-span-2 p-2">{user.userId.name}</div>
-          <div className="col-span-2 p-2 overflow-x-auto">{user.userId.email}</div>
+          <div className="col-span-2 p-2 overflow-x-auto">
+            {user.userId.email}
+          </div>
           <div className="col-span-1 p-2">
-            {user.teams.map((team) => team.name).join(', ')}
+            {user.teams.map((team) => team.name).join(", ")}
           </div>
           <div className="col-span-1 p-2">{user.position}</div>
           <div className="col-span-1 p-2">
-            {new Date(Number(user.hireDate)).toLocaleDateString('es-CL', {
-              day: '2-digit',
-              month: '2-digit',
-              year: '2-digit'
+            {new Date(Number(user.hireDate)).toLocaleDateString("es-CL", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "2-digit",
             })}
           </div>
           <div className="col-span-1 p-2">{user.userId.status}</div>
           <div className="col-span-2 p-2">
-            <button 
-              onClick={() => handleShowUser(user)} 
+            <button
+              onClick={() => handleShowUser(user)}
               className="px-4 cursor-pointer hover:underline"
             >
               Ver
             </button>
-            <button 
-              onClick={() => handleEditUser(user)} 
+            <button
+              onClick={() => handleEditUser(user)}
               className="px-4 cursor-pointer hover:underline"
             >
               Editar
             </button>
-            <button className="px-4 cursor-pointer hover:underline">
+            <button
+              onClick={()=>handlSoftDelete(user.id)}
+              className="px-4 cursor-pointer hover:underline"
+            >
               Eliminar
             </button>
           </div>
@@ -106,18 +124,15 @@ export const UsersList = ({
 
       {/* Modals */}
       {isModalEditUserOpen && selectedUser && (
-        <ModalEditUser 
-          user={selectedUser} 
+        <ModalEditUser
+          user={selectedUser}
           onClose={handleCloseEditModal}
-          onSave={()=>{}}
+          onSave={() => {}}
         />
       )}
 
       {isModalShowUserOpen && selectedUser && (
-        <ModalShowUser 
-          user={selectedUser} 
-          onClose={handleCloseShowModal}
-        />
+        <ModalShowUser user={selectedUser} onClose={handleCloseShowModal} />
       )}
     </div>
   );
