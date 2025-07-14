@@ -1,9 +1,9 @@
 import { Document, Types } from "mongoose";
 
 export interface IOKR extends Document {
-  title: string;
+  name: string;
   description: string;
-  owner: Types.ObjectId;
+  startups: Types.ObjectId[];
   status: "draft" | "pending" | "in_progress" | "completed";
   startDate: Date;
   endDate: Date;
@@ -13,7 +13,7 @@ export interface IOKR extends Document {
 }
 
 export interface IOKRUpdate {
-  title?: string;
+  name?: string;
   description?: string;
   status?: 'draft' | 'pending' | 'in_progress' | 'completed';
   startDate?: Date;

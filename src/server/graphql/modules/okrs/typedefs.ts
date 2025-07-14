@@ -1,9 +1,9 @@
 export const okrsTypeDefs = `#graphql
   type OKR {
     id: ID!
-    title: String!
+    name: String!
     description: String!
-    owner: Team!
+    startups: [Startup]
     status: OKRStatus!
     startDate: String
     endDate: String
@@ -19,40 +19,23 @@ export const okrsTypeDefs = `#graphql
     completed
   }
 
-  type Query {
-    okrs: [OKR!]! 
-    okr(id: ID!): OKR
-    teamOkrs(teamId: ID!): [OKR!]! 
-    draftOkrs(teamId: ID!): [OKR!]!  # Query específica para borradores
-  }
-
   input CreateOKRInput {
-    title: String!
+    name: String!
     description: String!
-    owner: ID!
-    startDate: String!
-    endDate: String!
-  }
-
-  input UpdateOKRInput {
-    title: String
-    description: String
-    status: OKRStatus
+    status:OKRStatus!
     startDate: String
     endDate: String
   }
 
-  input CreateDraftOKRInput {
-    title: String!
-    description: String!
-    owner: ID!
+  type Query {
+    okrs: [OKR!]! 
+    okr(id: ID!): OKR
+    draftOkrs: [OKR!]!
+    noDraftOkrs: [OKR!]!
   }
 
   type Mutation {
     createOKR(input: CreateOKRInput!, createdBy: ID!): OKR!
-    createDraftOKR(input: CreateDraftOKRInput!, createdBy: ID!): OKR!
-    updateOKR(id: ID!, input: UpdateOKRInput!): OKR!
     deleteOKR(id: ID!): Boolean!
-    publishDraft(id: ID!, startDate: String!, endDate: String!): OKR!  # Nueva mutation
   }
 `;

@@ -1,22 +1,12 @@
 import dbConnect from "@/server/database/dbConnect";
 import { OKR } from "@/server/database/models";
-import { IOKRUpdate } from "@/server/database/interfaces/IOKR";
 import { Types } from "mongoose";
 
 export class OkrService {
   static async getOkrs() {
     await dbConnect();
     const okrs = await OKR.find()
-      .populate({
-        path: 'owner',
-        populate: {
-          path: 'manager',
-          populate: {
-            path: 'userId',
-            select: 'email name role status'
-          }
-        }
-      })
+      .populate('startups')
       .populate('createdBy');
     console.log(JSON.stringify(okrs, null, 2));
     return okrs;
@@ -29,83 +19,38 @@ export class OkrService {
       .populate('createdBy');
   }
 
-  static async getTeamOkrs(teamId: string) {
+  static async getDraftOkrs() {
     await dbConnect();
-    return await OKR.find({ owner: teamId, status: { $ne: 'draft' } })
-      .populate('owner')
+    return await OKR.find({status:"draft"})
+      .populate('startups')
       .populate('createdBy');
   }
 
-  static async getDraftOkrs(teamId: string) {
+  static async getNoDraftOkrs() {
     await dbConnect();
-    return await OKR.find({ owner: teamId, status: 'draft' })
-      .populate('owner')
+    return await OKR.find({status:{$ne:"draft"}})
+      .populate('startups')
       .populate('createdBy');
   }
+
 
   static async createOKR(
     input: {
-      title: string;
+      name: string;
       description: string;
-      owner: Types.ObjectId;
-      startDate: Date;
-      endDate: Date;
+      startDate?: Date;
+      endDate?: Date;
+      status:string
     },
     createdBy: string
   ) {
     await dbConnect();
     const newOkr = await OKR.create({
       ...input,
-      status: "pending",
       createdBy
     });
 
     return newOkr;
-  }
-
-  static async createDraftOKR(
-    input: {
-      title: string;
-      description: string;
-      owner: Types.ObjectId;
-    },
-    createdBy: string
-  ) {
-    await dbConnect();
-    return await OKR.create({
-      ...input,
-      status: 'draft',
-      createdBy,
-    });
-  }
-
-  static async publishDraft(
-    id: Types.ObjectId,
-    startDate: Date,
-    endDate: Date
-  ) {
-    await dbConnect();
-    return await OKR.findByIdAndUpdate(
-      id,
-      {
-        status: 'pending',
-        startDate,
-        endDate
-      },
-      { new: true }
-    ).populate('owner').populate('createdBy');
-  }
-
-  static async updateOKR(
-    id: Types.ObjectId,
-    updates: IOKRUpdate
-  ) {
-    await dbConnect();
-    return await OKR.findByIdAndUpdate(id, updates, { 
-      new: true 
-    })
-    .populate('owner')
-    .populate('createdBy');
   }
 
   static async deleteOKR(id: Types.ObjectId) {

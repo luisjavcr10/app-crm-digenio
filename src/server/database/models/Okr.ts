@@ -2,7 +2,7 @@ import { Schema, model, models } from "mongoose";
 import { IOKR } from "../interfaces/IOKR";
 
 const okrSchema = new Schema<IOKR>({
-  title: {
+  name: {
     type: String,
     required: true,
     trim: true,
@@ -13,20 +13,21 @@ const okrSchema = new Schema<IOKR>({
     required: true,
     trim:true
   },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "Team",
-    required: true,
-    index:true
+  startups: {
+    type: [Schema.Types.ObjectId],
+    ref: "Startup",
+    required: false,
+    index:true,
+    default: []
   },
   status: {
     type: String,
     enum: ["draft","pending", "in_progress", "completed"],
-    default: "draft"
+    required:true
   },
   startDate: {
     type: Date,
-    required: true,
+    required: false,
     validate: {
       validator: function(this: IOKR, value: Date) {
         return !this.endDate || value <= this.endDate;
@@ -36,7 +37,7 @@ const okrSchema = new Schema<IOKR>({
   },
   endDate: {
     type: Date,
-    required: true,
+    required: false,
   },
   createdBy: {
     type: Schema.Types.ObjectId,
@@ -49,12 +50,12 @@ const okrSchema = new Schema<IOKR>({
   toObject: { virtuals: true }
 });
 
-// Virtual para información del equipo (owner)
-okrSchema.virtual('ownerInfo', {
-  ref: 'Team',
-  localField: 'owner',
+// Virtual para información de las startups
+okrSchema.virtual('startupsInfo', {
+  ref: 'Startup',
+  localField: 'startups',
   foreignField: '_id',
-  justOne: true,
+  justOne: false
 });
 
 // Virtual para información del creador
