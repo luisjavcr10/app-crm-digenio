@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_OKRS_QUERY = gql`
-  query OKRs {
-    okrs {
+  query OKRs($userId: ID) {
+    okrs(userId: $userId) {
       id
       name
       description

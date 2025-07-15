@@ -1,19 +1,22 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_OKRS_QUERY } from "@/client/services/okrs";
+import { useOkrModalStore } from "@/client/store/modalsStore";
+import { useAuth } from "@/client/hooks/useAuth";
+import type { OkrProps, OkrFilterStatus } from "@/client/types/okr";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { OkrFormModal } from "@/client/components/private/okrs/OkrFormModal";
 import { OkrCard } from "@/client/components/private/okrs/OkrCard";
-import { useQuery } from "@apollo/client";
-import { GET_OKRS_QUERY } from "@/client/services/okrs";
 import { NoData } from "@/client/components/shared/NoData";
 import { TitleSection } from "@/client/components/shared/TitleSection";
-import { useOkrModalStore } from "@/client/store/modalsStore";
-import type { OkrProps, OkrFilterStatus } from "@/client/types/okr";
 
 /**
  * OKRs page component - Manages OKR listing, filtering, and creation
  */
 export default function OkrsPage() {
+  const { user } = useAuth();
+
   // Modal states
   const openModal = useOkrModalStore((state) => state.open);
   const closeModal = useOkrModalStore((state) => state.close);
@@ -28,7 +31,10 @@ export default function OkrsPage() {
   const [startDateFilter, setStartDateFilter] = useState<string>('');
   const [endDateFilter, setEndDateFilter] = useState<string>('');
 
-  const { data } = useQuery(GET_OKRS_QUERY);
+  const { data } = useQuery(GET_OKRS_QUERY, {
+    variables: { userId: user?.id },
+    skip: !user?.id,
+  });
 
   useEffect(() => {
     if (data?.okrs) {
@@ -104,7 +110,7 @@ export default function OkrsPage() {
   return (
     <div className="h-full my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
       <TitleSection name="OKRs" description="Gestión de objetivos para alinear y dar seguimiento a las metas de la empresa.">
-        <MainButton text="Agregar nuevo OKR" handleClick={openModal} />
+        {user.roles.includes("ADMIN") && <MainButton text="Agregar nuevo OKR" handleClick={openModal} />}
       </TitleSection>
 
       {/* Filters */}
@@ -120,7 +126,7 @@ export default function OkrsPage() {
             onChange={(e) => setStatusFilter(e.target.value as OkrFilterStatus)}
           >
             <option value="all">Todos</option>
-            <option value="draft">Borrador</option>
+           {user.roles.includes("ADMIN") && <option value="draft">Borrador</option>}
             <option value="pending">Pendientes</option>
             <option value="completed">Completados</option>
             <option value="in_progress">En progreso</option>

@@ -9,7 +9,7 @@ const counterSchema = new Schema<IEmployeeCounter>(
   { _id: true }
 );
 
-const Counter = model<IEmployeeCounter>("Counter", counterSchema);
+const Counter = models.Counter || model<IEmployeeCounter>("Counter", counterSchema);
 
 const employeeSchema = new Schema<IEmployee>(
   {

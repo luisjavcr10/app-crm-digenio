@@ -1,14 +1,31 @@
 import dbConnect from "@/server/database/dbConnect";
-import { OKR } from "@/server/database/models";
+import { OKR, User } from "@/server/database/models";
 import { Types } from "mongoose";
 
 export class OkrService {
-  static async getOkrs() {
+  static async getOkrs(userId?: string) {
     await dbConnect();
-    const okrs = await OKR.find()
+    
+    let filter = {};
+    
+    // Si se proporciona userId, verificar si es admin
+    if (userId) {
+      const user = await User.findById(userId);
+      const isAdmin = user?.roles?.includes('ADMIN');
+      
+      // Si no es admin, excluir los borradores
+      if (!isAdmin) {
+        filter = { status: { $ne: 'draft' } };
+      }
+    } else {
+      // Si no se proporciona userId, excluir borradores por defecto
+      filter = { status: { $ne: 'draft' } };
+    }
+    
+    const okrs = await OKR.find(filter)
       .populate('startups')
       .populate('createdBy');
-    console.log(JSON.stringify(okrs, null, 2));
+    
     return okrs;
   }
 

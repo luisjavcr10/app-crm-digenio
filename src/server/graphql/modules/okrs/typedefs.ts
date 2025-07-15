@@ -36,7 +36,7 @@ export const okrsTypeDefs = `#graphql
   }
 
   type Query {
-    okrs: [OKR!]! 
+    okrs(userId: ID): [OKR!]! 
     okr(id: ID!): OKR
     draftOkrs: [OKR!]!
     noDraftOkrs: [OKR!]!

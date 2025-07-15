@@ -4,8 +4,8 @@ import { IOKR } from "@/server/database/interfaces/IOKR";
 
 export const okrsResolvers = {
   Query: {
-    okrs: async () => {
-      return await OkrService.getOkrs();
+    okrs: async (_: undefined, { userId }: { userId?: string }) => {
+      return await OkrService.getOkrs(userId);
     },
     okr: async (_: undefined, { id }: { id: string }) => {
       return await OkrService.getOkrById(id);

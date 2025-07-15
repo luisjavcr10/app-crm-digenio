@@ -208,11 +208,11 @@ export const OkrFormModal = ({
 
         {passedOkr && !isEditing && (
           <div className="w-full py-4 px-6 flex justify-center items-center gap-4 flex-wrap">
-            {canEditOkr(okr.status) && (
+            {user.roles.includes("ADMIN") && canEditOkr(okr.status) && (
               <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
             )}
             
-            {okr.status === 'draft' && canConfirmOkr(okr) && (
+            {user.roles.includes("ADMIN") && okr.status === 'draft' && canConfirmOkr(okr) && (
               <MainButton 
                 text={updating ? "Confirmando..." : "Confirmar OKR"} 
                 handleClick={handleConfirm} 
@@ -220,7 +220,7 @@ export const OkrFormModal = ({
               />
             )}
             
-            {canDeleteOkr(okr.status) && (
+            {user.roles.includes("ADMIN") && canDeleteOkr(okr.status) && (
               <MainButton 
                 text={deleting ? "Eliminando..." : "Eliminar"} 
                 handleClick={handleDelete} 
