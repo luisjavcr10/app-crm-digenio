@@ -77,7 +77,7 @@ export const useOkrOperations = () => {
    * Actualiza un OKR existente
    */
   const updateExistingOkr = async (id: string, okr: Partial<OkrProps>) => {
-    const input: any = {};
+    const input: Partial<OkrProps> = {};
     
     if (okr.name !== undefined) input.name = okr.name;
     if (okr.description !== undefined) input.description = okr.description;

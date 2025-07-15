@@ -1,6 +1,6 @@
 import { OkrService } from "./service";
 import { Types } from "mongoose";
-import { IOKR, IOKRUpdate } from "@/server/database/interfaces/IOKR";
+import { IOKR } from "@/server/database/interfaces/IOKR";
 
 export const okrsResolvers = {
   Query: {

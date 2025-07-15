@@ -28,10 +28,6 @@ export const OkrCard = ({
     setIsModalOpen(false);
   };
 
-  const handleDeleteOkr = () => {
-    onDelete?.(okr.id);
-    setIsModalOpen(false);
-  };
 
   return (
     <div key={index} className="">
