@@ -71,6 +71,7 @@ export const startupsTypeDefs = `#graphql
     description: String
     okrId: ID
     teamId: ID
+    sprints: [CreateSprintInput!]
   }
 
   input UpdateSprintInput {

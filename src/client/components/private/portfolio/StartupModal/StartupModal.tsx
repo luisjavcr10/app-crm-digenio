@@ -1,27 +1,69 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ApolloQueryResult } from "@apollo/client";
 import {
   CREATE_STARTUP_MUTATION,
-  UPDATE_STARTUP_METRICS_MUTATION,
   UPDATE_STARTUP_MUTATION,
   DELETE_STARTUP_MUTATION,
+  UPDATE_STARTUP_STATUS_MUTATION,
 } from "@/client/services/startups";
+import { GET_OKRS_QUERY } from "@/client/services/okrs";
+import { ID_NAME_TEAMS } from "@/client/services/employees";
 import { ModalLayout } from "@/client/components/shared/modal";
+import {FormSection} from "../../../shared/formElements/FormSection";
 import {TextInput, TextareaInput} from "../../../shared/formElements";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import { ProgressBar } from "../ProgressBar";
+import { useAuth } from "@/client/hooks/useAuth";
 
 interface IStartup {
   _id: string;
-  client: string;
   name: string;
   description: string;
-  responsible: string;
-  monthlyMetric: string;
-  metric: string;
-  currentValue: number;
-  expectedValue: number;
+  okrId: {
+    _id: string;
+    name: string;
+  };
+  teamId: {
+    _id: string;
+    name: string;
+  };
+  status: string;
+  observation?: string;
+  sprints: {
+    orderNumber: number;
+    name: string;
+    deliverable?: string;
+    startDate?: string;
+    endDate?: string;
+    status: string;
+    modules: {
+      name: string;
+      task: string;
+      responsible: {
+        _id: string;
+        name: string;
+      };
+      status: string;
+      deadline?: string;
+    }[];
+  }[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ISprint {
+  orderNumber: number;
+  name: string;
+}
+
+interface IOKR {
+  id: string;
+  name: string;
+}
+
+interface ITeam {
+  id: string;
+  name: string;
 }
 
 export const StartupModal = ({
@@ -33,69 +75,79 @@ export const StartupModal = ({
   handleClose: () => void;
   refetch: () => Promise<ApolloQueryResult<{ getAllStartups: IStartup[] }>>;
 }>) => {
+  const {user} = useAuth();
   const [formData, setFormData] = useState({
     _id: "",
-    client: "",
     name: "",
     description: "",
-    responsible: "",
-    monthlyMetric: "",
-    metric: "",
-    currentValue: 0,
-    expectedValue: 0,
+    okrId: "",
+    teamId: "",
+    sprints: [] as ISprint[],
   });
+
+  const [newSprint, setNewSprint] = useState({ orderNumber: 1, name: "" });
+  const [validationAction, setValidationAction] = useState<'accept' | 'observe' | 'reject' | null>(null);
+  const [observationText, setObservationText] = useState("");
 
   const [isEditing, setIsEditing] = useState(!startup); // crear = editable, ver = no editable
   const isViewMode = !!startup && !isEditing;
 
   const [createStartup, { loading: creating, error: createError }] = useMutation(CREATE_STARTUP_MUTATION);
   const [updateStartup, { loading: updating, error: updateError }] = useMutation(UPDATE_STARTUP_MUTATION);
-  const [updateStartupMetrics, { error: updateMetricsError }] = useMutation(UPDATE_STARTUP_METRICS_MUTATION);
   const [deleteStartup, { loading: deleting, error: deleteError }] = useMutation(DELETE_STARTUP_MUTATION);
+  const [updateStartupStatus, { loading: validating }] = useMutation(UPDATE_STARTUP_STATUS_MUTATION);
+
+  const { data: okrsData } = useQuery<{ okrs: IOKR[] }>(GET_OKRS_QUERY);
+  const { data: teamsData } = useQuery<{ teams: ITeam[] }>(ID_NAME_TEAMS);
 
   useEffect(() => {
     if (startup) {
-      setFormData(startup);
+      setFormData({
+        _id: startup._id,
+        name: startup.name,
+        description: startup.description,
+        okrId: startup.okrId._id,
+        teamId: startup.teamId._id,
+        sprints: startup.sprints.map(s => ({ orderNumber: s.orderNumber, name: s.name })),
+      });
+      setObservationText(startup.observation || "");
     }
+    setValidationAction(null);
   }, [startup]);
 
-  const handleCreate = async () => {
-    const {
-      client,
-      name,
-      description,
-      responsible,
-      monthlyMetric,
-      metric,
-      currentValue,
-      expectedValue,
-    } = formData;
+  const addSprint = () => {
+    if (newSprint.name.trim()) {
+      setFormData({
+        ...formData,
+        sprints: [...formData.sprints, { ...newSprint }]
+      });
+      setNewSprint({ orderNumber: newSprint.orderNumber + 1, name: "" });
+    }
+  };
 
-    if (
-      !client ||
-      !name ||
-      !description ||
-      !responsible ||
-      !monthlyMetric ||
-      !metric ||
-      currentValue === 0 ||
-      expectedValue === 0
-    ) {
-      alert("Por favor, completa todos los campos antes de continuar.");
+  const removeSprint = (index: number) => {
+    const updatedSprints = formData.sprints.filter((_, i) => i !== index);
+    setFormData({ ...formData, sprints: updatedSprints });
+  };
+
+  const handleCreate = async () => {
+    const { name, description, okrId, teamId, sprints } = formData;
+
+    if (!name || !description || !okrId || !teamId || sprints.length === 0) {
+      alert("Por favor, completa todos los campos requeridos y agrega al menos un sprint.");
       return;
     }
 
     try {
       const { data } = await createStartup({
         variables: {
-          client,
-          name,
-          description,
-          responsible,
-          monthlyMetric,
-          metric,
-          currentValue,
-          expectedValue,
+          input: {
+            name,
+            description,
+            okrId,
+            teamId,
+            sprints,
+          },
         },
       });
 
@@ -110,25 +162,16 @@ export const StartupModal = ({
 
   const handleUpdate = async () => {
     try {
-      // Actualizar datos generales
       await updateStartup({
         variables: {
           id: formData._id,
-          client: formData.client,
-          name: formData.name,
-          description: formData.description,
-          responsible: formData.responsible,
-          monthlyMetric: formData.monthlyMetric,
-        },
-      });
-
-      // Actualizar métricas
-      await updateStartupMetrics({
-        variables: {
-          id: formData._id,
-          metric: formData.metric,
-          currentValue: formData.currentValue,
-          expectedValue: formData.expectedValue,
+          input: {
+            name: formData.name,
+            description: formData.description,
+            okrId: formData.okrId,
+            teamId: formData.teamId,
+            sprints: formData.sprints,
+          },
         },
       });
 
@@ -140,14 +183,52 @@ export const StartupModal = ({
   };
 
   const handleDelete = async () => {
+    if (!startup) return;
     try {
-      const { data } = await deleteStartup({ variables: { id: formData._id } });
+      const { data } = await deleteStartup({ variables: { id: startup._id } });
       if (data?.deleteStartup) {
         await refetch();
         handleClose();
       }
     } catch (err) {
       console.error("Error deleting startup:", err);
+    }
+  };
+
+  const handleValidation = async () => {
+    if (!startup || !validationAction) return;
+    
+    try {
+      let status;
+      let observation;
+      
+      switch (validationAction) {
+        case 'accept':
+          status = 'IN_PROGRESS';
+          break;
+        case 'observe':
+          status = 'IDEA_OBSERVED';
+          observation = observationText;
+          break;
+        case 'reject':
+          status = 'IDEA_REJECTED';
+          break;
+        default:
+          return;
+      }
+      
+      await updateStartupStatus({
+        variables: {
+          id: startup._id,
+          status,
+          observation
+        }
+      });
+      
+      await refetch();
+      handleClose();
+    } catch (error) {
+      console.error("Error validating startup:", error);
     }
   };
 
@@ -165,19 +246,8 @@ export const StartupModal = ({
         </div>
 
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2">
-          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-            <p className="min-w-[100px]">Cliente</p>
-            <TextInput
-              label="Cliente"
-              value={formData.client}
-              onChange={(value) => setFormData({ ...formData, client: value })}
-              placeholder="Nombre del cliente"
-              disabled={isViewMode}
-            />
-          </div>
-
-          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-            <p className="min-w-[100px]">Nombre</p>
+          <FormSection>
+            <p className="w-[100px]">Nombre</p>
             <TextInput
               label="Nombre"
               value={formData.name}
@@ -185,132 +255,170 @@ export const StartupModal = ({
               placeholder="Nombre de la startup"
               disabled={isViewMode}
             />
-          </div>
+          </FormSection>
 
-          <TextareaInput
-            label="Descripción"
-            value={formData.description}
-            onChange={(value) =>
-              setFormData({ ...formData, description: value })
-            }
-            placeholder="Descripción detallada de la startup"
-            disabled={isViewMode}
-          />
-
-          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-            <p className="min-w-[100px]">Responsable</p>
-            <TextInput
-              label="Responsable"
-              value={formData.responsible}
+          <FormSection>
+            <p className="w-[100px]">Descripción</p>
+            <TextareaInput
+              label="Descripción"
+              value={formData.description}
               onChange={(value) =>
-                setFormData({ ...formData, responsible: value })
+                setFormData({ ...formData, description: value })
               }
-              placeholder="Responsable del proyecto"
+              placeholder="Descripción detallada de la startup"
               disabled={isViewMode}
             />
-          </div>
+          </FormSection>
 
-          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-            <p className="max-w-[100px]">Métrica mensual</p>
-            <TextInput
-              label="Métrica mensual"
-              value={formData.monthlyMetric}
-              onChange={(value) =>
-                setFormData({ ...formData, monthlyMetric: value })
-              }
-              placeholder="Nombre de la métrica mensual"
+          <FormSection>
+            <p className="min-w-[100px]">OKR</p>
+            <select
+              value={formData.okrId}
+              onChange={(e) => setFormData({ ...formData, okrId: e.target.value })}
+              className="flex-1 px-4 py-2 border border-neutral-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               disabled={isViewMode}
-            />
-          </div>
+            >
+              <option value="">Selecciona un OKR</option>
+              {okrsData?.okrs.map((okr) => (
+                <option key={okr.id} value={okr.id}>
+                  {okr.name}
+                </option>
+              ))}
+            </select>
+          </FormSection>
 
-          <div className="text-[14px]">
-            {/* Primer bloque (lectura) */}
-            <div className="bg-red-100 mb-3 py-2 px-5 rounded-[12px]">
-              <div className="grid grid-cols-6 gap-2 items-center">
-                <div className="col-span-1">Métrica</div>
-                <div className="col-span-1">Valor actual</div>
-                <div className="col-span-1">Valor esperado</div>
-                <div className="col-span-1">Porcentaje</div>
-                <div className="col-span-2">Barra de progreso </div>
+          <FormSection>
+            <p className="min-w-[100px]">Equipo</p>
+            <select
+              value={formData.teamId}
+              onChange={(e) => setFormData({ ...formData, teamId: e.target.value })}
+              className="flex-1 px-4 py-2 border border-neutral-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              disabled={isViewMode}
+            >
+              <option value="">Selecciona un equipo</option>
+              {teamsData?.teams.map((team) => (
+                <option key={team.id} value={team.id}>
+                  {team.name}
+                </option>
+              ))}
+            </select>
+          </FormSection>
+
+          <div className="flex flex-col gap-4">
+            <p className="font-semibold">Sprints</p>
+            
+            {/* Lista de sprints existentes */}
+            {formData.sprints.map((sprint, index) => (
+              <div key={index} className="flex items-center gap-4 p-3 border border-neutral-3 rounded-lg">
+                <span className="font-medium">#{sprint.orderNumber}</span>
+                <span className="flex-1">{sprint.name}</span>
+                {!isViewMode && (
+                  <button
+                    onClick={() => removeSprint(index)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    Eliminar
+                  </button>
+                )}
               </div>
-            </div>
+            ))}
 
-            {/* Segundo bloque (edición con inputs) */}
-            <div className="border border-neutral-300 mb-3 py-2 px-5 rounded-[12px]">
-              <div className="grid grid-cols-6 gap-2 items-center">
+            {/* Agregar nuevo sprint */}
+            {!isViewMode && (
+              <div className="flex items-center gap-4 p-3 border-2 border-dashed border-neutral-3 rounded-lg">
+                <span className="font-medium">#{newSprint.orderNumber}</span>
                 <input
                   type="text"
-                  placeholder="Métrica"
-                  value={formData.metric}
-                  onChange={(e) =>
-                    setFormData({ ...formData, metric: e.target.value })
-                  }
-                  className="col-span-1 border border-gray-300 rounded px-2 py-1"
-                  disabled={isViewMode}
+                  value={newSprint.name}
+                  onChange={(e) => setNewSprint({ ...newSprint, name: e.target.value })}
+                  placeholder="Nombre del sprint"
+                  className="flex-1 px-3 py-2 border border-neutral-3 rounded focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
-                <input
-                  type="number"
-                  placeholder="Valor actual"
-                  value={formData.currentValue}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      currentValue: Number(e.target.value),
-                    })
-                  }
-                  className="col-span-1 border border-gray-300 rounded px-2 py-1"
-                  disabled={isViewMode}
-                />
-                <input
-                  type="text"
-                  placeholder="Valor esperado"
-                  value={formData.expectedValue}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      expectedValue: Number(e.target.value),
-                    })
-                  }
-                  className="col-span-1 border border-gray-300 rounded px-2 py-1"
-                  disabled={isViewMode}
-                />
-                <p className="col-span-1 border border-gray-300 rounded px-2 py-1">
-                  {formData.expectedValue === 0
-                    ? 0
-                    : (
-                        (formData.currentValue / formData.expectedValue) *
-                        100
-                      ).toFixed(1)}
-                  %
-                </p>
-
-                <div className="col-span-2">
-                  <ProgressBar
-                    percentage={
-                      formData.expectedValue === 0
-                        ? 0
-                        : parseFloat(
-                            (
-                              (formData.currentValue / formData.expectedValue) *
-                              100
-                            ).toFixed(1)
-                          )
-                    }
-                  />
-                </div>
+                <button
+                  onClick={addSprint}
+                  className="px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600"
+                >
+                  Agregar
+                </button>
               </div>
-            </div>
+            )}
           </div>
         </div>
+        
+        {user.roles.includes("ADMIN") && startup?.status==="IDEA_PENDING_REVIEW" &&(
+          <div className="px-6 py-4 border-b border-neutral-3 dark:border-neutral-2">
+            <div className="mb-4 flex gap-4">
+              <p className="w-[200px]">Opciones de validación</p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setValidationAction('accept')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    validationAction === 'accept'
+                      ? 'bg-[#FFEAEA]'
+                      : 'border border-neutral-3 text-neutral-7 dark:text-neutral-3 hover:bg-green-100 dark:hover:bg-green-900'
+                  }`}
+                >
+                  ACEPTAR
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setValidationAction('observe')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    validationAction === 'observe'
+                      ? 'bg-[#FFEAEA]'
+                      : 'border border-neutral-3 text-neutral-7 dark:text-neutral-3 hover:bg-yellow-100 dark:hover:bg-yellow-900'
+                  }`}
+                >
+                  OBSERVAR
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setValidationAction('reject')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    validationAction === 'reject'
+                      ? 'bg-[#FFEAEA]'
+                      : 'border border-neutral-3 text-neutral-7 dark:text-neutral-3 hover:bg-red-100 dark:hover:bg-red-900'
+                  }`}
+                >
+                  RECHAZAR
+                </button>
+              </div>
+            </div>
+            {validationAction === 'observe' && (
+              <div className="flex gap-4">
+                <p className="w-[200px]">Observaciones a levantar</p>
+                <textarea
+                  value={observationText}
+                  onChange={(e) => setObservationText(e.target.value)}
+                  placeholder="Ingrese las observaciones que debe levantar la startup..."
+                  className="flex-1 p-3 border border-neutral-3 dark:border-neutral-6 rounded-lg bg-white dark:bg-neutral-8 text-neutral-8 dark:text-neutral-2 placeholder-neutral-5 dark:placeholder-neutral-5 focus:outline-none focus:ring-2 focus:ring-primary-5 focus:border-transparent resize-none"
+                  rows={4}
+                />
+              </div>
+            )}
+          </div>
+        )}
 
         {startup && !isEditing && (
-          <div className="w-full py-4 px-6 flex justify-center items-center gap-4">
-            <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
-            <MainButton 
-              text={deleting ? "Eliminando..." : "Eliminar"} 
-              handleClick={handleDelete} 
-              disabled={deleting} 
-            />
+          <div className="w-full py-4 px-6 flex justify-center items-center gap-4 border-t border-neutral-4">
+            {user.roles.includes("TEAMLEADER") && (
+              <>
+                <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
+                <MainButton 
+                  text={deleting ? "Eliminando..." : "Eliminar"} 
+                  handleClick={handleDelete} 
+                  disabled={deleting} 
+                />
+              </>
+            )}
+            {user.roles.includes("ADMIN") && startup.status==="IDEA_PENDING_REVIEW" && validationAction &&(
+              <MainButton 
+                text="Confirmar validación" 
+                handleClick={handleValidation} 
+                disabled={validating || (validationAction === 'observe' && !observationText.trim())} 
+              />
+            )}
           </div>
         )}
 
@@ -332,9 +440,9 @@ export const StartupModal = ({
           </div>
         )}
 
-        {(createError || updateError || updateMetricsError || deleteError) && (
+        {(createError || updateError || deleteError) && (
           <p className="text-red-500 text-center pb-4">
-            Error: {(createError || updateError || updateMetricsError || deleteError)?.message}
+            Error: {(createError || updateError || deleteError)?.message}
           </p>
         )}
       </div>

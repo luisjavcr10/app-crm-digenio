@@ -1,5 +1,5 @@
 import dbConnect from "@/server/database/dbConnect";
-import { Startup } from "@/server/database/models";
+import { Startup, OKR } from "@/server/database/models";
 import { IStartup, StartupStatus } from "@/server/database/interfaces/IStartup";
 import { ISprint, IModule } from "@/server/database/interfaces/ISprint";
 import { Types } from "mongoose";
@@ -104,6 +104,12 @@ export class StartupService {
       }))
     });
 
+    // Agregar el ID de la startup al array de startups del OKR
+    await OKR.findByIdAndUpdate(
+      input.okrId,
+      { $addToSet: { startups: startup._id } }
+    );
+
     return await startup.populate(['okrId', 'teamId']);
   }
 
@@ -150,14 +156,36 @@ static async updateStartupStatus(
     description?: string;
     okrId?: string;
     teamId?: string;
+    sprints?: Array<{
+      orderNumber: number;
+      name: string;
+    }>;
   }): Promise<IStartup | null> {
     await dbConnect();
+    
+    // Obtener la startup actual para verificar su estado
+    const currentStartup = await Startup.findById(id);
+    if (!currentStartup) return null;
     
     const updateData: any = {};
     if (input.name) updateData.name = input.name;
     if (input.description) updateData.description = input.description;
     if (input.okrId) updateData.okrId = new Types.ObjectId(input.okrId);
     if (input.teamId) updateData.teamId = new Types.ObjectId(input.teamId);
+    if (input.sprints) {
+      updateData.sprints = input.sprints.map(sprint => ({
+        orderNumber: sprint.orderNumber,
+        name: sprint.name,
+        status: 'planned',
+        modules: []
+      }));
+    }
+
+    // Si la startup está en estado IDEA_OBSERVED, cambiar a IDEA_PENDING_REVIEW y eliminar observaciones
+    if (currentStartup.status === 'idea_observed') {
+      updateData.status = 'idea_pending_review';
+      updateData.$unset = { observation: 1 };
+    }
 
     return await Startup.findByIdAndUpdate(
       id,

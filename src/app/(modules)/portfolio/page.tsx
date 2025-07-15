@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
+import { useAuth } from "@/client/hooks/useAuth";
 import { GET_ALL_STARTUPS_QUERY } from "@/client/services/startups";
 import { StartupCard } from "@/client/components/private/portfolio/StartupCard";
 import { StartupModal } from "@/client/components/private/portfolio/StartupModal";
@@ -11,19 +12,42 @@ import { useStartupModalStore } from "@/client/store/modalsStore";
 
 interface IStartup {
   _id: string;
-  client: string;
   name: string;
   description: string;
-  responsible: string;
-  monthlyMetric: string;
-  metric: string;
-  currentValue: number;
-  expectedValue: number;
+  okrId: {
+    _id: string;
+    name: string;
+  };
+  teamId: {
+    _id: string;
+    name: string;
+  };
+  status: string;
+  observation?: string;
+  sprints: {
+    orderNumber: number;
+    name: string;
+    deliverable?: string;
+    startDate?: string;
+    endDate?: string;
+    status: string;
+    modules: {
+      name: string;
+      task: string;
+      responsible: {
+        _id: string;
+        name: string;
+      };
+      status: string;
+      deadline?: string;
+    }[];
+  }[];
   createdAt: string;
   updatedAt: string;
 }
 
 export default function PortfolioPage() {
+  const { user } = useAuth();
   const openModal = useStartupModalStore((state) => state.open);
   const closeModal = useStartupModalStore((state) => state.close);
   const isOpenModal = useStartupModalStore((state) => state.isOpen);
@@ -37,12 +61,9 @@ export default function PortfolioPage() {
   const startups = data?.getAllStartups || [];
   
   const filteredStartups = startups.filter((s) => {
-    const percentage =
-      s.expectedValue === 0 ? 0 : (s.currentValue / s.expectedValue) * 100;
-  
-    if (stageFilter === "idea") return percentage === 0;
-    if (stageFilter === "crecimiento") return percentage > 0 && percentage < 100;
-    if (stageFilter === "escala") return percentage === 100;
+    if (stageFilter === "idea") return s.status === "idea_pending_review" || s.status === "idea_approved";
+    if (stageFilter === "crecimiento") return s.status === "in_progress" || s.status === "paused";
+    if (stageFilter === "escala") return s.status === "completed" || s.status === "cancelled";
     return true;
   });
 
@@ -52,10 +73,10 @@ export default function PortfolioPage() {
         name="Portafolio de startups"
         description="Registro y monitoreo de los proyectos o productos que contribuyen al cumplimiento de los objetivos."
       >
-        <MainButton
+        {user.roles.includes("TEAMLEADER") && <MainButton
           text="Agregar nueva startup"
           handleClick={openModal}
-        />
+        />}
       </TitleSection>
 
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
@@ -68,8 +89,8 @@ export default function PortfolioPage() {
           >
             <option value="all">Todas las etapas</option>
             <option value="idea">Idea</option>
-            <option value="crecimiento">Crecimiento</option>
-            <option value="escala">Escala</option>
+            <option value="crecimiento">En Progreso</option>
+            <option value="escala">Finalizado</option>
           </select>
         </div>
       </div>

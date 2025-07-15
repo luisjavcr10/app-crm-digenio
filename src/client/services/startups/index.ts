@@ -4,14 +4,39 @@ export const GET_STARTUP_QUERY = gql`
   query GetStartup($id: ID!) {
     getStartup(id: $id) {
       _id
-      client
       name
       description
-      responsible
-      monthlyMetric
-      metric
-      currentValue
-      expectedValue
+      okrId {
+        id
+        name
+      }
+      teamId {
+        id
+        name
+      }
+      status
+      observation
+      sprints {
+        orderNumber
+        name
+        deliverable
+        startDate
+        endDate
+        status
+        modules {
+          name
+          task
+          responsible {
+            id
+            userId {
+              email
+              name
+            }
+          }
+          status
+          deadline
+        }
+      }
       createdAt
       updatedAt
     }
@@ -22,126 +47,236 @@ export const GET_ALL_STARTUPS_QUERY = gql`
   query GetAllStartups {
     getAllStartups {
       _id
-      client
       name
       description
-      responsible
-      monthlyMetric
-      metric
-      currentValue
-      expectedValue
+      okrId {
+        id
+        name
+      }
+      teamId {
+        id
+        name
+      }
+      status
+      observation
+      sprints {
+        orderNumber
+        name
+        deliverable
+        startDate
+        endDate
+        status
+        modules {
+          name
+          task
+          responsible {
+            id
+            userId {
+              email
+              name
+            }
+          }
+          status
+          deadline
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_STARTUPS_BY_OKR_QUERY = gql`
+  query GetStartupsByOkr($okrId: ID!) {
+    getStartupsByOkr(okrId: $okrId) {
+      _id
+      name
+      description
+      status
+      observation
+      sprints {
+        orderNumber
+        name
+        status
+      }
       createdAt
     }
   }
 `;
 
-export const GET_STARTUPS_BY_CLIENT_QUERY = gql`
-  query GetStartupsByClient($client: String!) {
-    getStartupsByClient(client: $client) {
+export const GET_STARTUPS_BY_TEAM_QUERY = gql`
+  query GetStartupsByTeam($teamId: ID!) {
+    getStartupsByTeam(teamId: $teamId) {
       _id
       name
       description
-      responsible
-      currentValue
-      expectedValue
+      status
+      observation
+      sprints {
+        orderNumber
+        name
+        status
+      }
       createdAt
     }
   }
 `;
 
-export const GET_STARTUPS_BY_RESPONSIBLE_QUERY = gql`
-  query GetStartupsByResponsible($responsible: String!) {
-    getStartupsByResponsible(responsible: $responsible) {
+export const GET_STARTUPS_BY_STATUS_QUERY = gql`
+  query GetStartupsByStatus($status: StartupStatus!) {
+    getStartupsByStatus(status: $status) {
       _id
       name
-      client
-      monthlyMetric
-      currentValue
-      expectedValue
+      description
+      okrId {
+        id
+        name
+      }
+      teamId {
+        id
+        name
+      }
+      status
+      observation
+      createdAt
+    }
+  }
+`;
+
+export const GET_PENDING_REVIEW_STARTUPS_QUERY = gql`
+  query GetPendingReviewStartups {
+    getPendingReviewStartups {
+      _id
+      name
+      description
+      okrId {
+        id
+        name
+      }
+      teamId {
+        id
+        name
+      }
+      status
+      createdAt
     }
   }
 `;
 
 export const CREATE_STARTUP_MUTATION = gql`
-  mutation CreateStartup(
-    $client: String!
-    $name: String!
-    $description: String!
-    $responsible: String!
-    $monthlyMetric: String!
-    $metric: String!
-    $expectedValue: Float!
-    $currentValue: Float
-  ) {
-    createStartup(
-      client: $client
-      name: $name
-      description: $description
-      responsible: $responsible
-      monthlyMetric: $monthlyMetric
-      metric: $metric
-      expectedValue: $expectedValue
-      currentValue: $currentValue
-    ) {
+  mutation CreateStartup($input: CreateStartupInput!) {
+    createStartup(input: $input) {
       _id
       name
-      client
+      description
+      okrId {
+        id
+        name
+      }
+      teamId {
+        id
+        name
+      }
+      status
+      sprints {
+        orderNumber
+        name
+        status
+      }
       createdAt
     }
   }
 `;
 
 export const UPDATE_STARTUP_MUTATION = gql`
-  mutation UpdateStartup(
-    $id: ID!
-    $client: String
-    $name: String
-    $description: String
-    $responsible: String
-    $monthlyMetric: String
-    $metric: String
-    $currentValue: Float
-    $expectedValue: Float
-  ) {
-    updateStartup(
-      id: $id
-      client: $client
-      name: $name
-      description: $description
-      responsible: $responsible
-      monthlyMetric: $monthlyMetric
-      metric: $metric
-      currentValue: $currentValue
-      expectedValue: $expectedValue
-    ) {
+  mutation UpdateStartup($id: ID!, $input: UpdateStartupInput!) {
+    updateStartup(id: $id, input: $input) {
       _id
       name
-      client
-      currentValue
-      expectedValue
+      description
+      okrId {
+        id
+        name
+      }
+      teamId {
+        id
+        name
+      }
       updatedAt
     }
   }
 `;
 
-export const UPDATE_STARTUP_METRICS_MUTATION = gql`
-  mutation UpdateStartupMetrics($id: ID!, $currentValue: Float!) {
-    updateStartupMetrics(id: $id, currentValue: $currentValue) {
+export const UPDATE_STARTUP_STATUS_MUTATION = gql`
+  mutation UpdateStartupStatus($id: ID!, $status: StartupStatus!, $observation: String) {
+    updateStartupStatus(id: $id, status: $status, observation: $observation) {
       _id
       name
-      currentValue
-      expectedValue
+      status
+      observation
       updatedAt
+    }
+  }
+`;
+
+export const UPDATE_SPRINT_MUTATION = gql`
+  mutation UpdateSprint($startupId: ID!, $sprintOrderNumber: Int!, $input: UpdateSprintInput!) {
+    updateSprint(startupId: $startupId, sprintOrderNumber: $sprintOrderNumber, input: $input) {
+      _id
+      sprints {
+        orderNumber
+        name
+        deliverable
+        startDate
+        endDate
+        status
+      }
+    }
+  }
+`;
+
+export const ADD_MODULE_TO_SPRINT_MUTATION = gql`
+  mutation AddModuleToSprint($startupId: ID!, $sprintOrderNumber: Int!, $input: AddModuleInput!) {
+    addModuleToSprint(startupId: $startupId, sprintOrderNumber: $sprintOrderNumber, input: $input) {
+      _id
+      sprints {
+        orderNumber
+        name
+        modules {
+          name
+          task
+          responsible {
+            id
+            userId {
+              email
+              name
+            }
+          }
+          status
+          deadline
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_MODULE_STATUS_MUTATION = gql`
+  mutation UpdateModuleStatus($startupId: ID!, $sprintOrderNumber: Int!, $moduleIndex: Int!, $status: ModuleStatus!) {
+    updateModuleStatus(startupId: $startupId, sprintOrderNumber: $sprintOrderNumber, moduleIndex: $moduleIndex, status: $status) {
+      _id
+      sprints {
+        orderNumber
+        modules {
+          name
+          status
+        }
+      }
     }
   }
 `;
 
 export const DELETE_STARTUP_MUTATION = gql`
   mutation DeleteStartup($id: ID!) {
-    deleteStartup(id: $id) {
-      _id
-      name
-      client
-    }
+    deleteStartup(id: $id)
   }
 `;

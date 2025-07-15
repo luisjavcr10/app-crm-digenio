@@ -135,6 +135,10 @@ export const startupResolvers = {
           description?: string;
           okrId?: string;
           teamId?: string;
+          sprints?: Array<{
+            orderNumber: number;
+            name: string;
+          }>;
         };
       }
     ): Promise<IStartup> => {

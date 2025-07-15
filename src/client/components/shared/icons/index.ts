@@ -7,4 +7,5 @@ export { ListAddIcon } from './ListAddIcon';
 export { RefreshIcon } from './RefreshIcon';
 export { DocumentIcon } from './DocumentIcon';
 export { ChartIcon } from './ChartIcon';
-export { UserIcon } from './UserIcon'
+export { UserIcon } from './UserIcon';
+export { CircleTargetIcon } from './CircleTargetIcon';
