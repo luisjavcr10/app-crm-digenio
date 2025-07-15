@@ -29,18 +29,18 @@ export default function FollowUp() {
   }, [data]);
 
   return (
-    <div className="h-full my-6 mx-8 flex flex-col gap-8">
+    <div className="h-full my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
       <TitleSection
         name="SEGUIMIENTO"
         description="Seguimiento visual de objetivos estratégicos en conjunto con las startups participantes."
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      
         {okrs.length === 0 ? (
-          <div className="col-span-full">
             <NoData />
-          </div>
         ) : (
-          okrs.map((okr) => (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {okrs.map((okr) => (
             <div key={okr.id} className="flex border border-neutral-3  rounded-[12px]">
               <div className="">
                 <div className="flex flex-col gap-2 border-b border-neutral-3 p-3">
@@ -60,9 +60,10 @@ export default function FollowUp() {
                 
               </div>
             </div>
-          ))
+          ))}
+          </div>
         )}
-      </div>
+      
     </div>
   );
 }
