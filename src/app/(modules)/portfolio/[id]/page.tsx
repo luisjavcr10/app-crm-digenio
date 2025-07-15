@@ -595,15 +595,12 @@ export default function StartupDetailPage() {
                       Módulos del Sprint {viewingModulesIndex + 1}
                     </h2>
                   </div>
-                  {user?.roles.includes('TEAMLEADER') && (
-                    <div className="cursor-pointer" onClick={handleAddModule}>
-                      <PlusIcon />
-                    </div>
-                  )}
+                  
                 </div>
 
                 {/* Encabezados de módulos */}
-                <div className="grid grid-cols-[0.5fr_2fr_2fr_1.5fr_1fr_1fr_1fr] gap-4 p-3 bg-[#FFEAEA] rounded-t-[12px] text-sm font-medium">
+                <div className="flex">
+                <div className="flex-1 grid grid-cols-[0.5fr_2fr_2fr_1.5fr_1fr_1fr_1fr] gap-4 p-3 bg-[#FFEAEA] rounded-[12px] text-sm font-medium mb-4">
                   <div>N°</div>
                   <div>Módulo</div>
                   <div>Tarea</div>
@@ -611,6 +608,12 @@ export default function StartupDetailPage() {
                   <div>Estado</div>
                   <div>Fecha límite</div>
                   <div>Opciones</div>
+                </div>
+                {user?.roles.includes('TEAMLEADER') && (
+                    <div className="cursor-pointer" onClick={handleAddModule}>
+                      <PlusIcon />
+                    </div>
+                  )}
                 </div>
 
                 {/* Fila de agregar nuevo módulo */}
@@ -899,7 +902,7 @@ export default function StartupDetailPage() {
 
                 {/* Encabezados */}
                 <div className="flex gap-2">
-                  <div className="flex-1 grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] gap-4 p-3 bg-[#FFEAEA] rounded-[12px] text-sm font-medium">
+                  <div className="flex-1 grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] gap-4 p-3 bg-[#FFEAEA] rounded-[12px] text-sm font-medium  mb-4">
                     <div>Sprint</div>
                     <div>Entregable</div>
                     <div>Fecha inicio</div>
