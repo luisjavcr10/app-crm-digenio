@@ -61,14 +61,14 @@ export default function PortfolioPage() {
   const startups = data?.getAllStartups || [];
   
   const filteredStartups = startups.filter((s) => {
-    if (stageFilter === "idea") return s.status === "idea_pending_review" || s.status === "idea_approved";
-    if (stageFilter === "crecimiento") return s.status === "in_progress" || s.status === "paused";
-    if (stageFilter === "escala") return s.status === "completed" || s.status === "cancelled";
+    if (stageFilter === "idea") return s.status === "IDEA_PENDING_REVIEW" || s.status === "IDEA_OBSERVED" || s.status === "IDEA_REJECTED";
+    if (stageFilter === "crecimiento") return s.status === "IN_PROGRESS" || s.status === "paused";
+    if (stageFilter === "escala") return s.status === "COMPLETED";
     return true;
   });
 
   return (
-    <div className="h-full my-6 mx-8 flex flex-col gap-8 ">
+    <div className="h-full my-6 mx-8 flex flex-col gap-8 overflow-auto">
       <TitleSection
         name="Portafolio de startups"
         description="Registro y monitoreo de los proyectos o productos que contribuyen al cumplimiento de los objetivos."
@@ -88,9 +88,9 @@ export default function PortfolioPage() {
             onChange={(e) => setStageFilter(e.target.value)}
           >
             <option value="all">Todas las etapas</option>
-            <option value="idea">Idea</option>
-            <option value="crecimiento">En Progreso</option>
-            <option value="escala">Finalizado</option>
+            <option value="idea">Ideas (Pendiente/Observada/Rechazada)</option>
+            <option value="crecimiento">En Progreso/Pausada</option>
+            <option value="escala">Completada</option>
           </select>
         </div>
       </div>
