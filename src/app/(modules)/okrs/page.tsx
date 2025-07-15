@@ -11,9 +11,8 @@ import { useOkrModalStore } from "@/client/store/modalsStore";
 
 interface okrProps {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  owner: string;
   status: string;
   startDate: string;
   endDate: string;
@@ -21,9 +20,12 @@ interface okrProps {
 }
 
 export default function OkrsPage() {
+  //modal states
   const openModal = useOkrModalStore((state) => state.open);
   const closeModal = useOkrModalStore((state) => state.close);
   const isOpenModal = useOkrModalStore((state) => state.isOpen);
+
+  //filters states
   const [okrs, setOkrs] = useState<okrProps[]>([]);
   const [filteredOkrs, setFilteredOkrs] = useState<okrProps[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -31,11 +33,12 @@ export default function OkrsPage() {
   const [endDateFilter, setEndDateFilter] = useState<string>("");
 
   const { data } = useQuery(GET_OKRS_QUERY);
+  console.log(data);
 
   useEffect(() => {
-    if (data?.getOKRs) {
-      setOkrs(data.getOKRs);
-      setFilteredOkrs(data.getOKRs);
+    if (data?.okrs) {
+      setOkrs(data.okrs);
+      setFilteredOkrs(data.okrs);
     }
   }, [data]);
 
@@ -89,9 +92,10 @@ export default function OkrsPage() {
             onChange={(e) => setStatusFilter(e.target.value)}
           >
             <option value="all">Todos</option>
-            <option value="Pending">Pendientes</option>
-            <option value="Completed">Completados</option>
-            <option value="In Progress">En progreso</option>
+            <option value="draft">Borrador</option>
+            <option value="pending">Pendientes</option>
+            <option value="completed">Completados</option>
+            <option value="in_progress">En progreso</option>
           </select>
         </div>
 
@@ -126,7 +130,7 @@ export default function OkrsPage() {
       {filteredOkrs.length === 0 ? (
         <NoData />
       ) : (
-        <div className="min-h-[450px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="min-h-[450px] m-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="flex flex-col gap-4 md:hidden">
             {filteredOkrs.map((okr, idx) => (
               <OkrCard key={idx} index={idx} okr={okr} />

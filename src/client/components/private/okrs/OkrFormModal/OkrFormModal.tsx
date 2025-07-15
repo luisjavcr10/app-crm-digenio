@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import {TextInput, TextareaInput, DateInput} from "@/client/components/shared/formElements";
+import {TextInput, TextareaInput, DateInput, FormSection} from "@/client/components/shared/formElements";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import ReactMarkdown from "react-markdown";
 import {
@@ -12,14 +12,14 @@ import { GET_DEEPSEEK_RECOMMENDATION } from "@/client/services/ia";
 
 interface okrProps {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  owner: string;
   status: string;
   startDate: string;
   endDate: string;
   userId: string;
 }
+
 
 export const OkrFormModal = ({
   handleClose,
@@ -32,9 +32,8 @@ export const OkrFormModal = ({
 }>) => {
   const [okr, setOkr] = useState<okrProps>({
     id: "",
-    title: "",
+    name: "",
     description: "",
-    owner: "",
     status: "Pending",
     startDate: "",
     endDate: "",
@@ -51,6 +50,7 @@ export const OkrFormModal = ({
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [getRecommendation, { data: recommendationData, loading: loadingRecommendation, error: errorRecommendation }] = useLazyQuery(GET_DEEPSEEK_RECOMMENDATION);
 
+  console.log(passedOkr);
 
   useEffect(() => {
     if (passedOkr) {
@@ -78,9 +78,8 @@ export const OkrFormModal = ({
       const { data } = await updateOkr({
         variables: {
           id: okr.id,
-          title: okr.title,
+          name: okr.name,
           description: okr.description,
-          owner: okr.owner,
           status: okr.status,
           startDate: okr.startDate,
           endDate: okr.endDate,
@@ -125,35 +124,28 @@ export const OkrFormModal = ({
         </div>
 
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2 ">
-          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-            <p className="min-w-[100px]">Responsable</p>
-            <TextInput
-              label="Responsable"
-              value={okr.owner}
-              onChange={(value) => setOkr({ ...okr, owner: value })}
-              placeholder="Nombres y apellidos del colaborador"
-              disabled={isViewMode}
-            />
-          </div>
 
-          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-            <p className="min-w-[100px]">Título:</p>
+          <FormSection>
+            <p className="w-[100px]">Título</p>
             <TextInput
               label="Título"
-              value={okr.title}
-              onChange={(value) => setOkr({ ...okr, title: value })}
+              value={okr.name}
+              onChange={(value) => setOkr({ ...okr, name: value })}
               placeholder="Título del objetivo"
               disabled={isViewMode}
             />
-          </div>
+          </FormSection>
 
-          <TextareaInput
-            label="Descripción"
-            value={okr.description}
-            onChange={(value) => setOkr({ ...okr, description: value })}
-            placeholder="Descripción detallada del objetivo"
-            disabled={isViewMode}
-          />
+          <FormSection>
+            <p className="w-[100px]">Descripcion</p>
+            <TextareaInput
+              label="Descripción"
+              value={okr.description}
+              onChange={(value) => setOkr({ ...okr, description: value })}
+              placeholder="Descripción detallada del objetivo"
+              disabled={isViewMode}
+            />
+          </FormSection>
 
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="min-w-[100px]">Estado:</p>
@@ -196,7 +188,7 @@ export const OkrFormModal = ({
                 variables: {
                   messages: [
                     { role: 'system', content: 'Eres un experto en OKRs. Da recomendaciones para lograr el siguiente OKR.' },
-                    { role: 'user', content: `Título: ${okr.title}\nDescripción: ${okr.description}\nResponsable: ${okr.owner}\nEstado: ${okr.status}\nFecha inicio: ${okr.startDate}\nFecha fin: ${okr.endDate}` }
+                    { role: 'user', content: `Título: ${okr.name}\nDescripción: ${okr.description}\nEstado: ${okr.status}\nFecha inicio: ${okr.startDate}\nFecha fin: ${okr.endDate}` }
                   ]
                 }
               });
@@ -224,9 +216,8 @@ export const OkrFormModal = ({
 
               {/* Información del OKR */}
               <div className="space-y-2 text-neutral-800 dark:text-neutral-200 text-[16px] leading-relaxed">
-                <p><span className="font-semibold">Título:</span> {okr.title}</p>
+                <p><span className="font-semibold">Título:</span> {okr.name}</p>
                 <p><span className="font-semibold">Descripción:</span> {okr.description}</p>
-                <p><span className="font-semibold">Responsable:</span> {okr.owner}</p>
                 <p><span className="font-semibold">Estado:</span> {okr.status}</p>
                 <p><span className="font-semibold">Fecha inicio:</span> {okr.startDate}</p>
                 <p><span className="font-semibold">Fecha fin:</span> {okr.endDate}</p>

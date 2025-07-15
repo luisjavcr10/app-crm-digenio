@@ -1,16 +1,30 @@
 import { gql } from "@apollo/client";
 
 export const GET_OKRS_QUERY = gql`
-  query GetOKRs {
-    getOKRs {
+  query OKRs {
+    okrs {
       id
-      title
+      name
       description
-      owner
       status
       startDate
       endDate
-      userId
+      createdBy {
+        email
+      }
+    }
+  }
+`;
+
+export const FOLLOW_UP_OKRS_QUERY = gql`
+  query OKRs {
+    okrs {
+      id
+      name
+      status
+      startups {
+        name
+      }   
     }
   }
 `;
