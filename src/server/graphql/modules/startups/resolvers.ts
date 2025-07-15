@@ -6,11 +6,7 @@ import { IStartup, StartupStatus } from "@/server/database/interfaces/IStartup";
 import { ISprint, IModule } from "@/server/database/interfaces/ISprint";
 import { GraphQLError } from "graphql";
 
-type StartupParent = Document<unknown, IStartup> &
-  IStartup & {
-    okrInfo: IOKR[];
-    teamInfo: ITeam[];
-  };
+
 
 /**
  * Convierte el estado de la base de datos al formato GraphQL

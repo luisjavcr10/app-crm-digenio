@@ -67,7 +67,7 @@ export const okrsResolvers = {
     startups: async (parent: IOKR): Promise<IStartup[]> => {
       if (parent.startups && parent.startups.length > 0) {
         // Verificar si el primer elemento es un documento poblado (no solo ObjectId)
-        const firstStartup = parent.startups[0] as any;
+        const firstStartup = parent.startups[0] as IStartup | Types.ObjectId;
         if (firstStartup && typeof firstStartup === 'object' && 'name' in firstStartup) {
           // Ya está poblado, verificar si tiene sprints
           if (firstStartup.sprints !== undefined) {

@@ -91,15 +91,29 @@ export default function FollowUp() {
                   <p className="text-center text-[12px] text-neutral-3">Sin startups 📂</p>
                 ) : (
                   <div className="text-center">
-                    <p className="text-[10px] text-neutral-4 mb-1">Startups</p>
+                    <p className="text-[10px] text-neutral-2 mb-1">Startups</p>
                     <p className="text-lg font-semibold text-neutral-6">{okr.startups.length}</p>
                     {okr.startups.some(startup => startup.status === 'IN_PROGRESS') && (
-                      <>
-                        <p className="text-[10px] text-neutral-4 mb-1 mt-2">En progreso</p>
+                      <div className="flex gap-2">
+                      <div>
+                        <p className="text-[10px] text-neutral-2 mb-1 mt-2">En progreso</p>
                         <p className="text-sm text-blue-600">
                           {okr.startups.filter(startup => startup.status === 'IN_PROGRESS').length}
                         </p>
-                      </>
+                        
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-neutral-2 mb-1 mt-2">Progreso promedio</p>
+                        <p className="text-[10px] text-green-600">
+                          {Math.round(
+                            okr.startups
+                              .filter(startup => startup.status === 'IN_PROGRESS')
+                              .reduce((sum, startup) => sum + calculateAverageProgress(startup), 0) /
+                            okr.startups.filter(startup => startup.status === 'IN_PROGRESS').length
+                          )}%
+                        </p>
+                        </div>
+                      </div>
                     )}
                   </div>
                 )}
