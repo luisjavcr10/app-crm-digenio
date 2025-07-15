@@ -24,6 +24,13 @@ export const FOLLOW_UP_OKRS_QUERY = gql`
       status
       startups {
         name
+        status
+        sprints {
+          status
+          modules {
+            status
+          }
+        }
       }   
     }
   }

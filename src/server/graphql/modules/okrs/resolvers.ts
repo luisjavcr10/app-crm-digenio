@@ -1,6 +1,7 @@
 import { OkrService } from "./service";
 import { Types } from "mongoose";
 import { IOKR } from "@/server/database/interfaces/IOKR";
+import { IStartup } from "@/server/database/interfaces/IStartup";
 
 export const okrsResolvers = {
   Query: {
@@ -63,9 +64,24 @@ export const okrsResolvers = {
   },
 
   OKR: {
-    startups: async (parent: IOKR) => {
-      if (parent.startups) return parent.startups;
-      return parent.populate("startups").then((o: IOKR) => o.startups);
+    startups: async (parent: IOKR): Promise<IStartup[]> => {
+      if (parent.startups && parent.startups.length > 0) {
+        // Verificar si el primer elemento es un documento poblado (no solo ObjectId)
+        const firstStartup = parent.startups[0] as any;
+        if (firstStartup && typeof firstStartup === 'object' && 'name' in firstStartup) {
+          // Ya está poblado, verificar si tiene sprints
+          if (firstStartup.sprints !== undefined) {
+            return parent.startups as unknown as IStartup[];
+          }
+        }
+      }
+      const populated = await parent.populate({
+        path: "startups",
+        populate: {
+          path: "sprints.modules.responsible"
+        }
+      });
+      return populated.startups as unknown as IStartup[];
     },
     createdBy: (parent: IOKR) => {
       if (parent.createdBy) return parent.createdBy;
