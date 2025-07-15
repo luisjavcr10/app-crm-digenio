@@ -27,6 +27,14 @@ export const okrsTypeDefs = `#graphql
     endDate: String
   }
 
+  input UpdateOKRInput {
+    name: String
+    description: String
+    status: OKRStatus
+    startDate: String
+    endDate: String
+  }
+
   type Query {
     okrs: [OKR!]! 
     okr(id: ID!): OKR
@@ -36,6 +44,7 @@ export const okrsTypeDefs = `#graphql
 
   type Mutation {
     createOKR(input: CreateOKRInput!, createdBy: ID!): OKR!
+    updateOKR(id: ID!, input: UpdateOKRInput!): OKR!
     deleteOKR(id: ID!): Boolean!
   }
 `;

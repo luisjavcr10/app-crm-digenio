@@ -1,51 +1,58 @@
 import { useEffect, useState } from "react";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import {TextInput, TextareaInput, DateInput, FormSection} from "@/client/components/shared/formElements";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import ReactMarkdown from "react-markdown";
-import {
-  CREATE_OKR_MUTATION,
-  UPDATE_OKR_MUTATION,
-  DELETE_OKR_MUTATION
-} from "@/client/services/okrs";
 import { GET_DEEPSEEK_RECOMMENDATION } from "@/client/services/ia";
+import { useOkrOperations } from "../hooks/useOkrOperations";
+import { OkrValidationMessage } from "../components/OkrValidationMessage";
+import { useAuth } from "@/client/hooks/useAuth";
 
-interface okrProps {
-  id: string;
-  name: string;
-  description: string;
-  status: string;
-  startDate: string;
-  endDate: string;
-  userId: string;
-}
+import type { OkrProps, OkrStatus } from "@/client/types/okr";
 
 
 export const OkrFormModal = ({
   handleClose,
   handleSubmit,
   okr: passedOkr,
+  onDelete,
 }: Readonly<{
   handleClose: () => void;
-  handleSubmit: (okr: okrProps) => void;
-  okr?: okrProps;
+  handleSubmit: (okr: OkrProps) => void;
+  okr?: OkrProps;
+  onDelete?: (okrId: string) => Promise<void>;
 }>) => {
-  const [okr, setOkr] = useState<okrProps>({
+  const { user } = useAuth();
+
+  const [okr, setOkr] = useState<OkrProps>({
     id: "",
     name: "",
     description: "",
-    status: "Pending",
+    status: "draft",
     startDate: "",
     endDate: "",
-    userId: "temp-user-id",
+    userId: user.id,
   });
 
-  const [isEditing, setIsEditing] = useState(!passedOkr); // crear = editable, ver = no editable
+  const [isEditing, setIsEditing] = useState(!passedOkr);
   const isViewMode = !!passedOkr && !isEditing;
 
-  const [createOkr, { loading: creating, error: createError }] = useMutation(CREATE_OKR_MUTATION);
-  const [updateOkr, { loading: updating, error: updateError }] = useMutation(UPDATE_OKR_MUTATION);
-  const [deleteOkr, { loading: deleting, error: deleteError }] = useMutation(DELETE_OKR_MUTATION);
+  const {
+    createDraftOkr,
+    createPendingOkr,
+    updateExistingOkr,
+    confirmDraftOkr,
+    deleteExistingOkr,
+    canConfirmOkr,
+    canEditOkr,
+    canDeleteOkr,
+    creating,
+    updating,
+    deleting,
+    createError,
+    updateError,
+    deleteError,
+  } = useOkrOperations();
   const [activeTab, setActiveTab] = useState<'form' | 'recomendaciones'>('form');
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [getRecommendation, { data: recommendationData, loading: loadingRecommendation, error: errorRecommendation }] = useLazyQuery(GET_DEEPSEEK_RECOMMENDATION);
@@ -58,37 +65,35 @@ export const OkrFormModal = ({
     }
   }, [passedOkr]);
 
-  const handleCreate = async () => {
+  const handleCreateDraft = async () => {
     try {
-      const { data } = await createOkr({
-        variables: { ...okr },
-      });
-
-      if (data?.createOKR) {
-        handleSubmit(data.createOKR);
+      const result = await createDraftOkr(okr, okr.userId);
+      if (result) {
+        handleSubmit(result);
         handleClose();
       }
     } catch (err) {
-      console.error("Error creating OKR:", err);
+      console.error("Error creating draft OKR:", err);
+    }
+  };
+
+  const handleCreatePending = async () => {
+    try {
+      const result = await createPendingOkr(okr, okr.userId);
+      if (result) {
+        handleSubmit(result);
+        handleClose();
+      }
+    } catch (err) {
+      console.error("Error creating pending OKR:", err);
     }
   };
 
   const handleUpdate = async () => {
     try {
-      const { data } = await updateOkr({
-        variables: {
-          id: okr.id,
-          name: okr.name,
-          description: okr.description,
-          status: okr.status,
-          startDate: okr.startDate,
-          endDate: okr.endDate,
-          userId: okr.userId,
-        },
-      });
-
-      if (data?.updateOKR) {
-        handleSubmit(data.updateOKR);
+      const result = await updateExistingOkr(okr.id, okr);
+      if (result) {
+        handleSubmit(result);
         handleClose();
       }
     } catch (err) {
@@ -96,10 +101,23 @@ export const OkrFormModal = ({
     }
   };
 
+  const handleConfirm = async () => {
+    try {
+      const result = await confirmDraftOkr(okr);
+      if (result) {
+        handleSubmit(result);
+        handleClose();
+      }
+    } catch (err) {
+      console.error("Error confirming OKR:", err);
+    }
+  };
+
   const handleDelete = async () => {
     try {
-      const { data } = await deleteOkr({ variables: { id: okr.id } });
-      if (data?.deleteOKR) {
+      const result = await deleteExistingOkr(okr.id);
+      if (result) {
+        onDelete?.(okr.id);
         handleClose();
       }
     } catch (err) {
@@ -124,6 +142,15 @@ export const OkrFormModal = ({
         </div>
 
         <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2 ">
+          {/* Mensaje de validación para crear OKR pendiente */}
+          {!passedOkr && (
+            <OkrValidationMessage okr={okr} showForPending={true} />
+          )}
+          
+          {/* Mensaje de validación para confirmar draft */}
+          {passedOkr && okr.status === 'draft' && !isEditing && (
+            <OkrValidationMessage okr={okr} showForPending={true} />
+          )}
 
           <FormSection>
             <p className="w-[100px]">Título</p>
@@ -153,13 +180,14 @@ export const OkrFormModal = ({
               className="border p-2 rounded-lg text-sm bg-neutral-4 dark:bg-neutral-2"
               value={okr.status}
               onChange={(e) =>
-                setOkr({ ...okr, status: e.target.value as okrProps["status"] })
+                setOkr({ ...okr, status: e.target.value as OkrStatus })
               }
-              disabled={isViewMode}
+              disabled={isViewMode || (passedOkr && okr.status === 'completed')}
             >
-              <option value="Pending">Pendiente</option>
-              <option value="In Progress">En progreso</option>
-              <option value="Completed">Completado</option>
+              <option value="draft">Borrador</option>
+              <option value="pending">Pendiente</option>
+              <option value="in_progress">En progreso</option>
+              <option value="completed">Completado</option>
             </select>
           </div>
 
@@ -179,9 +207,28 @@ export const OkrFormModal = ({
         </div>
 
         {passedOkr && !isEditing && (
-          <div className="w-full py-4 px-6 flex justify-center items-center gap-4">
-            <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
-            <MainButton text={deleting ? "Eliminando..." : "Eliminar"} handleClick={handleDelete} disabled={deleting} />          <MainButton text="Recomendaciones para lograr el OKR" handleClick={() => {
+          <div className="w-full py-4 px-6 flex justify-center items-center gap-4 flex-wrap">
+            {canEditOkr(okr.status) && (
+              <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
+            )}
+            
+            {okr.status === 'draft' && canConfirmOkr(okr) && (
+              <MainButton 
+                text={updating ? "Confirmando..." : "Confirmar OKR"} 
+                handleClick={handleConfirm} 
+                disabled={updating}
+              />
+            )}
+            
+            {canDeleteOkr(okr.status) && (
+              <MainButton 
+                text={deleting ? "Eliminando..." : "Eliminar"} 
+                handleClick={handleDelete} 
+                disabled={deleting}
+              />
+            )}
+            
+            <MainButton text="Recomendaciones para lograr el OKR" handleClick={() => {
               setActiveTab('recomendaciones');
               setShowRecommendations(true);
               getRecommendation({
@@ -252,20 +299,27 @@ export const OkrFormModal = ({
 
 
         {(isEditing || !passedOkr) && (
-          <div className="w-full py-4 px-6 flex justify-center items-center">
-            <MainButton
-              text={
-                passedOkr
-                  ? updating
-                    ? "Guardando..."
-                    : "Guardar cambios"
-                  : creating
-                    ? "Guardando..."
-                    : "Agregar nuevo OKR"
-              }
-              handleClick={passedOkr ? handleUpdate : handleCreate}
-              disabled={creating || updating}
-            />
+          <div className="w-full py-4 px-6 flex justify-center items-center gap-4 flex-wrap">
+            {passedOkr ? (
+              <MainButton
+                text={updating ? "Guardando..." : "Guardar cambios"}
+                handleClick={handleUpdate}
+                disabled={updating}
+              />
+            ) : (
+              <>
+                <MainButton
+                  text={creating ? "Guardando..." : "Guardar como Borrador"}
+                  handleClick={handleCreateDraft}
+                  disabled={creating}
+                />
+                <MainButton
+                  text={creating ? "Guardando..." : "Crear OKR Pendiente"}
+                  handleClick={handleCreatePending}
+                  disabled={creating || !canConfirmOkr(okr)}
+                />
+              </>
+            )}
           </div>
         )}
 

@@ -38,6 +38,25 @@ export const okrsResolvers = {
       return await OkrService.createOKR(input, createdBy);
     },
 
+    updateOKR: async (
+      _: undefined,
+      {
+        id,
+        input,
+      }: {
+        id: string;
+        input: {
+          name?: string;
+          description?: string;
+          status?: string;
+          startDate?: Date;
+          endDate?: Date;
+        };
+      }
+    ) => {
+      return await OkrService.updateOKR(id, input);
+    },
+
     deleteOKR: async (_: undefined, { id }: { id: string }) => {
       return await OkrService.deleteOKR(new Types.ObjectId(id));
     },

@@ -1,23 +1,19 @@
 import { OkrFormModal } from "../OkrFormModal";
 import { useState } from "react";
 import { getFormattedDate } from "@/client/utils/formatDate";
-
-interface okrProps {
-  id: string;
-  name: string;
-  description: string;
-  status: string;
-  startDate: string;
-  endDate: string;
-  userId: string;
-}
+import { TagForStatus } from "@/client/components/shared/TagForStatus";
+import type { OkrProps } from "@/client/types/okr";
 
 export const OkrCard = ({
   index,
   okr,
+  onUpdate,
+  onDelete,
 }: Readonly<{
   index: number;
-  okr: okrProps;
+  okr: OkrProps;
+  onUpdate?: (okr: OkrProps) => void;
+  onDelete?: (okrId: string) => Promise<void>;
 }>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => {
@@ -27,13 +23,24 @@ export const OkrCard = ({
     setIsModalOpen(false);
   };
 
+  const handleSubmit = (updatedOkr: OkrProps) => {
+    onUpdate?.(updatedOkr);
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteOkr = () => {
+    onDelete?.(okr.id);
+    setIsModalOpen(false);
+  };
+
   return (
     <div key={index} className="">
       {isModalOpen && (
         <OkrFormModal
           handleClose={handleCloseModal}
-          handleSubmit={() => {}}
+          handleSubmit={handleSubmit}
           okr={okr}
+          onDelete={onDelete}
         />
       )}
 
@@ -43,34 +50,7 @@ export const OkrCard = ({
       >
         <div className="flex flex-col gap-2">
           <p className="text-[16px]">{okr.name}</p>
-          <div className="flex items-center gap-2 bg-neutral-4 dark:bg-neutral-2 rounded-[12px] border border-neutral-3 text-[12px] px-2 w-fit">
-            <span className="relative flex size-2">
-              <span
-                className={`absolute inline-flex h-full w-full animate-ping rounded-full ${
-                  okr.status === "completed"
-                    ? "bg-alert-green"
-                    : okr.status === "in_progress"
-                    ? "bg-blue-600"
-                    : okr.status === "pending"
-                    ? "bg-alert-yellow"
-                    : "bg-neutral-2"
-                } opacity-75`}
-              ></span>
-              <span
-                className={`relative inline-flex size-2 rounded-full ${
-                  okr.status === "completed"
-                    ? "bg-alert-green"
-                    : okr.status === "in_progress"
-                    ? "bg-blue-600"
-                    : okr.status === "pending"
-                    ? "bg-alert-yellow"
-                    : "bg-neutral-2"
-                }`}
-              ></span>
-            </span>
-
-            <p>{okr.status}</p>
-          </div>
+          <TagForStatus status={okr.status} />
         </div>
 
         <div className="flex flex-col ">

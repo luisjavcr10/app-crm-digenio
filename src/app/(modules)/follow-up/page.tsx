@@ -5,11 +5,12 @@ import { TitleSection } from "@/client/components/shared/TitleSection";
 import { NoData } from "@/client/components/shared/NoData";
 import { FOLLOW_UP_OKRS_QUERY } from "@/client/services/okrs";
 import { TagForStatus } from "@/client/components/shared/TagForStatus";
+import type { OkrStatus } from "@/client/types/okr";
 
-interface okrsFollowUpProps {
+interface OkrsFollowUpProps {
   id: string;
   name: string;
-  status: "draft" | "pending" | "in_progress" | "completed";
+  status: OkrStatus;
   startups: {
     id: string;
     name: string;
@@ -17,7 +18,7 @@ interface okrsFollowUpProps {
 }
 
 export default function FollowUp() {
-  const [okrs, setOkrs] = useState<okrsFollowUpProps[]>([]);
+  const [okrs, setOkrs] = useState<OkrsFollowUpProps[]>([]);
   const { data } = useQuery(FOLLOW_UP_OKRS_QUERY);
   console.log(okrs);
 

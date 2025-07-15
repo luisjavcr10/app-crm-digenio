@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
 import { OkrFormModal } from "@/client/components/private/okrs/OkrFormModal";
 import { OkrCard } from "@/client/components/private/okrs/OkrCard";
@@ -8,32 +8,27 @@ import { GET_OKRS_QUERY } from "@/client/services/okrs";
 import { NoData } from "@/client/components/shared/NoData";
 import { TitleSection } from "@/client/components/shared/TitleSection";
 import { useOkrModalStore } from "@/client/store/modalsStore";
+import type { OkrProps, OkrFilterStatus } from "@/client/types/okr";
 
-interface okrProps {
-  id: string;
-  name: string;
-  description: string;
-  status: string;
-  startDate: string;
-  endDate: string;
-  userId: string;
-}
-
+/**
+ * OKRs page component - Manages OKR listing, filtering, and creation
+ */
 export default function OkrsPage() {
-  //modal states
+  // Modal states
   const openModal = useOkrModalStore((state) => state.open);
   const closeModal = useOkrModalStore((state) => state.close);
   const isOpenModal = useOkrModalStore((state) => state.isOpen);
 
-  //filters states
-  const [okrs, setOkrs] = useState<okrProps[]>([]);
-  const [filteredOkrs, setFilteredOkrs] = useState<okrProps[]>([]);
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [startDateFilter, setStartDateFilter] = useState<string>("");
-  const [endDateFilter, setEndDateFilter] = useState<string>("");
+  // Data states
+  const [okrs, setOkrs] = useState<OkrProps[]>([]);
+  const [filteredOkrs, setFilteredOkrs] = useState<OkrProps[]>([]);
+  
+  // Filter states
+  const [statusFilter, setStatusFilter] = useState<OkrFilterStatus>('all');
+  const [startDateFilter, setStartDateFilter] = useState<string>('');
+  const [endDateFilter, setEndDateFilter] = useState<string>('');
 
   const { data } = useQuery(GET_OKRS_QUERY);
-  console.log(data);
 
   useEffect(() => {
     if (data?.okrs) {
@@ -42,15 +37,18 @@ export default function OkrsPage() {
     }
   }, [data]);
 
-  useEffect(() => {
+  /**
+   * Filters OKRs based on status and date range
+   */
+  const filterOkrs = useCallback(() => {
     let result = [...okrs];
 
-    // Filtrar por estado
-    if (statusFilter !== "all") {
+    // Filter by status
+    if (statusFilter !== 'all') {
       result = result.filter((okr) => okr.status === statusFilter);
     }
 
-    // Filtrar por fecha de inicio
+    // Filter by start date
     if (startDateFilter) {
       const filterStartDate = new Date(startDateFilter);
       result = result.filter((okr) => {
@@ -59,7 +57,7 @@ export default function OkrsPage() {
       });
     }
 
-    // Filtrar por fecha de fin
+    // Filter by end date
     if (endDateFilter) {
       const filterEndDate = new Date(endDateFilter);
       result = result.filter((okr) => {
@@ -69,12 +67,39 @@ export default function OkrsPage() {
     }
 
     setFilteredOkrs(result);
-  }, [statusFilter, startDateFilter, endDateFilter, okrs]);
+  }, [okrs, statusFilter, startDateFilter, endDateFilter]);
 
-  const handleAddOkr = (newOkr: okrProps) => {
-    setOkrs([newOkr, ...okrs]);
-    setFilteredOkrs([newOkr, ...filteredOkrs]);
-  };
+  useEffect(() => {
+    filterOkrs();
+  }, [filterOkrs]);
+
+  /**
+   * Handles adding or updating an OKR in the list
+   * @param okr - The OKR to add or update
+   */
+  const handleOkrSubmit = useCallback((okr: OkrProps) => {
+    setOkrs((prevOkrs) => {
+      const existingIndex = prevOkrs.findIndex((existingOkr) => existingOkr.id === okr.id);
+      
+      if (existingIndex >= 0) {
+        // Update existing OKR
+        const updatedOkrs = [...prevOkrs];
+        updatedOkrs[existingIndex] = okr;
+        return updatedOkrs;
+      } else {
+        // Add new OKR
+        return [okr, ...prevOkrs];
+      }
+    });
+  }, []);
+
+  /**
+   * Handles removing an OKR from the list
+   * @param okrId - The ID of the OKR to remove
+   */
+  const handleOkrDelete = useCallback(async (okrId: string): Promise<void> => {
+    setOkrs((prevOkrs) => prevOkrs.filter((okr) => okr.id !== okrId));
+  }, []);
 
   return (
     <div className="h-full my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
@@ -82,14 +107,17 @@ export default function OkrsPage() {
         <MainButton text="Agregar nuevo OKR" handleClick={openModal} />
       </TitleSection>
 
-      {/** Filtros */}
+      {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
         <div className="flex flex-col gap-2 w-full md:w-auto">
+          <label htmlFor="status-filter" className="text-sm font-medium text-neutral-7 dark:text-neutral-3">
+            Estado
+          </label>
           <select
             id="status-filter"
             className="px-4 py-2 border border-neutral-3 text-[12px] text-neutral-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => setStatusFilter(e.target.value as OkrFilterStatus)}
           >
             <option value="all">Todos</option>
             <option value="draft">Borrador</option>
@@ -100,20 +128,26 @@ export default function OkrsPage() {
         </div>
 
         <div className="flex flex-col gap-2 w-full md:w-auto">
+          <label htmlFor="start-date" className="text-sm font-medium text-neutral-7 dark:text-neutral-3">
+            Fecha de inicio
+          </label>
           <input
             type="date"
             id="start-date"
-            className="px-4 py-2 border border-neutral-3 text-[12px] text-neutral-3  rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="px-4 py-2 border border-neutral-3 text-[12px] text-neutral-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             value={startDateFilter}
             onChange={(e) => setStartDateFilter(e.target.value)}
           />
         </div>
 
         <div className="flex flex-col gap-2 w-full md:w-auto">
+          <label htmlFor="end-date" className="text-sm font-medium text-neutral-7 dark:text-neutral-3">
+            Fecha de fin
+          </label>
           <input
             type="date"
             id="end-date"
-            className="px-4 py-2 border border-neutral-3 text-[12px] text-neutral-3  rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="px-4 py-2 border border-neutral-3 text-[12px] text-neutral-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             value={endDateFilter}
             onChange={(e) => setEndDateFilter(e.target.value)}
           />
@@ -122,7 +156,7 @@ export default function OkrsPage() {
 
       {isOpenModal && (
         <OkrFormModal
-          handleSubmit={handleAddOkr}
+          handleSubmit={handleOkrSubmit}
           handleClose={closeModal}
         />
       )}
@@ -131,17 +165,32 @@ export default function OkrsPage() {
         <NoData />
       ) : (
         <div className="min-h-[450px] m-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Mobile view - single column */}
           <div className="flex flex-col gap-4 md:hidden">
-            {filteredOkrs.map((okr, idx) => (
-              <OkrCard key={idx} index={idx} okr={okr} />
+            {filteredOkrs.map((okr, index) => (
+              <OkrCard 
+                key={okr.id} 
+                index={index} 
+                okr={okr} 
+                onUpdate={handleOkrSubmit}
+                onDelete={handleOkrDelete}
+              />
             ))}
           </div>
+          
+          {/* Desktop view - masonry layout */}
           {[0, 1, 2].map((colIndex) => (
-            <div key={colIndex} className="hidden md:flex flex-col gap-4">
+            <div key={`column-${colIndex}`} className="hidden md:flex flex-col gap-4">
               {filteredOkrs
                 .filter((_, index) => index % 3 === colIndex)
-                .map((okr, idx) => (
-                  <OkrCard key={idx} index={idx} okr={okr} />
+                .map((okr, index) => (
+                  <OkrCard 
+                    key={okr.id} 
+                    index={index} 
+                    okr={okr} 
+                    onUpdate={handleOkrSubmit}
+                    onDelete={handleOkrDelete}
+                  />
                 ))}
             </div>
           ))}

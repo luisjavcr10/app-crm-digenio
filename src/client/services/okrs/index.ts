@@ -45,65 +45,27 @@ export const GET_OKR_QUERY = gql`
 `;
 
 export const CREATE_OKR_MUTATION = gql`
-  mutation CreateOKR(
-    $title: String!
-    $description: String!
-    $owner: String!
-    $status: String!
-    $startDate: String!
-    $endDate: String!
-    $userId: String!
-  ) {
-    createOKR(
-      title: $title
-      description: $description
-      owner: $owner
-      status: $status
-      startDate: $startDate
-      endDate: $endDate
-      userId: $userId
-    ) {
+  mutation CreateOKR($input: CreateOKRInput!, $createdBy: ID!) {
+    createOKR(input: $input, createdBy: $createdBy) {
       id
-      title
+      name
       description
-      owner
       status
       startDate
       endDate
-      userId
     }
   }
 `;
 
 export const UPDATE_OKR_MUTATION = gql`
-  mutation UpdateOKR(
-    $id: ID!
-    $title: String
-    $description: String
-    $owner: String
-    $status: String
-    $startDate: String
-    $endDate: String
-    $userId: String
-  ) {
-    updateOKR(
-      id: $id
-      title: $title
-      description: $description
-      owner: $owner
-      status: $status
-      startDate: $startDate
-      endDate: $endDate
-      userId: $userId
-    ) {
+  mutation UpdateOKR($id: ID!, $input: UpdateOKRInput!) {
+    updateOKR(id: $id, input: $input) {
       id
-      title
+      name
       description
-      owner
       status
       startDate
       endDate
-      userId
     }
   }
 `;

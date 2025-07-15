@@ -49,8 +49,31 @@ export class OkrService {
       ...input,
       createdBy
     });
-
+    await newOkr.populate('createdBy');
+    await newOkr.populate('startups');
     return newOkr;
+  }
+
+  static async updateOKR(
+    id: string,
+    input: {
+      name?: string;
+      description?: string;
+      startDate?: Date;
+      endDate?: Date;
+      status?: string;
+    }
+  ) {
+    await dbConnect();
+    const updatedOkr = await OKR.findByIdAndUpdate(
+      id,
+      { ...input },
+      { new: true }
+    )
+      .populate('startups')
+      .populate('createdBy');
+    
+    return updatedOkr;
   }
 
   static async deleteOKR(id: Types.ObjectId) {
