@@ -3,6 +3,7 @@ import { Document } from "mongoose";
 import { IOKR } from "@/server/database/interfaces/IOKR";
 import { ITeam } from "@/server/database/interfaces/ITeam";
 import { IStartup, StartupStatus } from "@/server/database/interfaces/IStartup";
+import { ISprint, IModule } from "@/server/database/interfaces/ISprint";
 import { GraphQLError } from "graphql";
 
 type StartupParent = Document<unknown, IStartup> &
@@ -223,12 +224,17 @@ export const startupResolvers = {
         };
       }
     ): Promise<IStartup> => {
-      const sprintData: any = {};
+      const sprintData: {
+        deliverable?: string;
+        startDate?: Date;
+        endDate?: Date;
+        status?: 'planned' | 'in_progress' | 'completed' | 'delayed';
+      } = {};
       if (input.deliverable) sprintData.deliverable = input.deliverable;
       if (input.startDate) sprintData.startDate = new Date(input.startDate);
       if (input.endDate) sprintData.endDate = new Date(input.endDate);
       if (input.status) {
-        const statusMap: Record<string, string> = {
+        const statusMap: Record<string, 'planned' | 'in_progress' | 'completed' | 'delayed'> = {
           'PLANNED': 'planned',
           'IN_PROGRESS': 'in_progress',
           'COMPLETED': 'completed',
@@ -316,7 +322,7 @@ export const startupResolvers = {
    * Resolvers para campos específicos del tipo Sprint
    */
   Sprint: {
-    status: (parent: any) => {
+    status: (parent: ISprint) => {
       const statusMap: Record<string, string> = {
         'planned': 'PLANNED',
         'in_progress': 'IN_PROGRESS',
@@ -331,7 +337,7 @@ export const startupResolvers = {
    * Resolvers para campos específicos del tipo Module
    */
   Module: {
-    status: (parent: any) => {
+    status: (parent: IModule) => {
       const statusMap: Record<string, string> = {
         'pending': 'PENDING',
         'in_progress': 'IN_PROGRESS',
@@ -340,11 +346,11 @@ export const startupResolvers = {
       };
       return statusMap[parent.status];
     },
-    responsible: async (parent: any) => {
+    responsible: async (parent: IModule & { populate?: (field: string) => Promise<IModule> }) => {
       if (parent.responsible && typeof parent.responsible === 'object') {
         return parent.responsible;
       }
-      return parent.populate("responsible").then((m: any) => m.responsible);
+      return parent.populate?.("responsible").then((m: IModule) => m.responsible);
     },
   },
 };

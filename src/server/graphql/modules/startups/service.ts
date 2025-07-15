@@ -178,7 +178,29 @@ static async updateStartupStatus(
     const currentStartup = await Startup.findById(id);
     if (!currentStartup) return null;
     
-    const updateData: any = {};
+    const updateData: {
+      name?: string;
+      description?: string;
+      okrId?: Types.ObjectId;
+      teamId?: Types.ObjectId;
+      sprints?: Array<{
+        orderNumber: number;
+        name: string;
+        deliverable?: string;
+        startDate?: Date | null;
+        endDate?: Date | null;
+        status: string;
+        modules: Array<{
+          name: string;
+          task: string;
+          responsible: Types.ObjectId;
+          status: string;
+          deadline: Date | null;
+        }>;
+      }>;
+      status?: StartupStatus;
+      $unset?: { observation: number };
+    } = {};
     if (input.name) updateData.name = input.name;
     if (input.description) updateData.description = input.description;
     if (input.okrId) updateData.okrId = new Types.ObjectId(input.okrId);

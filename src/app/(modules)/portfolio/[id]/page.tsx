@@ -209,7 +209,7 @@ export default function StartupDetailPage() {
           deliverable: newSprint.deliverable,
           startDate: newSprint.startDate || null,
           endDate: newSprint.endDate || null,
-          status: newSprint.status,
+          status: mapSprintStatusToGraphQL(newSprint.status),
           modules: []
         }
       ];
@@ -270,6 +270,27 @@ export default function StartupDetailPage() {
     }
   };
 
+  // Funciones de mapeo para convertir estados a GraphQL enums
+  const mapSprintStatusToGraphQL = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      'planned': 'PLANNED',
+      'in_progress': 'IN_PROGRESS', 
+      'completed': 'COMPLETED',
+      'delayed': 'DELAYED'
+    };
+    return statusMap[status] || status;
+  };
+
+  const mapModuleStatusToGraphQL = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      'pending': 'PENDING',
+      'in_progress': 'IN_PROGRESS',
+      'completed': 'COMPLETED', 
+      'blocked': 'BLOCKED'
+    };
+    return statusMap[status] || status;
+  };
+
   const handleConfirmEditSprint = async () => {
     if (!startup || editingSprintIndex === null) return;
     
@@ -282,7 +303,7 @@ export default function StartupDetailPage() {
             deliverable: editingSprint.deliverable,
             startDate: editingSprint.startDate || null,
             endDate: editingSprint.endDate || null,
-            status: editingSprint.status,
+            status: mapSprintStatusToGraphQL(editingSprint.status),
             modules: sprint.modules || []
           };
         }
@@ -292,12 +313,12 @@ export default function StartupDetailPage() {
           deliverable: sprint.deliverable,
           startDate: sprint.startDate,
           endDate: sprint.endDate,
-          status: sprint.status,
+          status: mapSprintStatusToGraphQL(sprint.status),
           modules: (sprint.modules || []).map(module => ({
             name: module.name,
             task: module.task,
             responsible: module.responsible.id, // Solo enviar el ID
-            status: module.status,
+            status: mapModuleStatusToGraphQL(module.status),
             deadline: module.deadline
           }))
         };
@@ -345,7 +366,7 @@ export default function StartupDetailPage() {
       task: '',
       responsible: '',
       responsibleName: '',
-      status: 'pending' as "pending" | "in_progress" | "completed" | "blocked",
+      status: 'pending',
       deadline: ''
     });
     setEmployeeSearchTerm('');
@@ -363,7 +384,7 @@ export default function StartupDetailPage() {
             name: newModule.name,
             task: newModule.task,
             responsible: newModule.responsible, // Solo enviar el ID
-            status: newModule.status,
+            status: mapModuleStatusToGraphQL(newModule.status),
             deadline: newModule.deadline || null
           };
           
@@ -373,7 +394,7 @@ export default function StartupDetailPage() {
             deliverable: sprint.deliverable,
             startDate: sprint.startDate,
             endDate: sprint.endDate,
-            status: sprint.status,
+            status: mapSprintStatusToGraphQL(sprint.status),
             modules: [...(sprint.modules || []), newModuleData]
           };
         }
@@ -383,12 +404,12 @@ export default function StartupDetailPage() {
           deliverable: sprint.deliverable,
           startDate: sprint.startDate,
           endDate: sprint.endDate,
-          status: sprint.status,
+          status: mapSprintStatusToGraphQL(sprint.status),
           modules: (sprint.modules || []).map(module => ({
             name: module.name,
             task: module.task,
             responsible: module.responsible.id, // Solo enviar el ID
-            status: module.status,
+            status: mapModuleStatusToGraphQL(module.status),
             deadline: module.deadline
           }))
         };
@@ -414,7 +435,7 @@ export default function StartupDetailPage() {
          task: '',
          responsible: '',
          responsibleName: '',
-         status: 'pending' as "pending" | "in_progress" | "completed" | "blocked",
+         status: 'pending',
          deadline: ''
        });
        setEmployeeSearchTerm('');
@@ -430,21 +451,22 @@ export default function StartupDetailPage() {
 
   const handleEditModule = (moduleIndex: number) => {
     if (!user?.roles.includes('TEAMLEADER')) return;
-    const sprint = startup?.sprints[viewingModulesIndex!];
-    const module = sprint?.modules[moduleIndex];
-    if (module) {
-      setEditingModule({
-        name: module.name,
-        task: module.task,
-        responsible: module.responsible.id,
-        responsibleName: module.responsible.userId.name,
-        status: module.status as "pending" | "in_progress" | "completed" | "blocked",
-        deadline: module.deadline ? new Date(module.deadline).toISOString().split('T')[0] : ''
-      });
-      setEditEmployeeSearchTerm(module.responsible.userId.name);
-      setShowEditEmployeeDropdown(false);
-      setEditingModuleIndex(moduleIndex);
-    }
+    console.log(moduleIndex);
+    //const sprint = startup?.sprints[viewingModulesIndex!];
+    //const module = sprint?.modules[moduleIndex];
+    //if (module) {
+    //  setEditingModule({
+    //    name: module.name,
+    //    task: module.task,
+    //    responsible: module.responsible.id,
+    //    responsibleName: module.responsible.userId.name,
+    //    status: module.status,
+    //    deadline: module.deadline ? new Date(module.deadline).toISOString().split('T')[0] : ''
+    //  });
+    //  setEditEmployeeSearchTerm(module.responsible.userId.name);
+    //  setShowEditEmployeeDropdown(false);
+    //  setEditingModuleIndex(moduleIndex);
+    //}
   };
 
   const handleConfirmEditModule = async () => {
@@ -459,7 +481,7 @@ export default function StartupDetailPage() {
                 name: editingModule.name,
                 task: editingModule.task,
                 responsible: editingModule.responsible, // Solo enviar el ID
-                status: editingModule.status,
+                status: mapModuleStatusToGraphQL(editingModule.status),
                 deadline: editingModule.deadline || null
               };
             }
@@ -468,7 +490,7 @@ export default function StartupDetailPage() {
               name: module.name,
               task: module.task,
               responsible: module.responsible.id, // Solo enviar el ID
-              status: module.status,
+              status: mapModuleStatusToGraphQL(module.status),
               deadline: module.deadline
             };
           });
@@ -479,7 +501,7 @@ export default function StartupDetailPage() {
             deliverable: sprint.deliverable,
             startDate: sprint.startDate,
             endDate: sprint.endDate,
-            status: sprint.status,
+            status: mapSprintStatusToGraphQL(sprint.status),
             modules: updatedModules
           };
         }
@@ -489,8 +511,14 @@ export default function StartupDetailPage() {
           deliverable: sprint.deliverable,
           startDate: sprint.startDate,
           endDate: sprint.endDate,
-          status: sprint.status,
-          modules: sprint.modules || []
+          status: mapSprintStatusToGraphQL(sprint.status),
+          modules: (sprint.modules || []).map(module => ({
+            name: module.name,
+            task: module.task,
+            responsible: module.responsible.id,
+            status: mapModuleStatusToGraphQL(module.status),
+            deadline: module.deadline
+          }))
         };
       });
 
@@ -660,7 +688,7 @@ export default function StartupDetailPage() {
                       <div className="flex items-center">
                         <select
                           value={newModule.status}
-                          onChange={(e) => setNewModule({...newModule, status: e.target.value as any})}
+                          onChange={(e) => setNewModule({...newModule, status: e.target.value as "pending" | "in_progress" | "completed" | "blocked"})}
                           className="w-full px-2 py-1 border rounded text-xs"
                         >
                           <option value="PENDING">Pendiente</option>
@@ -779,7 +807,7 @@ export default function StartupDetailPage() {
                               <div className="flex items-center">
                                 <select
                                   value={editingModule.status}
-                                  onChange={(e) => setEditingModule({...editingModule, status: e.target.value as any})}
+                                  onChange={(e) => setEditingModule({...editingModule, status: e.target.value as "pending" | "in_progress" | "completed" | "blocked"})}
                                   className="w-full px-2 py-1 border rounded text-xs"
                                 >
                                   <option value="PENDING">Pendiente</option>
@@ -922,7 +950,7 @@ export default function StartupDetailPage() {
                       <div className="flex items-center">
                         <select
                           value={newSprint.status}
-                          onChange={(e) => setNewSprint({...newSprint, status: e.target.value as any})}
+                          onChange={(e) => setNewSprint({...newSprint, status: e.target.value as "planned" | "in_progress" | "completed" | "delayed"})}
                           className="w-full px-2 py-1 border rounded text-xs"
                         >
                           <option value="PLANNED">Planificado</option>
@@ -1007,7 +1035,7 @@ export default function StartupDetailPage() {
                               <div className="flex items-center">
                                 <select
                                   value={editingSprint.status}
-                                  onChange={(e) => setEditingSprint({...editingSprint, status: e.target.value as any})}
+                                  onChange={(e) => setEditingSprint({...editingSprint, status: e.target.value as "planned" | "in_progress" | "completed" | "delayed"})}
                                   className="w-full px-2 py-1 border rounded text-xs"
                                 >
                                   <option value="PLANNED">Planificado</option>
