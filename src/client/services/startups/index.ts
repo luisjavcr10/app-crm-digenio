@@ -202,6 +202,30 @@ export const UPDATE_STARTUP_MUTATION = gql`
         id
         name
       }
+      status
+      observation
+      sprints {
+        orderNumber
+        name
+        deliverable
+        startDate
+        endDate
+        status
+        modules {
+          name
+          task
+          responsible {
+            id
+            userId {
+              email
+              name
+            }
+          }
+          status
+          deadline
+        }
+      }
+      createdAt
       updatedAt
     }
   }

@@ -27,7 +27,7 @@ export const startupsTypeDefs = `#graphql
     task: String!
     responsible: Employee!
     status: ModuleStatus!
-    deadline: String!
+    deadline: String
   }
 
   type Sprint {
@@ -53,6 +53,24 @@ export const startupsTypeDefs = `#graphql
     updatedAt: String!
   }
 
+  input ModuleInput {
+    name: String!
+    task: String!
+    responsible: ID!
+    status: ModuleStatus!
+    deadline: String
+  }
+
+  input SprintInput {
+    orderNumber: Int!
+    name: String!
+    deliverable: String
+    startDate: String
+    endDate: String
+    status: SprintStatus!
+    modules: [ModuleInput!]!
+  }
+
   input CreateSprintInput {
     orderNumber: Int!
     name: String!
@@ -71,7 +89,7 @@ export const startupsTypeDefs = `#graphql
     description: String
     okrId: ID
     teamId: ID
-    sprints: [CreateSprintInput!]
+    sprints: [SprintInput!]
   }
 
   input UpdateSprintInput {
@@ -85,7 +103,7 @@ export const startupsTypeDefs = `#graphql
     name: String!
     task: String!
     responsible: ID!
-    deadline: String!
+    deadline: String
   }
 
   type Query {

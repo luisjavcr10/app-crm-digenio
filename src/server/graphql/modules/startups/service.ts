@@ -159,6 +159,17 @@ static async updateStartupStatus(
     sprints?: Array<{
       orderNumber: number;
       name: string;
+      deliverable?: string;
+      startDate?: string | Date;
+      endDate?: string | Date;
+      status: string;
+      modules: Array<{
+        name: string;
+        task: string;
+        responsible: string;
+        status: string;
+        deadline: string | Date;
+      }>;
     }>;
   }): Promise<IStartup | null> {
     await dbConnect();
@@ -176,8 +187,17 @@ static async updateStartupStatus(
       updateData.sprints = input.sprints.map(sprint => ({
         orderNumber: sprint.orderNumber,
         name: sprint.name,
-        status: 'planned',
-        modules: []
+        deliverable: sprint.deliverable,
+        startDate: sprint.startDate && !isNaN(new Date(sprint.startDate).getTime()) ? new Date(sprint.startDate) : null,
+        endDate: sprint.endDate && !isNaN(new Date(sprint.endDate).getTime()) ? new Date(sprint.endDate) : null,
+        status: sprint.status,
+        modules: sprint.modules.map(module => ({
+          name: module.name,
+          task: module.task,
+          responsible: new Types.ObjectId(module.responsible),
+          status: module.status,
+          deadline: module.deadline && !isNaN(new Date(module.deadline).getTime()) ? new Date(module.deadline) : null
+        }))
       }));
     }
 

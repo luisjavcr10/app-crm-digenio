@@ -9,3 +9,6 @@ export { DocumentIcon } from './DocumentIcon';
 export { ChartIcon } from './ChartIcon';
 export { UserIcon } from './UserIcon';
 export { CircleTargetIcon } from './CircleTargetIcon';
+export { PlusIcon } from './PlusIcon';
+export { EditIcon } from './EditIcon';
+export { CheckIcon } from './CheckIcon';

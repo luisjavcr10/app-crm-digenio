@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { ApolloQueryResult } from "@apollo/client";
+import { useRouter } from "next/navigation";
 import {
   CREATE_STARTUP_MUTATION,
   UPDATE_STARTUP_MUTATION,
@@ -76,6 +77,7 @@ export const StartupModal = ({
   refetch: () => Promise<ApolloQueryResult<{ getAllStartups: IStartup[] }>>;
 }>) => {
   const {user} = useAuth();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     _id: "",
     name: "",
@@ -117,17 +119,20 @@ export const StartupModal = ({
 
   const addSprint = () => {
     if (newSprint.name.trim()) {
+      const nextOrderNumber = formData.sprints.length + 1;
       setFormData({
         ...formData,
-        sprints: [...formData.sprints, { ...newSprint }]
+        sprints: [...formData.sprints, { orderNumber: nextOrderNumber, name: newSprint.name }]
       });
-      setNewSprint({ orderNumber: newSprint.orderNumber + 1, name: "" });
+      setNewSprint({ orderNumber: nextOrderNumber + 1, name: "" });
     }
   };
 
   const removeSprint = (index: number) => {
-    const updatedSprints = formData.sprints.filter((_, i) => i !== index);
+    const updatedSprints = formData.sprints.filter((_, i) => i !== index)
+      .map((sprint, i) => ({ ...sprint, orderNumber: i + 1 }));
     setFormData({ ...formData, sprints: updatedSprints });
+    setNewSprint({ orderNumber: updatedSprints.length + 1, name: "" });
   };
 
   const handleCreate = async () => {
@@ -302,9 +307,14 @@ export const StartupModal = ({
                 </option>
               ))}
             </select>
+            <MainButton text="Seguimiento del equipo" handleClick={() => {
+              if (startup?._id) {
+                router.push(`/portfolio/${startup._id}`);
+              }
+            }}/>
           </FormSection>
 
-          <div className="flex flex-col gap-4">
+          {startup?.status.startsWith("IDEA") && <div className="flex flex-col gap-4">
             <p className="font-semibold">Sprints</p>
             
             {/* Lista de sprints existentes */}
@@ -326,7 +336,7 @@ export const StartupModal = ({
             {/* Agregar nuevo sprint */}
             {!isViewMode && (
               <div className="flex items-center gap-4 p-3 border-2 border-dashed border-neutral-3 rounded-lg">
-                <span className="font-medium">#{newSprint.orderNumber}</span>
+                <span className="font-medium">#{formData.sprints.length + 1}</span>
                 <input
                   type="text"
                   value={newSprint.name}
@@ -342,7 +352,84 @@ export const StartupModal = ({
                 </button>
               </div>
             )}
-          </div>
+          </div>}
+
+          {startup?.status === "IN_PROGRESS" && (
+            <div className=" border-b border-neutral-3 dark:border-neutral-2">
+              <h3 className="text-lg font-semibold mb-4">Entregables</h3>
+              
+              {/* Grid de entregables */}
+              <div className="space-y-4">
+                {/* Cabecera del grid */}
+                <div 
+                  className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] gap-4 p-3 rounded-[12px] text-sm font-medium text-neutral-8"
+                  style={{ backgroundColor: '#FFEAEA' }}
+                >
+                  <div>Sprint</div>
+                  <div>Entregable</div>
+                  <div>Fecha límite</div>
+                  <div>Estado</div>
+                  <div>Avance %</div>
+                  <div>Progreso</div>
+                </div>
+                
+                {/* Filas de datos */}
+                {startup.sprints && startup.sprints.length > 0 ? (
+                  startup.sprints.map((sprint, index) => {
+                    // Calcular el porcentaje de avance basado en módulos completados
+                    const totalModules = sprint.modules?.length || 0;
+                    const completedModules = sprint.modules?.filter(module => module.status === 'COMPLETED').length || 0;
+                    const progressPercentage = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0;
+                    
+                    // Mapear estado del sprint
+                    const statusMap: Record<string, string> = {
+                      'planned': 'Planificado',
+                      'in_progress': 'En progreso',
+                      'completed': 'Completado',
+                      'delayed': 'Retrasado'
+                    };
+                    
+                    return (
+                      <div 
+                        key={index} 
+                        className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] gap-4 p-3 bg-white dark:bg-neutral-1 border border-neutral-3 rounded-[12px] text-sm text-neutral-7"
+                      >
+                        <div className="flex items-center">
+                          {sprint.orderNumber || index + 1}
+                        </div>
+                        <div className="flex items-center">
+                          {sprint.deliverable || sprint.name || 'Sin entregable definido'}
+                        </div>
+                        <div className="flex items-center">
+                          {sprint.endDate ? new Date(sprint.endDate).toLocaleDateString('es-ES') : 'Sin fecha límite'}
+                        </div>
+                        <div className="flex items-center">
+                          {statusMap[sprint.status] || 'Sin estado'}
+                        </div>
+                        <div className="flex items-center">
+                          {progressPercentage}%
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-full bg-neutral-2 rounded-full h-2">
+                            <div 
+                              className="bg-alert-green h-2 rounded-full transition-all duration-300" 
+                              style={{ width: `${progressPercentage}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="p-6 text-center text-neutral-5 bg-white dark:bg-neutral-1 border border-neutral-3 rounded-[12px]">
+                    No hay sprints definidos para esta startup
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          
         </div>
         
         {user.roles.includes("ADMIN") && startup?.status==="IDEA_PENDING_REVIEW" &&(
@@ -402,7 +489,7 @@ export const StartupModal = ({
 
         {startup && !isEditing && (
           <div className="w-full py-4 px-6 flex justify-center items-center gap-4 border-t border-neutral-4">
-            {user.roles.includes("TEAMLEADER") && (
+            {user.roles.includes("TEAMLEADER") && startup.status.startsWith("IDEA") && (
               <>
                 <MainButton text="Editar" handleClick={() => setIsEditing(true)} />
                 <MainButton 

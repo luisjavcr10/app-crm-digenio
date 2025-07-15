@@ -138,11 +138,54 @@ export const startupResolvers = {
           sprints?: Array<{
             orderNumber: number;
             name: string;
+            deliverable?: string;
+            startDate?: string;
+            endDate?: string;
+            status: string;
+            modules: Array<{
+              name: string;
+              task: string;
+              responsible: string;
+              status: string;
+              deadline: string;
+            }>;
           }>;
         };
       }
     ): Promise<IStartup> => {
-      const updatedStartup = await StartupService.updateStartup(id, input);
+      // Mapear los datos de entrada para convertir los enums de GraphQL a valores de base de datos
+      const processedInput = {
+        ...input,
+        sprints: input.sprints?.map(sprint => ({
+          ...sprint,
+          startDate: sprint.startDate ? new Date(sprint.startDate) : undefined,
+          endDate: sprint.endDate ? new Date(sprint.endDate) : undefined,
+          status: (() => {
+            const statusMap: Record<string, string> = {
+              'PLANNED': 'planned',
+              'IN_PROGRESS': 'in_progress',
+              'COMPLETED': 'completed',
+              'DELAYED': 'delayed'
+            };
+            return statusMap[sprint.status] || 'planned';
+          })(),
+          modules: sprint.modules.map(module => ({
+            ...module,
+            deadline: new Date(module.deadline),
+            status: (() => {
+              const statusMap: Record<string, string> = {
+                'PENDING': 'pending',
+                'IN_PROGRESS': 'in_progress',
+                'COMPLETED': 'completed',
+                'BLOCKED': 'blocked'
+              };
+              return statusMap[module.status] || 'pending';
+            })()
+          }))
+        }))
+      };
+      
+      const updatedStartup = await StartupService.updateStartup(id, processedInput);
       if (!updatedStartup) throw new GraphQLError("Startup no encontrada");
       return updatedStartup;
     },
