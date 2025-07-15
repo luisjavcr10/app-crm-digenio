@@ -314,7 +314,7 @@ export const StartupModal = ({
             }}/>
           </FormSection>
 
-          {startup?.status.startsWith("IDEA") && <div className="flex flex-col gap-4">
+          {<div className="flex flex-col gap-4">
             <p className="font-semibold">Sprints</p>
             
             {/* Lista de sprints existentes */}
