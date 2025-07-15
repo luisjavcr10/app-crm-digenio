@@ -1,7 +1,4 @@
 import { StartupService } from "./service";
-import { Document } from "mongoose";
-import { IOKR } from "@/server/database/interfaces/IOKR";
-import { ITeam } from "@/server/database/interfaces/ITeam";
 import { IStartup, StartupStatus } from "@/server/database/interfaces/IStartup";
 import { ISprint, IModule } from "@/server/database/interfaces/ISprint";
 import { GraphQLError } from "graphql";
