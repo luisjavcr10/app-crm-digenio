@@ -35,6 +35,7 @@ export default function FollowUp() {
     }
   }, [data]);
 
+
   // Función para calcular el porcentaje promedio de progreso de los sprints
   const calculateAverageProgress = (startup: OkrsFollowUpProps['startups'][0]) => {
     if (!startup.sprints || startup.sprints.length === 0) return 0;
@@ -71,10 +72,10 @@ export default function FollowUp() {
                 <div className="p-3">
                   {okr.startups.length === 0
                     ? <p className="text-[12px] text-center text-neutral-3">Aún no hay startups registradas para lograr este objetivo. 📢</p>
-                    : okr.startups.map((startup) => {
+                    : okr.startups.map((startup, index) => {
                         const progressPercentage = startup.status === 'IN_PROGRESS' ? calculateAverageProgress(startup) : null;
                         return (
-                          <div key={startup.id} className="flex justify-between items-center text-neutral-6 dark:text-neutral-4 mb-1">
+                          <div key={index} className="flex justify-between items-center text-neutral-6 dark:text-neutral-4 mb-1">
                             <span>{startup.name}</span>
                             {progressPercentage !== null && (
                               <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">

@@ -175,7 +175,8 @@ export const StartupModal = ({
             description: formData.description,
             okrId: formData.okrId,
             teamId: formData.teamId,
-            sprints: formData.sprints,
+            // No enviamos sprints en la actualización ya que se manejan por separado
+            // y el schema espera SprintInput completo con módulos
           },
         },
       });
@@ -307,11 +308,11 @@ export const StartupModal = ({
                 </option>
               ))}
             </select>
-            <MainButton text="Seguimiento del equipo" handleClick={() => {
+            { startup?.status ==="IN_PROGRESS" && <MainButton text="Seguimiento del equipo" handleClick={() => {
               if (startup?._id) {
                 router.push(`/portfolio/${startup._id}`);
               }
-            }}/>
+            }}/>}
           </FormSection>
 
           {<div className="flex flex-col gap-4">
