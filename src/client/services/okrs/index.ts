@@ -17,8 +17,8 @@ export const GET_OKRS_QUERY = gql`
 `;
 
 export const FOLLOW_UP_OKRS_QUERY = gql`
-  query OKRs {
-    okrs {
+  query NoDraftOkrs {
+    noDraftOkrs {
       id
       name
       status
