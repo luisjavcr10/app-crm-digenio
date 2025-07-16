@@ -1,15 +1,15 @@
-1. El proyecto está construido con Next.js usando TypeScript.
-2. Se utiliza TailwindCSS 4 para estilos.
-3. El backend está integrado dentro del mismo proyecto y usa GraphQL sobre MongoDB (NoSQL) en /src/server/.
-4. Si se usan librerías externas, deben estar alineadas con el ecosistema de Next.js.
-5. Usar código idiomático y moderno de TypeScript.
-6. Evitar el uso de any — preferir tipos explícitos o genéricos.
-7. No usar enums; preferir union types ('typeA' | 'typeB').
-8. Usar funciones flecha y componentes funcionales.
-9. Evitar el uso directo de process.env en el cliente; usar variables en next.config.js si es necesario.
-10. Los nombres de archivo deben seguir kebab-case para componentes y camelCase para funciones/utilidades.
-11. Aplicar estilos exclusivamente con TailwindCSS, evitando style={{}} en línea.
-12. Seguir las reglas de ESLint y Prettier configuradas en el proyecto.
-13. Usar el sistema de rutas de la carpeta /app de Next.js (App Router).
-14. Todas las operaciones GraphQL deben estar tipadas y separadas por fragmentos reutilizables
-15. Usar GraphQL Codegen si está configurado en el proyecto.
+1. The project is built with Next.js using TypeScript.
+2. TailwindCSS 4 is used for styling.
+3. The backend is integrated within the same project and uses GraphQL over MongoDB (NoSQL) in /src/server/.
+4. If external libraries are used, they must align with the Next.js ecosystem.
+5. Use idiomatic and modern TypeScript code.
+6. Avoid using any — prefer explicit or generic types.
+7. Do not use enums; prefer union types ('typeA' | 'typeB').
+8. Use arrow functions and functional components.
+9. Avoid direct use of process.env on the client; use variables in next.config.js if necessary.
+10. File names should follow kebab-case for components and camelCase for functions/utilities.
+11. Apply styles exclusively with TailwindCSS, avoiding inline style={{}}.
+12. Follow the ESLint and Prettier rules configured in the project.
+13. Use the /app folder routing system from Next.js (App Router).
+14. All GraphQL operations must be typed and separated using reusable fragments.
+15. Use GraphQL Codegen if it is configured in the project.
