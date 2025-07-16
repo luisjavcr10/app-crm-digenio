@@ -57,8 +57,6 @@ export const OkrFormModal = ({
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [getRecommendation, { data: recommendationData, loading: loadingRecommendation, error: errorRecommendation }] = useLazyQuery(GET_DEEPSEEK_RECOMMENDATION);
 
-  console.log(passedOkr);
-
   useEffect(() => {
     if (passedOkr) {
       setOkr(passedOkr);
