@@ -5,6 +5,7 @@ import { useMutation } from "@apollo/client";
 import { FormLayout } from "../FormLayout";
 import { FormInput } from "../FormInput";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
+import { SuccessModal } from "@/client/components/shared/modal";
 import { SET_PASSWORD_FROM_TOKEN } from "@/client/services/auth";
 
 export const CreatePasswordForm = ({
@@ -89,16 +90,11 @@ export const CreatePasswordForm = ({
         />
       </FormLayout>
 
-      {isOpen && <div className="fixed inset-0 bg-[#1f1f1f80] flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full flex flex-col items-center">
-          <h2 className="text-[16px] text-center mb-4">¡Contraseña creada con éxito! Ya puedes iniciar sesión.</h2>
-          <MainButton
-            text={"Ir a login"}
-            handleClick={handleModal}
-            disabled={false}
-          />
-        </div>
-      </div>}
+      <SuccessModal
+        isOpen={isOpen}
+        message="¡Contraseña creada con éxito! Ya puedes iniciar sesión."
+        onClose={handleModal}
+      />
     </>
   );
 };

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormLayout } from "../FormLayout";
 import { FormInput } from "../FormInput";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
+import { SuccessModal } from "@/client/components/shared/modal";
 import { useMutation } from "@apollo/client";
 import { REQUEST_PASSWORD_RESET } from "@/client/services/auth";
 
@@ -64,20 +65,11 @@ export const RecoverPasswordForm = () => {
         />
       </FormLayout>
       
-      {isOpen && (
-        <div className="fixed inset-0 bg-[#1f1f1f80] flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full flex flex-col items-center">
-            <h2 className="text-[16px] text-center mb-4">
-              ¡Solicitud enviada con éxito! Si el correo está registrado, recibirás instrucciones.
-            </h2>
-            <MainButton
-              text={"Ir a login"}
-              handleClick={handleModal}
-              disabled={false}
-            />
-          </div>
-        </div>
-      )}
+      <SuccessModal
+        isOpen={isOpen}
+        message="¡Solicitud enviada con éxito! Si el correo está registrado, recibirás instrucciones."
+        onClose={handleModal}
+      />
     </>
   );
 };
