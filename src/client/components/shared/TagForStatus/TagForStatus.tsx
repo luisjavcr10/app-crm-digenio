@@ -28,7 +28,7 @@ const getStatusColors = (status: StatusType) => {
       return 'bg-alert-yellow';
     case 'draft':
     default:
-      return 'bg-neutral-2';
+      return 'bg-neutral-2 dark:bg-neutral-4';
   }
 };
 

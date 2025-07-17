@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_OKRS_QUERY } from "@/client/services/okrs";
 import { useOkrModalStore } from "@/client/store/modalsStore";
+import { useSidebarStore } from "@/client/store/sidebarStore";
 import { useAuth } from "@/client/hooks/useAuth";
 import type { OkrProps, OkrFilterStatus } from "@/client/types/okr";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
@@ -16,6 +17,7 @@ import { TitleSection } from "@/client/components/shared/TitleSection";
  */
 export default function OkrsPage() {
   const { user } = useAuth();
+  const { isOpen } = useSidebarStore((state) => state);
 
   // Modal states
   const openModal = useOkrModalStore((state) => state.open);
@@ -170,7 +172,7 @@ export default function OkrsPage() {
       {filteredOkrs.length === 0 ? (
         <NoData />
       ) : (
-        <div className="min-h-[450px] m-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className={`min-h-[450px] m-2 grid grid-cols-1 md:grid-cols-2 ${isOpen ?'lg:grid-cols-2':'lg:grid-cols-3'} gap-4`}>
           {/* Mobile view - single column */}
           <div className="flex flex-col gap-4 md:hidden">
             {filteredOkrs.map((okr, index) => (
