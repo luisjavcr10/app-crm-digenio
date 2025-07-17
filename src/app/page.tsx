@@ -18,13 +18,13 @@ export default function Home() {
     <div className="flex flex-1 flex-col m-6 md:flex-row">
       {/* Main content area */}
       <div
-        className={`relative flex min-h-[200px] w-full transition-all duration-1000 ease-in-out ${
+        className={`relative flex min-h-[200px] w-full transition-all duration-1000 ease-in-out overflow-hidden rounded-[12px] ${
           isOpen ? 'md:w-[calc(100%-500px)]' : 'md:w-full'
         }`}
       >
         {/* Background image */}
         <Image
-          className="z-0 rounded-[12px] object-cover"
+          className="z-0 object-cover"
           src="/images/main-image.png"
           fill
           alt="background"
@@ -44,15 +44,15 @@ export default function Home() {
         )}
 
         {/* Control buttons */}
-        <div className="absolute bottom-0 right-0 z-10 hidden gap-2 rounded-tl-[12px] bg-neutral-5 pt-3 pl-3 dark:bg-neutral-1 md:flex">
+        <div className="absolute bottom-3 right-3 z-10 hidden gap-2 md:flex">
           {!isOpen && (
-            <div className="rounded-[12px] border border-neutral-3 px-4 py-2 text-[24px] shadow-button-home">
+            <div className="rounded-[12px] border border-neutral-3 bg-neutral-5 dark:bg-neutral-1 px-4 py-2 text-[24px] shadow-button-home">
               Misión y visión
             </div>
           )}
           <button
             onClick={togglePanel}
-            className="cursor-pointer rounded-[12px] border border-neutral-3 px-4 py-2 text-[24px] shadow-button-home"
+            className="cursor-pointer rounded-[12px] border border-neutral-3 bg-neutral-5 dark:bg-neutral-1 px-4 py-2 text-[24px] shadow-button-home"
             type="button"
             aria-label={isOpen ? 'Cerrar panel' : 'Abrir panel'}
           >
