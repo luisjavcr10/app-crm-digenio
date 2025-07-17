@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-import {TextInput, TextareaInput, DateInput, FormSection} from "@/client/components/shared/formElements";
+import { ModalLayout, ModalTitle } from "@/client/components/shared/modal";
+import { TextInput, TextareaInput, DateInput, FormSection} from "@/client/components/shared/formElements";
 import { useLazyQuery } from "@apollo/client";
 import ReactMarkdown from "react-markdown";
 import { GET_DEEPSEEK_RECOMMENDATION } from "@/client/services/ia";
@@ -124,22 +125,14 @@ export const OkrFormModal = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 ">
-      <div className="absolute inset-0 bg-[#1f1f1f80]" onClick={handleClose} />
+    <ModalLayout onClose={handleClose}>
+        <ModalTitle 
+          onClose={handleClose} 
+          text={
+            passedOkr ? isEditing ? "Editar OKR" : "Detalle del OKR" : "Agregar nuevo OKR"} 
+        />
 
-      <div className="w-9/12 max-h-11/12 lg:max-h-9/12 overflow-y-auto bg-neutral-5 dark:bg-neutral-1 border border-neutral-3 dark:border-neutral-2 rounded-[12px] relative z-10">
-        <div className="flex justify-between items-center px-6 py-4 border-b border-neutral-3 dark:border-neutral-2">
-          <h2 className="text-[24px] lg:text-[32px] font-[600]">
-            {passedOkr
-              ? isEditing
-                ? "Editar OKR"
-                : "Detalle del OKR"
-              : "Agregar nuevo OKR"}
-          </h2>
-
-        </div>
-
-        <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2 ">
+        <div className="w-full flex flex-col gap-6 py-4 px-6 border-b border-neutral-3 dark:border-neutral-2 overflow-auto">
           {/* Mensaje de validación para crear OKR pendiente */}
           {!passedOkr && (
             <OkrValidationMessage okr={okr} showForPending={true} />
@@ -175,7 +168,7 @@ export const OkrFormModal = ({
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <p className="min-w-[100px]">Estado:</p>
             <select
-              className="border p-2 rounded-lg text-sm bg-neutral-4 dark:bg-neutral-2"
+              className="text-[12px] border border-neutral-3 dark:border-neutral-2 p-2 rounded-lg text-sm bg-neutral-4 dark:bg-neutral-1 outline-1 outline-neutral-3"
               value={okr.status}
               onChange={(e) =>
                 setOkr({ ...okr, status: e.target.value as OkrStatus })
@@ -326,8 +319,7 @@ export const OkrFormModal = ({
             Error: {(createError || updateError || deleteError)?.message}
           </p>
         )}
-      </div>
-    </div>
+      </ModalLayout>
   );
 };
 

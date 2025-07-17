@@ -25,7 +25,7 @@ export const OkrValidationMessage: React.FC<OkrValidationMessageProps> = ({
   if (missingFields.length === 0) return null;
 
   return (
-    <div className="bg-neutral-4 dark:bg-neutral-2 border border-neutral-3 rounded-lg p-4 mb-4 text-[12px]">
+    <div className="bg-neutral-4 dark:bg-neutral-1 border border-neutral-3 dark:border-neutral-2 rounded-lg p-4 mb-4 text-[12px]">
       <div className="flex items-start">
         <div className="flex-shrink-0 py-1">
           <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
@@ -38,7 +38,7 @@ export const OkrValidationMessage: React.FC<OkrValidationMessageProps> = ({
           </h3>
           <div className="flex gap-2 text-neutral-1 dark:text-neutral-5">
               {missingFields.map((field) => (
-                <p key={field} className='px-4 py-1 bg-neutral-5 border border-neutral-3 rounded-[8px]'>{field}</p>
+                <p key={field} className='px-4 py-1 bg-neutral-5 dark:bg-neutral-1 border border-neutral-3 dark:border-neutral-2 rounded-[8px]'>{field}</p>
               ))}
           </div>
         </div>

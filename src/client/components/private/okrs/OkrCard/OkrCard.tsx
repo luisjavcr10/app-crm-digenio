@@ -42,7 +42,7 @@ export const OkrCard = ({
 
       <div
         onClick={handleOpenModal}
-        className="py-3 px-5 flex items-end justify-between gap-2 border-y border-x border-neutral-3 dark:border-neutral-2 rounded-t-[12px] cursor-pointer hover:scale-[1.02] hover:rounded-b-[12px] hover:bg-neutral-4 origin-bottom transition-all duration-200 ease-out"
+        className="py-3 px-5 flex items-end justify-between gap-2 border-y border-x border-neutral-3 dark:border-neutral-2 rounded-t-[12px] cursor-pointer hover:scale-[1.02] hover:rounded-b-[12px] hover:bg-neutral-4 hover:dark:bg-neutral-2 origin-bottom transition-all duration-200 ease-out"
       >
         <div className="flex flex-col gap-2">
           <p className="text-[16px]">{okr.name}</p>

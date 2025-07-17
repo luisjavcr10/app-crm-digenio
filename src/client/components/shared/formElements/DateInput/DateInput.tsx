@@ -19,7 +19,7 @@ export const DateInput = ({
   const formattedValue = getFormattedDate(value);
 
   return (
-    <div className={`scheme-light dark:scheme-dark flex flex-col lg:flex-row gap-4 lg:gap-8 ${className}`}>
+    <div className={`text-[12px] scheme-light dark:scheme-dark flex flex-col lg:flex-row gap-4 lg:gap-8 ${className}`}>
       <p className="min-w-[100px]">{label}</p>
       <input
         value={formattedValue}

@@ -108,7 +108,7 @@ export default function OkrsPage() {
   }, []);
 
   return (
-    <div className="h-full my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
+    <div className="h-full mt-6 mb-2 mx-8 flex flex-col gap-8 overflow-x-auto">
       <TitleSection name="OKRs" description="Gestión de objetivos para alinear y dar seguimiento a las metas de la empresa.">
         {user.roles.includes("ADMIN") && <MainButton text="Agregar nuevo OKR" handleClick={openModal} />}
       </TitleSection>
@@ -133,7 +133,7 @@ export default function OkrsPage() {
           </select>
         </div>
 
-        <div className="flex flex-col gap-2 w-full md:w-auto">
+        <div className="flex flex-col gap-2 w-full md:w-auto scheme-light dark:scheme-dark ">
           <label htmlFor="start-date" className="text-sm font-medium text-neutral-7 dark:text-neutral-3">
             Fecha de inicio
           </label>
@@ -146,7 +146,7 @@ export default function OkrsPage() {
           />
         </div>
 
-        <div className="flex flex-col gap-2 w-full md:w-auto">
+        <div className="flex flex-col gap-2 w-full md:w-auto scheme-light dark:scheme-dark ">
           <label htmlFor="end-date" className="text-sm font-medium text-neutral-7 dark:text-neutral-3">
             Fecha de fin
           </label>
