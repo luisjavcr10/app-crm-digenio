@@ -81,7 +81,7 @@ export const UsersList = ({
       {users.map((user) => (
         <div
           key={user.id}
-          className="px-2 grid grid-cols-10 gap-0 border border-neutral-3 text-black dark:text-white rounded-[12px] mb-4"
+          className="px-2 mb-4 grid grid-cols-10 gap-0 border border-neutral-3 text-black dark:text-white rounded-[12px]"
         >
           <div className="col-span-2 p-2">{user.userId.name}</div>
           <div className="col-span-2 p-2 overflow-x-auto">

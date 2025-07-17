@@ -62,7 +62,7 @@ export default function Page (){
   }
 
   return(
-    <div className="h-full my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
+    <div className="h-full mt-6 mb-2 mx-8 flex flex-col gap-8 overflow-y-auto">
       <TitleSection 
         name="USUARIOS Y EQUIPOS" 
         description="Visualización de usuarios, sus cargos, equipos y métricas de satisfacción (NPS)."
@@ -73,9 +73,9 @@ export default function Page (){
         />
       </TitleSection>
 
-      <div className="h-[20px] w-full bg-nps rounded-[12px] relative">
+      {/**<div className="bg-nps h-[20px] w-full rounded-[12px] relative">
         <VscTriangleUp className="absolute top-[75%] left-[80%] translate-x-[-50%] translate-y-[-50%] text-neutral-1" />
-      </div>
+      </div>*/}
 
 
       <SwitchEntity 
