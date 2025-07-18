@@ -1,9 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { ThemeProvider } from 'next-themes';
 import { Be_Vietnam_Pro } from "next/font/google";
 import { AuthProvider } from "@/client/contexts/AuthContext";
 import ApolloWrapper from "@/client/contexts/ApolloWrapper";
-import { ThemeWrapper } from "@/client/contexts/ThemeWrapper";
 import { PageSection } from "@/client/components/private/layout/PageSection";
 import { Footer } from "@/client/components/shared/Footer";
 import { Sidebar } from "@/client/components/shared/Sidebar";
@@ -25,27 +25,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`h-screen flex flex-col bg-background text-foreground ${beVietmanPro.className}`}
       >
-        <ThemeWrapper>
+        <ThemeProvider attribute="class" defaultTheme="system">
           <ApolloWrapper>
             <AuthProvider>
               <div className="flex">
-
                 <Sidebar />
-
                 <PageSection>
                   {children}
                 </PageSection>
-              
               </div>
-                  
               <Footer />
             </AuthProvider>
           </ApolloWrapper>
-        </ThemeWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );
