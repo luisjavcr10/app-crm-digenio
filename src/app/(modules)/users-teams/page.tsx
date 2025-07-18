@@ -13,9 +13,6 @@ import { UsersList } from "@/client/components/private/users-teams/usersComponen
 import { TeamsList } from "@/client/components/private/users-teams/teamsComponents";
 import { TitleSection } from "@/client/components/shared/TitleSection";
 import { MainButton } from "@/client/components/shared/buttons/MainButton";
-//icons from react-icons
-import { VscTriangleUp } from "react-icons/vsc";
-
 
 export default function Page (){
   //stores to handle modal state
