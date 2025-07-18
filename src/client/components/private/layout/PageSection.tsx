@@ -1,7 +1,7 @@
 import { Header } from "../../shared/Header";
 
 /**
- * Componente que contiene el contenido principal de las páginas
+ * Componente que contiene el contenido principal de las páginas (okrs, startups, etc).
  * Se ajusta dinámicamente según el estado del sidebar
  */
 export const PageSection = ({children}: Readonly<{children:React.ReactNode}>) => {
