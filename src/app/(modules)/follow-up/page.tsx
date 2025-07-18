@@ -51,7 +51,7 @@ export default function FollowUp() {
   };
 
   return (
-    <div className="h-full my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
+    <div className="w-full h-[calc(100%-40px)] my-6 mx-8 flex flex-col gap-8 overflow-x-auto">
       <TitleSection
         name="SEGUIMIENTO"
         description="Seguimiento visual de objetivos estratégicos en conjunto con las startups participantes."

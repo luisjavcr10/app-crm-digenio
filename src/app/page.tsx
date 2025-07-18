@@ -15,7 +15,7 @@ export default function Home() {
   const togglePanel = () => setIsOpen(!isOpen);
 
   return (
-    <div className="flex flex-1 flex-col m-6 md:flex-row">
+    <div className="flex-1 flex flex-col m-6 md:flex-row">
       {/* Main content area */}
       <div
         className={`relative flex min-h-[200px] w-full transition-all duration-1000 ease-in-out overflow-hidden rounded-[12px] ${
