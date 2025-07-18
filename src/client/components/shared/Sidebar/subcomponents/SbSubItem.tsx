@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { useSidebarStore } from "@/client/store/sidebarStore";
 
 export const SbSubItem = ({ 
   icon,
@@ -12,11 +13,17 @@ export const SbSubItem = ({
   openModal?: () => void;
 }>) => {
   const router = useRouter();
+  const close = useSidebarStore((state) => state.close);
 
-  const handleRoute = () =>{
+  const handleRoute = () => {
     router.push(href);
     if(openModal){
       openModal();
+    }
+    
+    // Cerrar sidebar solo en móviles
+    if (window.innerWidth < 768) {
+      close();
     }
   }
 
