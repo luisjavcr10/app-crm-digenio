@@ -54,7 +54,7 @@ export const UsersList = ({
 
   if (loading) {
     return (
-      <div className="text-[12px] text-center p-2 bg-neutral-4 text-black dark:text-white rounded-[12px] mb-4 font-bold">
+      <div className="text-[12px] text-center p-2 bg-neutral-4 dark:bg-neutral-2 text-black dark:text-white rounded-[12px] mb-4 font-bold">
         Cargando usuarios...
       </div>
     );
@@ -67,27 +67,26 @@ export const UsersList = ({
   return (
     <div className="text-[12px]">
       {/* Header */}
-      <div className="px-2 grid grid-cols-10 gap-0 bg-[#FFEAEA] text-black dark:text-white rounded-[12px] mb-4 font-bold">
+      <div className="px-2 grid grid-cols-9 gap-0 bg-[#FFEAEA] dark:bg-alert-red/65 text-black dark:text-white rounded-[12px] mb-4 font-bold">
         <div className="col-span-2 p-2">Nombres y apellidos</div>
         <div className="col-span-2 p-2">Correo electrónico</div>
-        <div className="col-span-1 p-2">Equipo</div>
+        <div className="col-span-2 p-2">Equipos</div>
         <div className="col-span-1 p-2">Rol</div>
         <div className="col-span-1 p-2">Fecha de registro</div>
-        <div className="col-span-1 p-2">Estado</div>
-        <div className="col-span-2 p-2">Opciones</div>
+        <div className="col-span-1 p-2">Opciones</div>
       </div>
 
       {/* Users List */}
       {users.map((user) => (
         <div
           key={user.id}
-          className="px-2 mb-4 grid grid-cols-10 gap-0 border border-neutral-3 text-black dark:text-white rounded-[12px]"
+          className="px-2 mb-4 grid grid-cols-9 gap-0 border border-neutral-3 text-black dark:text-white rounded-[12px]"
         >
           <div className="col-span-2 p-2">{user.userId.name}</div>
           <div className="col-span-2 p-2 overflow-x-auto">
             {user.userId.email}
           </div>
-          <div className="col-span-1 p-2">
+          <div className="col-span-2 p-2">
             {user.teams.map((team) => team.name).join(", ")}
           </div>
           <div className="col-span-1 p-2">{user.position}</div>
@@ -98,8 +97,7 @@ export const UsersList = ({
               year: "2-digit",
             })}
           </div>
-          <div className="col-span-1 p-2">{user.userId.status}</div>
-          <div className="col-span-2 p-2">
+          <div className="col-span-1 p-2">
             <button
               onClick={() => handleShowUser(user)}
               className="px-4 cursor-pointer hover:underline"
