@@ -17,7 +17,7 @@ export const SbItem = ({
     <>
       <div
         onClick={handleOpen}
-        className="px-6 py-2.5 flex justify-between items-center border-t border-neutral-3"
+        className="px-6 py-2.5 flex justify-between items-center border-t border-neutral-3 cursor-pointer"
       >
         <div className="flex gap-4">
           {icon}
